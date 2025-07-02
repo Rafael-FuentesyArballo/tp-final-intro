@@ -1,13 +1,13 @@
- Usuarios:
+Usuarios:
     -Id
     -Nombre
 
-    Publicaciones:
+Publicaciones:
     -Id?
     -Id_usuario
     -Texto
 
-    Comentarios:
+Comentarios:
     -Id?
     -Id_usuario
     -Id_publicacion
