@@ -4,18 +4,16 @@ Grupo: Thomas Acosta, Rafael Fuentes y Arballo, Luis Diaz Omar, Celeste Bertelem
 
 Entidades/tablas:
 
-    Usuarios:
+Usuarios:
     -Id
     -Nombre
-    -Publicaciones
-    -Comentarios
 
-    Publicaciones:
+Publicaciones:
     -Id?
     -Id_usuario
     -Texto
 
-    Comentarios:
+Comentarios:
     -Id?
     -Id_usuario
     -Id_publicacion
