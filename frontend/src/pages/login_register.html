@@ -7,6 +7,44 @@
     <title>Ingresa - KeyStroke</title>
 </head>
 <body>
-    
+    <main>
+        <div class="main-container">
+            <div class="form-container">
+
+                <!-- Botones para cambiar entre login y registro js-->
+                <div class="switch-buttons">
+                <button id="btn-login">Iniciar sesión</button>
+                <button id="btn-register">Registrarse</button>
+                </div>
+
+                <!-- Formulario de Login -->
+                <form id="form-login" class="form active">
+                    <h2>Iniciar Sesión</h2>
+                    <label for="usuario">Usuario</label>
+                    <input type="text" id="usuario" name="usuario" required>
+
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="submit">Ingresar</button>
+                </form>
+
+                <!-- Formulario de Registro -->
+                <form id="form-register" class="form">
+                    <h2>Registrarse</h2>
+                    <label for="nuevoUsuario">Usuario</label>
+                    <input type="text" id="nuevoUsuario" name="nuevoUsuario" required>
+
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="nuevaPassword">Contraseña</label>
+                    <input type="password" id="nuevaPassword" name="nuevaPassword" required>
+
+                    <button type="submit">Crear cuenta</button>
+                </form>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
