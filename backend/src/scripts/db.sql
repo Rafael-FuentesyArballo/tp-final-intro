@@ -16,7 +16,6 @@ CREATE TABLE articulos (
     ubicacion varchar(50),
     id_vendedor int references usuarios(id),
     envio_gratis boolean,
-    tipo_de_articulo int,
     compatible_con varchar(50),
     stock int -- si llega a 0 se pausa la publicación
 );

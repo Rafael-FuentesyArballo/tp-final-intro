@@ -17,7 +17,18 @@ const {
     create_usuario,
     del_usuario,
     edit_usuario,
-} = require ('./scripts/usuarios')
+} = require ('./scripts/usuarios');
+
+// funciones de articulos.js
+
+const {
+    get_all_articulos,
+    get_one_articulo_id,
+    get_one_articulo_nombre,
+    create_articulo,
+    del_articulo,
+    edit_articulo,
+} = require('./scripts/articulos');
 
 //Endpoints usuarios//
 
@@ -94,3 +105,56 @@ app.delete('api/usuarios/:id', async (req,res) => {
 app.put('api/usuarios/', async (req,res) => {
     res.json();
 });
+
+
+// ENDPOINTS ARTICULOS 
+
+// get all
+app.get ('api/articulos', async (req,res) => {
+    const usuarios = await get_all_articulos();
+    res.json(usuarios);
+});
+
+// get one por ID
+app.get ('api/articulos/:id', async (req,res) => {
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+      res.json(articulo);
+});
+
+// crear
+app.post('api/articulos', async (req,res) => {
+    const descripcion
+    const precio 
+    const ubicacion 
+    const fecha 
+    const id_vendedor 
+    const id_comprador 
+    const envio_gratis 
+    const tipo_de_articulo 
+    const compatible_con
+    const stock
+
+    const articulo = await create_articulo(descripcion,
+    precio, 
+    ubicacion, 
+    fecha, 
+    id_vendedor, 
+    id_comprador, 
+    envio_gratis, 
+    tipo_de_articulo, 
+    compatible_con,
+    stock);
+
+    if (articulo === undefined ){
+        return res.sendStatus(500);
+    }else{
+        res.json(usuario);
+    }
+});
+
+// borrar
+
+// editar 

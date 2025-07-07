@@ -7,7 +7,7 @@ const dbclient = new Pool({
   password: 'password',
   host: 'localhost',
   port: 5432,
-  database: 'keystroke-bdd',
+  database: 'keystroke-db',
 })
 await client.connect()
 
