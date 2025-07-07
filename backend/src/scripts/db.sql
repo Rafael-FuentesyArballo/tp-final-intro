@@ -11,6 +11,7 @@ CREATE TABLE usuarios (
 
 CREATE TABLE articulos (
     id serial primary key,
+    titulo varchar(50),
     descripcion varchar(500),
     precio int not null check (precio > 0),
     ubicacion varchar(50),
