@@ -8,7 +8,7 @@ app.listen(port, () => {
     console.log(`Server iniciado en puerto ${port}`)
 });
 
-// funciones de db.js
+// funciones de usuarios.js
 const {
     check_mail,
     get_all_usuarios,
@@ -17,7 +17,7 @@ const {
     create_usuario,
     del_usuario,
     edit_usuario,
-} = require ('./scripts/db')
+} = require ('./scripts/usuarios')
 
 //Endpoints usuarios//
 
