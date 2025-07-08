@@ -1,17 +1,17 @@
-const { Pool } = require("pg");
+//const { Pool } = require("pg");
 
-//import { Pool } from 'pg'
+import { Pool } from 'pg'
  
 const dbclient = new Pool({
   user: 'postgres',
-  password: 'password',
+  password: 'postgres',
   host: 'localhost',
   port: 5432,
-  database: 'keystroke-bdd',
+  database: 'keystroke-db',
 })
-await client.connect()
+await dbclient.connect()
 
-async function check_mail(mail){
+export async function check_mail(mail){
     const result = await dbclient.query("SELECT mail FROM usuarios");
     if (result.includes(mail)){
         return true;
@@ -20,12 +20,12 @@ async function check_mail(mail){
     }
 }
 
-async function get_all_usuarios(){
+export async function get_all_usuarios(){
     const response = await dbclient.query("SELECT * FROM usuarios");
     return response.rows;
 }
 
-async function get_one_usuario_id(id){
+export async function get_one_usuario_id(id){
     const response = await dbclient.query("SELECT * FROM usuarios WHERE id = $1",[id]);
     if (response.rowcount === 0 ){
         return undefined;
@@ -35,7 +35,7 @@ async function get_one_usuario_id(id){
     }
 }
 
-async function get_one_usuario_nombre(nombre){
+export async function get_one_usuario_nombre(nombre){
     const response = await dbclient.query("SELECT * FROM usuarios WHERE  nombre_usuario = $1",[nombre]);
     if (response.rowcount === 0 ){
         return undefined;
@@ -45,7 +45,7 @@ async function get_one_usuario_nombre(nombre){
     }
 }
 
-async function create_usuario (
+export async function create_usuario (
     nombre_usuario,
     contraseña,
     mail,
@@ -73,7 +73,7 @@ async function create_usuario (
     };
 }
 
-async function del_usuario(id){
+export async function del_usuario(id){
     try{
         await dbclient.query(
             "DELETE FROM usuarios WHERE id = $1",[id]);
@@ -83,12 +83,3 @@ async function del_usuario(id){
 
 }
 
-module.exports = {
-    check_mail,
-    get_all_usuarios,
-    get_one_usuario_id,
-    get_one_usuario_nombre,
-    create_usuario,
-    del_usuario,
-    edit_usuario,
-};
