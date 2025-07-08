@@ -5,27 +5,21 @@ CREATE TABLE usuarios (
     mail varchar(50) unique not null,
     fecha_creacion_usuario TIMESTAMP WITH TIME ZONE,
     rol varchar(50),
-    karma int,
-    articulos_comprados int
+    karma int
 );
 
 CREATE TABLE articulos (
     id serial primary key,
-    descripcion varchar(500),
+    descripcion varchar(500) not null,
     precio int not null check (precio > 0),
     ubicacion varchar(50),
+    fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     id_vendedor int references usuarios(id),
+    id_comprador int references usuarios(id),
     envio_gratis boolean,
     tipo_de_articulo int,
     compatible_con varchar(50),
-    stock int -- si llega a 0 se pausa la publicación
-);
-
-CREATE TABLE publicaciones (
-    id serial primary key,
-    id_articulo int references articulos(id),
-    fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    texto varchar(500)
+    stock int -- si llega a 0 se pausa la venta
 );
 
 CREATE TABLE calificaciones (
@@ -38,6 +32,7 @@ CREATE TABLE calificaciones (
 CREATE TABLE comentarios (
     id serial primary key,
     id_autor int references usuarios(id),
+    id_comentario_padre int references comentarios(id),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     texto varchar(100),
     karma int,

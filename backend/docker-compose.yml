@@ -1,11 +1,11 @@
 services:
   postgres:
-    image: postgres:15
+    image: postgres:17
     container_name: my_postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bdd-tp-final
+      POSTGRES_DB: keystroke-db
     ports:
       - "5432:5432"
     volumes:
