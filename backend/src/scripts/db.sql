@@ -26,6 +26,13 @@ CREATE TABLE publicaciones (
     texto varchar(500)
 );
 
+CREATE TABLE imagenes (
+    id serial primary key,
+    id_articulo int references articulos(id) not null,
+    url_imagen varchar(255) not null,
+    orden int default 0
+);
+
 CREATE TABLE calificaciones (
     id serial primary key,
     id_articulo int references articulos(id) not null,
