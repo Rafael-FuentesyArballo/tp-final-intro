@@ -1,7 +1,8 @@
 //const express = require('express')
-import express from "express";
+import express, { json } from "express";
 
 const app = express();
+app.use(express.json());
 const port = 3000;
 
 app.listen(port, () => {
@@ -48,29 +49,38 @@ app.get ('/api/usuarios/:nombre_usuario', async (req,res) => {
 
 
 //crear usuario WIP, CREAR CATCHEO DE EXCEPCIONES
+// comando para probar:
+/*
+curl -X POST http://localhost:3000/api/usuarios \
+-H "Content-Type: application/json" \
+-d '{
+    "nombre_usuario": "Juan",
+    "contraseña": "xyz",
+    "mail": "juan@gmail.com",
+    "rol": "usuario"
+}'
+*/
+
 app.post('/api/usuarios', async (req,res) => {
     const nombre = req.body.nombre_usuario;
     const contra = req.body.contraseña;
     const mail = req.body.mail;
-    const fecha = req.body.fecha_creacion_usuario;
+    const fecha = req.body.fecha_creacion_usuario || new Date().toISOString();
     const rol = req.body.rol;
     const karma = 0; //karma inicial 0
     const articulos = 0;
 
     if ( await get_one_usuario_nombre(nombre) !== undefined ){
-        res.json("Nombre en uso por otro usuario");
-        return res.sendStatus(400);
+        return res.status(400).json({ error: "Nombre en uso" });
     }
     if (await check_mail(mail)){
-        res.json("Direccion de correo en uso por otro usuario");
-        return res.sendStatus(400);
+        return res.sendStatus(400).json("Direccion de correo en uso por otro usuario");
     }
-
 
     const usuario = await create_usuario(nombre,contra,mail,fecha,rol,karma,articulos);
 
     if (usuario === undefined ){
-        return res.sendStatus(500);
+        return res.sendStatus(500),json("Error al crear el usuario");
     }else{
         res.json(usuario);
     }

@@ -5,7 +5,8 @@ CREATE TABLE usuarios (
     mail varchar(50) unique not null,
     fecha_creacion_usuario TIMESTAMP WITH TIME ZONE,
     rol varchar(50),
-    karma int
+    karma int,
+    articulos_comprados int
 );
 
 CREATE TABLE articulos (

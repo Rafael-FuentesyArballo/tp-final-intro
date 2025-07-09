@@ -12,8 +12,8 @@ const dbclient = new Pool({
 await dbclient.connect()
 
 export async function check_mail(mail){
-    const result = await dbclient.query("SELECT mail FROM usuarios");
-    if (result.includes(mail)){
+    const result = await dbclient.query("SELECT mail FROM usuarios WHERE mail=$1",[mail]);
+    if (result.rows.length > 0 ){
         return true;
     }else{
         return false;
@@ -27,7 +27,7 @@ export async function get_all_usuarios(){
 
 export async function get_one_usuario_id(id){
     const response = await dbclient.query("SELECT * FROM usuarios WHERE id = $1",[id]);
-    if (response.rowcount === 0 ){
+    if (response.rowCount === 0 ){
         return undefined;
     }
     else{
@@ -55,12 +55,13 @@ export async function create_usuario (
     articulos_comprados){
     try{
         const response = await dbclient.query(
-            "INSERT INTO usuarios ( nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados) VALUES ($1,$2,$3,$4,$5,$6)",
+            "INSERT INTO usuarios ( nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados) VALUES ($1,$2,$3,$4,$5,$6,$7)",
             [nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados]
         );
-    } catch {
-        return undefined;
-    };
+    } catch (err) {
+    console.error("Error en create_usuario:", err);
+    return undefined;
+}
 
     return{
     nombre_usuario,
