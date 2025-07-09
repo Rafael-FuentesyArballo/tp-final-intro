@@ -5,7 +5,6 @@ CREATE TABLE usuarios (
     mail varchar(50) unique not null,
     fecha_creacion_usuario TIMESTAMP WITH TIME ZONE,
     rol varchar(50),
-    karma int,
     articulos_comprados int
 );
 
@@ -39,7 +38,6 @@ CREATE TABLE comentarios (
     id_autor int references usuarios(id),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     texto varchar(100),
-    karma int,
     id_articulo int references articulos(id)
 );
 
