@@ -55,3 +55,15 @@ CREATE TABLE likes (
     valor int check (valor = 1 OR valor = -1),
     unique (id_usuario, id_comentario)
 );
+
+INSERT INTO usuarios (nombre_usuario, contraseña, mail, rol, articulos_comprados)
+VALUES  ('DUMMY_USR_1', 'DUMMY_PASS', 'DUMMY_MAIL1@dummy.com', 'Usuario', 0),
+        ('DUMMY_USR_2', 'DUMMY_PASS', 'DUMMY_MAIL2@dummy.com', 'Usuario', 7),
+        ('DUMMY_ADMIN_1', 'DUMMY_PASS', 'DUMMY_MAIL3@dummy.com', 'Administrador', 999);
+
+INSERT INTO articulos (nombre, descripcion, precio, ubicacion, id_vendedor, stock)
+VALUES ( 'DUMMY_ARTICULO', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        99999, 'Plaza Constitución, CABA', 1, 99);
