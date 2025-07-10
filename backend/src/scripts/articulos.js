@@ -1,19 +1,23 @@
+
 import { response } from 'express';
 import { Pool } from 'pg'
  
 const dbclient = new Pool({
   user: 'postgres',
   password: 'postgres',
+
   host: 'localhost',
   port: 5432,
   database: 'keystroke-db',
 })
+
 await dbclient.connect()
 
 export async function get_all_articulos(){
     const response = await dbclient.query("SELECT * FROM articulos");
     return response.rows;
 }
+
 
 export async function get_one_articulo_id(id){
     const response = await dbclient.query("SELECT * FROM articulos WHERE id = $1",[id]);
@@ -24,6 +28,7 @@ export async function get_one_articulo_id(id){
         return response.rows[0];
     }
 }
+
 
 export async function get_all_articulos_id_vendedor(id_vendedor){
     const response = await dbclient.query("SELECT * FROM articulos WHERE id_vendedor = $1",[id_vendedor]);
