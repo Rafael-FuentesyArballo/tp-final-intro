@@ -92,56 +92,12 @@
                 </div>
             </article>
         </div>
-        <div id="comentarios_articulo_principal">
-            <article  id="lista_comentario_articulo_principal" class="media">
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>Barbara Middleton</strong>
-                            <br />
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros
-                            lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris
-                            sit amet dolor blandit rutrum. Nunc in tempus turpis.
-                            <br />
-                            <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
-                        </p>
-                    </div>
-                    <article class="media">
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong>Sean Brown</strong>
-                                    <br />
-                                    Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque
-                                    habitant morbi tristique senectus et netus et malesuada fames ac
-                                    turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis
-                                    leo feugiat.
-                                    <br />
-                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                </p>
-                            </div>
-                        </div>
-                    </article>
-                    <article class="media">
-                        <div class="media-content">
-                            <div class="content">
-                                <p>
-                                    <strong>Kayli Eunice </strong>
-                                    <br />
-                                    Sed convallis scelerisque mauris, non pulvinar nunc mattis vel.
-                                    Maecenas varius felis sit amet magna vestibulum euismod malesuada
-                                    cursus libero. Vestibulum ante ipsum primis in faucibus orci luctus
-                                    et ultrices posuere cubilia Curae; Phasellus lacinia non nisl id
-                                    feugiat.
-                                    <br />
-                                    <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                                </p>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-            </article>
-            <article id="caja_comentario_articulo_principal" class="media">
+        <div>
+          <div id="comentarios_articulo_principal">
+            
+          </div>
+          <div>
+              <article id="caja_comentario_articulo_principal" class="media">
                 <div class="media-content">
                     <div class="field">
                         <p class="control">
@@ -155,9 +111,84 @@
                     </div>
                 </div>
             </article>
+          </div>
         </div>
     </main>
     <script>
+      const articulo_URL = "http://localhost:3000"
+      //
+      const imagen = document.querySelector("#imagen_articulo_principal")
+      const titulo = document.querySelector("#strong_titulo_articulo_principal")
+      const id_vendedor = document.querySelector("#vendedor_articulo_principal")
+      const id_punto_encuentro = document.querySelector("#punto_de_encuentro_articulo_principal")
+      const id_descripcion = document.querySelector("#id_descripcion_articulo_principal")
+      
+      /*
+      fetch(articulo_URL+"api/articulos/"+id).then((response)=>{
+        return response.json();
+      }).then((data)=>{
+        data.forEach(element => {
+        const elemtentoNuevo = document.createElement("img")
+        const punto_vendedor = document.createElement("li")
+        const punto_de_encuentro = document.createElement("li")
+
+        //modificar con respecto a la bd
+        elemtentoNuevo.src = element
+        titulo.innerHTML= element
+        punto_vendedor.innerHTML= element
+        punto_de_encuentro.innerHTML= element
+        id_descripcion.innerHTML=element
+        //
+        id_vendedor.append(punto_vendedor)
+        id_punto_encuentro.append(punto_de_encuentro)
+        imagen.append(elemtentoNuevo)
+        });
+      })
+      */
+
+      /*
+      const comentario = document.querySelector("#lista_comentario_articulo_principal")
+      const div_principal = document.querySelector("#comentarios_articulo_principal")
+    
+      fetch(articulo_URL+"api/articulos/"+id).then((response)=>{
+        return response.json();
+      }).then((data)=>{
+        data.forEach(element => {
+          const usuario_comentario = document.createElement("strong")
+          const p = document.createElement("p")
+          const div = document.createElement("div")
+          const div1 = document.createElement("div")
+          const article = document.createElement("article")
+          const br = document.createElement("br")
+          const br1 = document.createElement("br")
+          const small = document.createElement("small")
+          const like = document.createElement("a")
+
+          usuario_comentario.append(String("usuario_random"))
+          like.append(String("likee"))
+          small.append(like)
+          small.append(String("· 6hs"))
+
+          article.classList.add("media")
+          div.classList.add("media-content")
+          div1.classList.add("content")
+
+          article.id = "lista_comentario_articulo_principal"
+          
+          p.append(usuario_comentario)
+          p.append(br)
+          p.append(String("comentario random"))
+          p.append(br1)
+          
+          p.append(small)
+          div1.append(p)
+          div.append(div1)
+          article.append(div)
+          div_principal.append(article)
+          console.log(article)
+        })
+      })
+      */
     </script>
     <footer></footer>
   </body>
