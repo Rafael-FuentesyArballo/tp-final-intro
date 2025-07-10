@@ -14,7 +14,9 @@ CREATE TABLE articulos (
     descripcion varchar(500),
     precio int not null check (precio > 0),
     ubicacion varchar(50),
+    fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     id_vendedor int references usuarios(id),
+    id_comprador int references usuarios(id),
     envio_gratis boolean,
     stock int -- si llega a 0 se pausa la publicación
 );
@@ -43,6 +45,7 @@ CREATE TABLE calificaciones (
 CREATE TABLE comentarios (
     id serial primary key,
     id_autor int references usuarios(id),
+    id_comentario_padre int references comentarios(id),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     texto varchar(100),
     id_articulo int references articulos(id)

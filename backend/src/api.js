@@ -9,7 +9,7 @@ app.listen(port, () => {
 });
 
 // funciones de usuarios.js
-const {
+import{
     check_mail,
     get_all_usuarios,
     get_one_usuario_id,
@@ -33,13 +33,13 @@ const {
 //Endpoints usuarios//
 
 //get all usuarios
-app.get ('api/usuarios', async (req,res) => {
+app.get ('/api/usuarios', async (req,res) => {
     const usuarios = await get_all_usuarios();
     res.json(usuarios);
 });
 
 //get one usuario POR ID
-app.get ('api/usuarios/:id', async (req,res) => {
+app.get ('/api/usuarios/:id', async (req,res) => {
     const usuario = await get_one_usuario_id(req.params.id);
     if ( usuario === undefined ){
         return res.status(404).json({Error: 'Usuario no encontrado'});
@@ -48,7 +48,7 @@ app.get ('api/usuarios/:id', async (req,res) => {
 });
 
 //get one usuario POR NOMBRE
-app.get ('api/usuarios/:nombre_usuario', async (req,res) => {
+app.get ('/api/usuarios/:nombre_usuario', async (req,res) => {
     const usuario = await get_one_usuario_nombre(req.params.nombre_usuario);
     if ( usuario === undefined ){
         return res.status(404).json({Error: 'Usuario no encontrado'});
@@ -59,7 +59,7 @@ app.get ('api/usuarios/:nombre_usuario', async (req,res) => {
 
 
 //crear usuario WIP, CREAR CATCHEO DE EXCEPCIONES
-app.post('api/usuarios', async (req,res) => {
+app.post('/api/usuarios', async (req,res) => {
     const nombre = req.body.nombre_usuario;
     const contra = req.body.contraseña;
     const mail = req.body.mail;
@@ -88,7 +88,7 @@ app.post('api/usuarios', async (req,res) => {
 });
 
 //delete usuario
-app.delete('api/usuarios/:id', async (req,res) => {
+app.delete('/api/usuarios/:id', async (req,res) => {
     const usuario = await get_one_usuario_id(req.params.id);
 
     if (usuario === undefined){
@@ -102,7 +102,7 @@ app.delete('api/usuarios/:id', async (req,res) => {
 });
 
 //editar usuario
-app.put('api/usuarios/', async (req,res) => {
+app.put('/api/usuarios/', async (req,res) => {
     res.json();
 });
 
