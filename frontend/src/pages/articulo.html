@@ -16,7 +16,6 @@
                 <span aria-hidden="true"></span>
                 </a>
         </div>
-
         <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
       <a class="navbar-item">
@@ -87,7 +86,6 @@
             <article class="message is-dark">
                 <div class="message-header">
                     <p>descripcion</p>
-    
                 </div>
                 <div class="message-body">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -165,7 +163,44 @@
             </article>
         </div>
     </main>
-    <script src="" ></script>
+    <script>
+      //modificar con respecto a la bd
+      const pokemonURL = "https://pokeapi.co/api/v2/pokemon/15"
+      //
+      const imagen = document.querySelector("#imagen_articulo_principal")
+      fetch(pokemonURL).then((response)=>{
+        return response.json();
+      }).then((data)=>{
+        const elemtentoNuevo = document.createElement("img")
+        const titulo = document.createElement("h1")
+        const link = document.createElement("a")
+        const div1 = document.createElement("div")
+        const div2 = document.createElement("div")
+        const div3 = document.createElement("div")
+        const strong = document.createElement("strong")
+
+        div1.classList.add("articulo")
+        div2.classList.add("imagen_articulo")
+        div3.classList.add("descripcion_articulo")
+        
+        link.src = "primer_articulo.html"
+
+        //modificar con respecto a la bd
+        link.innerHTML= data.species.name
+        elemtentoNuevo.src = data.sprites.front_default;
+        strong.innerHTML=String(data.weight);
+        //
+
+        titulo.append(link)
+        div1.append(div2)
+        div1.append(div3)
+        div3.append(titulo)
+        div3.append(strong)
+        div2.append(elemtentoNuevo)
+        lista.append(div1)
+        console.log(data)
+      })
+    </script>
     <footer></footer>
   </body>
 </html>

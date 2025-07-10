@@ -16,18 +16,17 @@ app.listen(port, ()=>{
 })
 
 
+
 const addProduct = async (itemToAdd)=>{
     //add data db
     const response = await addDataDB(itemToAdd)
     const productData = response.json()
-
 }
 
 const getProduct = async (searchItem)=>{
     //get data db
     const response = await getDataDB(searchItem)
     const productData = response.json()
-
 }
 
 buttonAddProduct.addEventListener("click", (e)=>{
