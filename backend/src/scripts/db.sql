@@ -3,7 +3,7 @@ CREATE TABLE usuarios (
     nombre_usuario varchar(50) unique not null,
     contraseña varchar(60) not null,
     mail varchar(50) unique not null,
-    fecha_creacion_usuario TIMESTAMP WITH TIME ZONE,
+    fecha_creacion_usuario TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     rol varchar(50),
     karma int,
     articulos_comprados int
