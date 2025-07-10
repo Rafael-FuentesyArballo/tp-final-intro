@@ -1,5 +1,6 @@
 //const { Pool } = require("pg");
 
+import { response } from 'express';
 import { Pool } from 'pg'
  
 const dbclient = new Pool({
@@ -59,7 +60,7 @@ export async function create_usuario (
             [nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados]
         );
     } catch (err) {
-    console.error("Error en create_usuario:", err);
+    console.error("Error al en create_usuario:", err);
     return undefined;
 }
 
@@ -74,13 +75,15 @@ export async function create_usuario (
     };
 }
 
-export async function del_usuario(id){
-    try{
-        await dbclient.query(
-            "DELETE FROM usuarios WHERE id = $1",[id]);
-    } catch {
-        return undefined;
-    };
 
+export async function del_usuario(id) {
+    try {
+        const response = await dbclient.query(
+            "DELETE FROM usuarios WHERE id = $1 RETURNING *", [id]);
+        return response.rows[0]; // Devuelve el usuario eliminado
+    } catch (error) {
+        console.error("Error en del_usuario:", error);
+        return undefined;
+    }
 }
 

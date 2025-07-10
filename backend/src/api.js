@@ -87,16 +87,25 @@ app.post('/api/usuarios', async (req,res) => {
 });
 
 //delete usuario
-app.delete('/api/usuarios/:id', async (req,res) => {
-    const usuario = await get_one_usuario_id(req.params.id);
-
-    if (usuario === undefined){
-        res.sendStatus(404).json("Usuario no encontrado");
-    }else{
-        resultado = await del_usuario(req.params.id);
-        if (resultado === undefined ){
-            res,sendStatus(500).json("Error al borrar el usuario");
+//Comando para probar (borra el usuario de id especificado al final de la url)
+/*
+curl -X "DELETE" 'http://localhost:3000/api/usuarios/5'
+*/
+app.delete('/api/usuarios/:id', async (req, res) => {
+    try {
+        const usuario = await get_one_usuario_id(req.params.id);
+        if (usuario === undefined) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
         }
+        const resultado = await del_usuario(req.params.id);
+        if (resultado === undefined) {
+            return res.status(500).json({ error: "Error al borrar el usuario" });
+        }
+
+        return res.status(200).json(usuario);
+    } catch (error) {
+        console.error("Error en DELETE /api/usuarios:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
     }
 });
 
