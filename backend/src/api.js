@@ -17,8 +17,10 @@ import{
     get_one_usuario_nombre,
     create_usuario,
     del_usuario,
+
     update_usuario,
 } from './scripts/usuarios.js';
+
 
 ///////////////////ENDPOINTS USUARIOS/////////////////////////
 
@@ -198,6 +200,7 @@ app.get ('/api/articulos/:id', async (req,res) => {
     }
       res.json(articulo);
 });
+
 
 //get all articulos por id_vendedor
 app.get ('/api/articulos/por_vendedor/:id_vendedor', async (req,res) => {
