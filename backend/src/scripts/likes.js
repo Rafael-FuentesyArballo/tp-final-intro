@@ -38,3 +38,20 @@ export async function get_karma_by_user(id_usuario) {
     );
     return response.rows[0].karma || 0;
 }
+
+export async function create_like(
+    id_usuario,
+    id_comentario,
+    valor,
+    ) {
+    try{
+        const response = await dbclient.query(
+            "INSERT INTO likes (id_usuario, id_comentario, valor) VALUES ($1,$2,$3) returning *",
+            [id_usuario, id_comentario, valor]
+        );
+        return response.rows[0];
+    } catch (err) {
+        console.error("Error en create_like:", err.stack);
+    return undefined;
+    }
+}
