@@ -323,3 +323,16 @@ app.put('/api/articulos/:id', async (req, res) => {
     // Éxito
     res.json(articuloActualizado);
 });
+
+///////////////////ENDPOINTS LIKES/////////////////////////
+import {
+    get_all_likes,
+    get_likes_by_comment,
+    get_karma_by_user,
+    create_like,
+    del_like,
+    update_like
+}from './scripts/likes.js'
+
+
+
