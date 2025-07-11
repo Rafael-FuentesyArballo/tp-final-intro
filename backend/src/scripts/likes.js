@@ -27,7 +27,6 @@ export async function get_likes_by_comment(id_comentario) {
     return response.rows[0].total_likes || 0;
 }
 
-// Karma
 export async function get_karma_by_user(id_usuario) {
     const response = await dbclient.query(
         `SELECT SUM(l.valor) AS karma
@@ -53,5 +52,24 @@ export async function create_like(
     } catch (err) {
         console.error("Error en create_like:", err.stack);
     return undefined;
+    }
+}
+
+export async function del_like(
+    id_usuario,
+    id_comentario,
+    ) {
+    try {
+        const response = await dbclient.query(
+        "DELETE FROM likes WHERE id_usuario = $1 and id_comentario = $2 RETURNING *", [id_usuario, id_comentario]);
+        
+        if (response.rowCount === 0) {
+            return undefined; // No se encontró el like para eliminar
+        }
+        
+        return response.rows[0]; // Devuelve el like eliminado
+    } catch (error) {
+        console.error("Error en del_like:", error);
+        return undefined;
     }
 }
