@@ -45,11 +45,11 @@ CREATE TABLE calificaciones (
 
 CREATE TABLE comentarios (
     id serial primary key,
-    id_autor int references usuarios(id),
+    id_autor int references usuarios(id) not null,
     id_comentario_padre int references comentarios(id),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    texto varchar(100),
-    id_articulo int references articulos(id)
+    texto varchar(100) not null,
+    id_articulo int references articulos(id) not null
 );
 
 CREATE TABLE likes (
@@ -71,3 +71,13 @@ VALUES ( 'DUMMY_ARTICULO', 'Lorem ipsum dolor sit amet, consectetur adipiscing e
         Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         99999, 'Plaza Constitución, CABA', 1, 99);
+
+INSERT INTO comentarios (id_autor, texto, id_articulo)
+VALUES  (1, 'Test comentario Padre', 1),
+        (2, 'Test comentario sin hijo', 1);
+
+INSERT INTO comentarios (id_autor, texto, id_articulo, id_comentario_padre)
+VALUES (2, 'Test comentario Hijo', 1, 1);
+
+INSERT INTO likes (id_usuario, id_comentario, valor)
+VALUES (2, 1, 1);
