@@ -72,7 +72,6 @@ VALUES ( 'DUMMY_ARTICULO', 'Lorem ipsum dolor sit amet, consectetur adipiscing e
         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         99999, 'Plaza Constitución, CABA', 1, 99);
 
-
 INSERT INTO comentarios (id_autor, texto, id_articulo)
 VALUES  (1, 'Test comentario Padre', 1),
         (2, 'Test comentario sin hijo', 1);
