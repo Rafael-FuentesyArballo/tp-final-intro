@@ -347,3 +347,11 @@ app.get ('/api/likes/por_comentario/:id_comentario', async (req,res) => {
     }
       res.json(likes);
 });
+
+app.get ('/api/likes/karma/:id_usuario', async (req,res) => {
+    const karma = await get_karma_by_user(req.params.id_usuario);
+    if ( karma === undefined ){
+        return res.status(404).json({Error: 'Karma no encontrado'});
+    }
+      res.json(karma);
+});
