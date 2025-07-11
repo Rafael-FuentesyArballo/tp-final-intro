@@ -38,11 +38,7 @@ export async function get_karma_by_user(id_usuario) {
     return response.rows[0].karma || 0;
 }
 
-export async function create_like(
-    id_usuario,
-    id_comentario,
-    valor,
-    ) {
+export async function create_like( id_usuario, id_comentario, valor) {
     try{
         const response = await dbclient.query(
             "INSERT INTO likes (id_usuario, id_comentario, valor) VALUES ($1,$2,$3) returning *",
@@ -55,21 +51,32 @@ export async function create_like(
     }
 }
 
-export async function del_like(
-    id_usuario,
-    id_comentario,
-    ) {
+export async function del_like(id_usuario, id_comentario,) {
     try {
         const response = await dbclient.query(
         "DELETE FROM likes WHERE id_usuario = $1 and id_comentario = $2 RETURNING *", [id_usuario, id_comentario]);
-        
         if (response.rowCount === 0) {
-            return undefined; // No se encontró el like para eliminar
+            return undefined;
         }
-        
-        return response.rows[0]; // Devuelve el like eliminado
+        return response.rows[0];
     } catch (error) {
         console.error("Error en del_like:", error);
+        return undefined;
+    }
+}
+
+export async function update_like(id_usuario, id_comentario, valor) {
+    try {
+        const response = await dbclient.query(
+            "UPDATE likes SET valor = $3 WHERE id_usuario = $1 AND id_comentario = $2 RETURNING *",
+            [id_usuario, id_comentario, valor]
+        );
+        if (response.rowCount === 0) {
+            return undefined;
+        }
+        return response.rows[0];
+    } catch (error) {
+        console.error("Error en update_like:", error);
         return undefined;
     }
 }
