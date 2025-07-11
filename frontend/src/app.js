@@ -185,7 +185,3 @@ document.getElementById("form-login").addEventListener("submit", function (e) {
     });
 });
 
-
-
-
-
