@@ -338,3 +338,12 @@ app.get ('/api/likes', async (req, res) =>{
     const likes = await get_all_likes();
     res.json(likes);
 });
+
+//get likes de un comentario
+app.get ('/api/likes/por_comentario/:id_comentario', async (req,res) => {
+    const likes = await get_likes_by_comment(req.params.id_comentario);
+    if ( likes === undefined ){
+        return res.status(404).json({Error: 'Likes no encontrados'});
+    }
+      res.json(likes);
+});

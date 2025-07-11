@@ -21,7 +21,8 @@ export async function get_likes_by_comment(id_comentario) {
     const response = await dbclient.query(
         `SELECT SUM(l.valor) AS total_likes
          FROM likes l
-         INNER JOIN comentarios c ON l.id_comentario = c.id`,
+         INNER JOIN comentarios c ON l.id_comentario = c.id
+         WHERE l.id_comentario = $1`,
         [id_comentario]
     );
     return response.rows[0].total_likes || 0;
