@@ -355,3 +355,50 @@ app.get ('/api/likes/karma/:id_usuario', async (req,res) => {
     }
       res.json(karma);
 });
+
+//crear like
+// comando para probar:
+/*
+curl -X POST http://localhost:3000/api/likes/ \
+-H "Content-Type: application/json" \
+-d '{
+    "id_usuario": 1,
+    "id_comentario": 1,
+    "valor" : 1
+}'
+
+dislike 
+curl -X POST http://localhost:3000/api/likes/ \
+-H "Content-Type: application/json" \
+-d '{
+    "id_usuario": 3,
+    "id_comentario": 1,
+    "valor" : -1
+}'
+
+*/
+app.post('/api/likes/', async (req,res) => {
+    const id_usuario = req.body.id_usuario;
+    const id_comentario = req.body.id_comentario;
+    const valor = req.body.valor;
+
+    if (id_usuario === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de usuario");
+    }
+
+    if (id_comentario === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de comentario");
+    }
+
+    if (valor !== 1 && valor !== -1){
+        return res.status(400).json({ error: "El valor del like debe ser 1 o -1." });
+    }
+
+    const like = await create_like( id_usuario, id_comentario, valor);
+
+    if (like === undefined ){
+        return res.status(500).json("Error interno del servidor");
+    }else{
+        res.json(like);
+    }
+});
