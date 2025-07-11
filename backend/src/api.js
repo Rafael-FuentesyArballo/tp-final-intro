@@ -334,5 +334,7 @@ import {
     update_like
 }from './scripts/likes.js'
 
-
-
+app.get ('/api/likes', async (req, res) =>{
+    const likes = await get_all_likes();
+    res.json(likes);
+});
