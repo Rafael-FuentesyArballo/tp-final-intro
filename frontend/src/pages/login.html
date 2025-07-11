@@ -44,41 +44,7 @@
         </div>
     </section>
     <script>
-        /*
-        document.getElementById("form-login").addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-
-            const data = {
-                email: formData.get("email"),
-                password: formData.get("password"),
-            };
-
-            fetch("http://localhost:3000/login", {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            })
-                .then(response => {
-                if (!response.ok) {
-                    throw new Error("Email o contraseña incorrectos.");
-                }
-                return response.json();
-                })
-                .then(result => {
-                console.log(result);
-                window.location.href = "/frontend/src/pages/index.html";
-                })
-                .catch(error => {
-                console.error("Error:", error);
-                alert(error.message);
-                });
-        });
-
-        */
+       
     </script>
 </body>
 </html>
