@@ -335,6 +335,11 @@ import {
     update_comentario
 }from './scripts/comentarios.js'
 
+app.get ('/api/comentarios', async (req, res) => {
+    const comentarios = await get_all_comentarios();
+    res.json(comentarios);
+});
+
 
 ///////////////////ENDPOINTS LIKES/////////////////////////
 import {
