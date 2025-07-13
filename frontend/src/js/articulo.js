@@ -1,5 +1,29 @@
 
+async function agregar_comentario(element, div_principal){
+     
+    const comentario = `
+                            <article class="media">
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <strong>${element.usuario_nombre}</strong>
+                                            <br>
+                                            ${element.texto}
+                                            <br>
+                                            <small>
+                                                <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
+                                                · ${element.tiempo_publicacion }
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
+    div_principal.insertAdjacentHTML('beforeend', comentario)
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+    const div_principal = document.querySelector("#comentarios_articulo_principal")   
     const articulo_pagina = document.querySelector("#articulo_pagina") 
     const titulo_html = document.querySelector("#titulo")
     const parametro_url = new URLSearchParams(window.location.search)
@@ -48,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(error)
         })
 
-        const div_principal = document.querySelector("#comentarios_articulo_principal")
+        
         fetch(url_keystrokes+"api/articulos/").then((response)=>{
             if(response.ok){
                 return response.json();
@@ -58,25 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }).then((data)=>{
             data.forEach(element => {
-                const comentario = `
-                            <article class="media">
-                                <div class="media-content">
-                                    <div class="content">
-                                        <p>
-                                            <strong>${element.usuario_nombre}</strong>
-                                            <br>
-                                            ${element.texto_comentario}
-                                            <br>
-                                            <small>
-                                                <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
-                                                · ${element.tiempo_publicacion }
-                                            </small>
-                                        </p>
-                                    </div>
-                                </div>
-                            </article>
-                        `;
-                div_principal.insertAdjacentHTML('beforeend', comentario)
+                agregar_comentario(element)
             })
         }).catch((error)=>{
             console.log(error)
@@ -84,7 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     const form_comentario_1 = document.querySelector("#form_comentario")
-    
+    const contenido_comentario = document.querySelector("#contenido_comentario")
     form_comentario_1.addEventListener('submit', async (event) => {
         event.preventDefault();
     
@@ -101,6 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             id_articulo: id
         };
         console.log(dataToSend)
+        
         /*
         fetch( url_keystrokes+'/api/comentario/', {
             method: "POST",
@@ -116,7 +123,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             return response.json();
         }).then(result => {
             console.log(result.id);
-            window.location.replace("articulo_plantilla.html"+"?id="+result.id)
+            agregar_comentario(dataToSend, div_principal)
+            contenido_comentario.value=""
         }).catch(error => {
             console.error("Error:", error);
             alert(error.message);
