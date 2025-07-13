@@ -12,3 +12,7 @@ const dbclient = new Pool({
 })
 await dbclient.connect()
 
+export async function get_all_comentarios(){
+    const response = await dbclient.query("SELECT * FROM comentarios");
+    return response.rows;
+}
