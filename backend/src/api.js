@@ -201,6 +201,25 @@ app.get ('/api/articulos/:id', async (req,res) => {
       res.json(articulo);
 });
 
+//get one articulo con informacion extra (PARA PAGINA DE ARTICULO)
+//Info extra:
+//  el vendedor(usuario)
+//  comentarios
+//  likes
+
+app.get ('/api/articulos_pagina/:id', async (req,res) => {
+    try{
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+
+
+    const vendedor = await get_one_username_id();
+    }catch{
+        res.status(500).json("Error interno del servidor");
+    }
+});
 
 //get all articulos por id_vendedor
 app.get ('/api/articulos/por_vendedor/:id_vendedor', async (req,res) => {
@@ -224,13 +243,13 @@ curl -X POST http://localhost:3000/api/articulos/ \
 
 app.post('/api/articulos/', async (req,res) => {
     const descripcion = req.body.descripcion;
+    const titulo = req.body.titulo;
     const precio = req.body.precio;
     const ubicacion = req.body.ubicacion;
     const fecha = req.body.fecha || new Date().toISOString();
     const id_vendedor = req.body.id_vendedor;
     const id_comprador = req.body.id_comprador;
     const envio_gratis = req.body.envio_gratis;
-    const compatible_con = req.body.compatible_con;
     const stock = req.body.stock;
 
     if (descripcion === undefined){
@@ -243,7 +262,7 @@ app.post('/api/articulos/', async (req,res) => {
 
     const articulo = await create_articulo(
         descripcion, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
-        compatible_con, stock);
+        titulo, stock);
 
     if (articulo === undefined ){
         return res.status(500).json("Error interno del servidor");
@@ -323,35 +342,6 @@ app.put('/api/articulos/:id', async (req, res) => {
     // Éxito
     res.json(articuloActualizado);
 });
-///////////////////ENDPOINTS COMENTARIOS/////////////////////////
-import {
-    get_all_comentarios,
-    get_one_comentario_id,
-    get_all_comentarios_id_articulo,
-    get_all_comentarios_id_usuario,
-    create_comentario_padre,
-    create_comentario_hijo,
-    del_comentario,
-    update_comentario
-}from './scripts/comentarios.js'
-
-app.get ('/api/comentarios', async (req, res) => {
-    const comentarios = await get_all_comentarios();
-    res.json(comentarios);
-});
-
-app.get ('/api/comentarios/:id', async (req, res) => {
-    const comentarios = await get_one_comentario_id(req.params.id);
-    if (comentarios === undefined){
-        return res.status(404).json({Error: 'Comentario no encontrado'});
-    }
-    res.json(comentarios);
-});
-
-app.get ('/api/comentarios/por_articulo/:id', async (req, res) => {
-    const comentariosArticulo = await get_all_comentarios_id_articulo(req.params.id);
-    res.json(comentariosArticulo);
-});
 
 ///////////////////ENDPOINTS LIKES/////////////////////////
 import {
@@ -372,7 +362,7 @@ app.get ('/api/likes', async (req, res) =>{
 app.get ('/api/likes/por_comentario/:id_comentario', async (req,res) => {
     const likes = await get_likes_by_comment(req.params.id_comentario);
     if ( likes === undefined ){
-        return res.status(404).json({Error: 'Like no encontrado'});
+        return res.status(404).json({Error: 'Likes no encontrados'});
     }
       res.json(likes);
 });
