@@ -22,13 +22,6 @@ CREATE TABLE articulos (
     stock int -- si llega a 0 se pausa la publicación
 );
 
-CREATE TABLE publicaciones (
-    id serial primary key,
-    id_articulo int references articulos(id),
-    fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    texto varchar(500)
-);
-
 CREATE TABLE imagenes (
     id serial primary key,
     id_articulo int references articulos(id) not null,
