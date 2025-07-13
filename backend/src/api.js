@@ -348,6 +348,11 @@ app.get ('/api/comentarios/:id', async (req, res) => {
     res.json(comentarios);
 });
 
+app.get ('/api/comentarios/por_articulo/:id', async (req, res) => {
+    const comentariosArticulo = await get_all_comentarios_id_articulo(req.params.id);
+    res.json(comentariosArticulo);
+});
+
 ///////////////////ENDPOINTS LIKES/////////////////////////
 import {
     get_all_likes,
