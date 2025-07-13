@@ -179,9 +179,12 @@ import{
     get_all_articulos,
     get_one_articulo_id,
     get_all_articulos_id_vendedor,
+    get_one_vendedor_articulo_id,
     create_articulo,
     del_articulo,
     update_articulo,
+    get_calificaciones_articulo_id,
+    get_all_comentarios_id_articulo,
 } from './scripts/articulos.js';
 
 
@@ -202,21 +205,50 @@ app.get ('/api/articulos/:id', async (req,res) => {
 });
 
 //get one articulo con informacion extra (PARA PAGINA DE ARTICULO)
-//Info extra:
-//  el vendedor(usuario)
-//  comentarios
-//  likes
+//el get para los comentarios de un articulo esta en endpoints comentarios
 
-app.get ('/api/articulos_pagina/:id', async (req,res) => {
+app.get ('/api/articulos/pagina/:id', async (req,res) => {
+    try{
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+    
+    const vendedor = await get_one_vendedor_articulo_id(req.params.id);
+    if ( vendedor === undefined ){
+        return res.status(404).json({Error: 'Vendedor no encontrado'});
+    }
+
+    const calificaciones = await get_calificaciones_articulo_id(req.params.id);
+    if ( calificaciones === undefined ){
+        return res.status(404).json({Error: 'Calificaciones no encontradas'});
+    }
+
+    res.json({
+        "articulo": "articulo",
+        "usuario_vendedor": "vendedor",
+        "calificaciones": "calificaciones"
+    })
+    }catch (error){
+        console.error("Error:", error);
+        res.status(500).json("Error interno del servidor");
+    }
+});
+
+//get all comentarios de un articulo con los usernames de los autores
+app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
     try{
     const articulo = await get_one_articulo_id(req.params.id);
     if ( articulo === undefined ){
         return res.status(404).json({Error: 'Articulo no encontrado'});
     }
 
+    const comentarios = await get_all_comentarios_id_articulo(req.params.id);
 
-    const vendedor = await get_one_username_id();
-    }catch{
+    res.json(comentarios);
+
+    }catch(err){
+        console.error("Error:", err);
         res.status(500).json("Error interno del servidor");
     }
 });

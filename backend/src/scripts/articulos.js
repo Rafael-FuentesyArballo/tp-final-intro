@@ -28,14 +28,38 @@ export async function get_one_articulo_id(id){
     }
 }
 
-export async function get_pagina_articulo_id(id){
-    const response = await dbclient.query("                          ")
-}
-
-
 export async function get_all_articulos_id_vendedor(id_vendedor){
     const response = await dbclient.query("SELECT * FROM articulos WHERE id_vendedor = $1",[id_vendedor]);
     return response.rows;
+}
+
+export async function get_one_vendedor_articulo_id(id_articulo){
+    try{
+    const response = await dbclient.query("SELECT u.nombre_usuario FROM articulos a JOIN usuarios u ON a.id_vendedor = u.id WHERE a.id = $1",[id_articulo]);
+    return response.rows[0];
+    } catch(err){
+        return undefined;
+    }
+}
+
+export async function get_calificaciones_articulo_id(id_articulo){
+    try{
+    const response = await dbclient.query("SELECT c.valor, c.id_usuario FROM calificaciones c JOIN articulos a ON  c.id_articulo= $1",[id_articulo]);
+    return response.rows;
+    } catch(err){
+        console.error("Error en get_calificaciones_articulo_id", err);
+        return undefined;
+    }
+}
+
+export async function get_all_comentarios_id_articulo(id_articulo){
+    try{
+    const response = await dbclient.query("SELECT c.*, u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id WHERE c.id_articulo = $1 ORDER BY c.fecha DESC;",[id_articulo]);
+    return response.rows;
+    } catch(err){
+        console.error("Error en get_all_comentarios_id_articulo", err);
+        return undefined;
+    }
 }
 
 export async function create_articulo(
