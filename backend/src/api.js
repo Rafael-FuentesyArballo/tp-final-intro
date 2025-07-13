@@ -323,6 +323,8 @@ app.put('/api/articulos/:id', async (req, res) => {
     // Éxito
     res.json(articuloActualizado);
 });
+///////////////////ENDPOINTS COMENTARIOS/////////////////////////
+
 
 ///////////////////ENDPOINTS LIKES/////////////////////////
 import {
