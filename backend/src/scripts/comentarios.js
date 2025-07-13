@@ -71,3 +71,35 @@ export async function del_comentario(id) {
         return undefined;
     }
 }
+
+export async function update_comentario(id, nuevosDatos) {
+    try {
+        // preparar campos y valores para la consulta SQL
+        const campos = [];
+        const valores = [];
+        let contador = 1;
+
+        // iterar sobre los campos a actualizar
+        for (const [key, value] of Object.entries(nuevosDatos)) {
+            campos.push(`${key} = $${contador}`);
+            valores.push(value);
+            contador++;
+        }
+
+        // armar la consulta SQL
+        const query = `
+            UPDATE comentarios 
+            SET ${campos.join(', ')} 
+            WHERE id = $${contador}
+            RETURNING *  
+        `;  // Devuelve el registro actualizado
+        valores.push(id);
+
+        // hacer la consulta
+        const result = await dbclient.query(query, valores);
+        return result.rows[0]; // retorna el comentario actualizado
+    } catch (err) {
+        console.error("Error en update_comentario:", err);
+        return undefined;
+    }
+}
