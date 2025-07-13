@@ -375,7 +375,6 @@ curl -X POST http://localhost:3000/api/likes/ \
     "id_comentario": 1,
     "valor" : -1
 }'
-
 */
 app.post('/api/likes/', async (req,res) => {
     const id_usuario = req.body.id_usuario;
@@ -401,4 +400,22 @@ app.post('/api/likes/', async (req,res) => {
     }else{
         res.json(like);
     }
+});
+
+// Borrar un like. Para saber qué like borrar hay que especificar el usuario y el comentario
+// Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes
+// Comando para probar:
+/*
+curl -X DELETE "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]"
+*/
+app.delete('/api/likes', async (req, res) => {
+    const { id_usuario, id_comentario } = req.query;
+    if (!id_usuario || !id_comentario) {
+        return res.status(400).json({ error: "Se requiere id_usuario y id_comentario para eliminar un like." });
+    }
+    const likeEliminado = await del_like(id_usuario, id_comentario);
+    if (likeEliminado === undefined) {
+        return res.status(404).json({ message: "No se encontró un like con el id_usuario y id_comentario proporcionados." });
+    }
+    res.status(200).json(likeEliminado);
 });
