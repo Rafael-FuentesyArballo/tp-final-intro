@@ -324,6 +324,16 @@ app.put('/api/articulos/:id', async (req, res) => {
     res.json(articuloActualizado);
 });
 ///////////////////ENDPOINTS COMENTARIOS/////////////////////////
+import {
+    get_all_comentarios,
+    get_one_comentario_id,
+    get_all_comentarios_id_articulo,
+    get_all_comentarios_id_usuario,
+    create_comentario_padre,
+    create_comentario_hijo,
+    del_comentario,
+    update_comentario
+}from './scripts/comentarios.js'
 
 
 ///////////////////ENDPOINTS LIKES/////////////////////////
