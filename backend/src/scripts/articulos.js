@@ -28,6 +28,10 @@ export async function get_one_articulo_id(id){
     }
 }
 
+export async function get_pagina_articulo_id(id){
+    const response = await dbclient.query("                          ")
+}
+
 
 export async function get_all_articulos_id_vendedor(id_vendedor){
     const response = await dbclient.query("SELECT * FROM articulos WHERE id_vendedor = $1",[id_vendedor]);
@@ -36,6 +40,7 @@ export async function get_all_articulos_id_vendedor(id_vendedor){
 
 export async function create_articulo(
     descripcion,
+    titulo,
     precio,
     ubicacion,
     fecha,
@@ -45,8 +50,8 @@ export async function create_articulo(
     stock) {
     try{
         const response = await dbclient.query(
-            "INSERT INTO articulos (descripcion,precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) returning *",
-            [descripcion,precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock]
+            "INSERT INTO articulos (descripcion,titulo,precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning *",
+            [descripcion,titulo, precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock]
         );
         return response.rows[0];
     } catch (err) {

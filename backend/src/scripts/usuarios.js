@@ -36,6 +36,16 @@ export async function get_one_usuario_id(id){
     }
 }
 
+export async function get_one_username_id(id){
+    const response = await dbclient.query("SELECT nombre_usuario FROM usuarios WHERE id = $1",[id]);
+    if (response.rowCount === 0 ){
+        return undefined;
+    }
+    else{
+        return response.rows[0];
+    }
+}
+
 export async function get_one_usuario_nombre(nombre){
     const response = await dbclient.query("SELECT * FROM usuarios WHERE  nombre_usuario = $1",[nombre]);
     if (response.rowcount === 0 ){
