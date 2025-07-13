@@ -71,7 +71,8 @@ export async function create_usuario (
 export async function del_usuario(id) {
     try {
         const response = await dbclient.query(
-            "DELETE FROM usuarios WHERE id = $1 RETURNING *", [id]);
+            "DELETE FROM usuarios WHERE id = $1 RETURNING * ", [id]);
+            return response.rows[0]; // Devuelve el usuario eliminado
     } catch (error) {
         console.error("Error en del_usuario:", error);
         return undefined;
@@ -79,7 +80,6 @@ export async function del_usuario(id) {
     if (response.rowCount === 0){
         return undefined;
     }
-     return response.rows[0]; // Devuelve el usuario eliminado
 }
 
 

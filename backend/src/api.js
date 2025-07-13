@@ -111,7 +111,7 @@ app.delete('/api/usuarios/:id', async (req, res) => {
 });
 
 //Editar usuario
-//  La request tiene que tener los campos a cambiar, sus nuevos valores en el cuerpo
+//  La request tiene que tener los campos a cambiar con sus nuevos valores en el cuerpo
 //y el id del usuario en la url.
 //Comando para probar
 /*
@@ -180,8 +180,8 @@ import{
     get_one_articulo_id,
     get_all_articulos_id_vendedor,
     create_articulo,
-    //del_articulo,
-    //update_articulo,
+    del_articulo,
+    update_articulo,
 } from './scripts/articulos.js';
 
 
@@ -230,7 +230,6 @@ app.post('/api/articulos/', async (req,res) => {
     const id_vendedor = req.body.id_vendedor;
     const id_comprador = req.body.id_comprador;
     const envio_gratis = req.body.envio_gratis;
-    const tipo_de_articulo = req.body.tipo_de_articulo;
     const compatible_con = req.body.compatible_con;
     const stock = req.body.stock;
 
@@ -238,13 +237,208 @@ app.post('/api/articulos/', async (req,res) => {
         return res.status(400).json("Error: descripcion no puede ser nula");
     }
 
+    if (precio === undefined){
+        return res.status(400).json("Error: se debe proveer precio");
+    }
+
     const articulo = await create_articulo(
         descripcion, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
-        tipo_de_articulo, compatible_con, stock);
+        compatible_con, stock);
 
     if (articulo === undefined ){
         return res.status(500).json("Error interno del servidor");
     }else{
         res.json(articulo);
     }
+});
+
+//Borrar articulo
+
+//Comando para probar (borra el articulo de id especificado al final de la url donde dice [id])
+/*
+curl -X "DELETE" 'http://localhost:3000/api/articulos/[id]'
+*/
+
+app.delete('/api/articulos/:id', async (req, res) => {
+    try {
+        const articulo = await get_one_articulo_id(req.params.id);
+        if (articulo === undefined) {
+            return res.status(404).json({ message: "Articulo no encontrado" });
+        }
+        const resultado = await del_articulo(req.params.id);
+        if (resultado === undefined) {
+            return res.status(500).json({ error: "Error al borrar el articulo" });
+        }
+        return res.status(200).json(articulo);
+    } catch (error) {
+        console.error("Error en DELETE /api/articulos:", error);
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
+});
+
+//Editar articulo
+
+//  La request tiene que tener los campos a cambiar con sus nuevos valores en el cuerpo
+//y el id del articulo en la url.
+//Comando para probar
+/*
+curl -X PUT http://localhost:3000/api/articulos/1 \
+-H "Content-Type: application/json" \
+-d '{
+    "descripcion": "ana_garcia",
+    "ubicacion": "aca"
+}' 
+*/
+
+app.put('/api/articulos/:id', async (req, res) => {
+    const id = req.params.id;
+    const datosActualizados = req.body;
+
+    // validar id y al menos 1 campo
+    if (!id || Object.keys(datosActualizados).length === 0) {
+        return res.status(400).json({ error: "Se requiere ID y al menos un campo para actualizar" });
+    }
+
+    // Validar si los campos a editar estan en los permitidos
+    const camposPermitidos = ['titulo', 'descripcion', 'precio', 'ubicacion', 'id_comprador', 'envio_gratis', 'stock' ];
+    const camposSolicitados = Object.keys(datosActualizados);
+    const camposInvalidos = camposSolicitados.filter(campo => !camposPermitidos.includes(campo));
+
+    if (camposInvalidos.length > 0) {
+        return res.status(400).json({ error: `Campos no editables: ${camposInvalidos.join(', ')}` });
+    }
+
+    // Validar existencia del articulo
+    const articuloExistente = await get_one_articulo_id(id);
+    if (!articuloExistente) {
+        return res.status(404).json({ error: "Articulo no encontrado" });
+    }
+
+    // Actualizar en la base de datos
+    const articuloActualizado = await update_articulo(id, datosActualizados);
+    if (!articuloActualizado) {
+        return res.status(500).json({ error: "Error al actualizar el articulo" });
+    }
+
+    // Éxito
+    res.json(articuloActualizado);
+});
+
+///////////////////ENDPOINTS LIKES/////////////////////////
+import {
+    get_all_likes,
+    get_likes_by_comment,
+    get_karma_by_user,
+    create_like,
+    del_like,
+    update_like
+}from './scripts/likes.js'
+
+app.get ('/api/likes', async (req, res) =>{
+    const likes = await get_all_likes();
+    res.json(likes);
+});
+
+//get likes de un comentario
+app.get ('/api/likes/por_comentario/:id_comentario', async (req,res) => {
+    const likes = await get_likes_by_comment(req.params.id_comentario);
+    if ( likes === undefined ){
+        return res.status(404).json({Error: 'Likes no encontrados'});
+    }
+      res.json(likes);
+});
+
+app.get ('/api/likes/karma/:id_usuario', async (req,res) => {
+    const karma = await get_karma_by_user(req.params.id_usuario);
+    if ( karma === undefined ){
+        return res.status(404).json({Error: 'Karma no encontrado'});
+    }
+      res.json(karma);
+});
+
+//crear like
+// comando para probar:
+/*
+curl -X POST http://localhost:3000/api/likes/ \
+-H "Content-Type: application/json" \
+-d '{
+    "id_usuario": 1,
+    "id_comentario": 1,
+    "valor" : 1
+}'
+
+dislike 
+curl -X POST http://localhost:3000/api/likes/ \
+-H "Content-Type: application/json" \
+-d '{
+    "id_usuario": 3,
+    "id_comentario": 1,
+    "valor" : -1
+}'
+*/
+app.post('/api/likes/', async (req,res) => {
+    const id_usuario = req.body.id_usuario;
+    const id_comentario = req.body.id_comentario;
+    const valor = req.body.valor;
+
+    if (id_usuario === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de usuario");
+    }
+
+    if (id_comentario === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de comentario");
+    }
+
+    if (valor !== 1 && valor !== -1){
+        return res.status(400).json({ error: "El valor del like debe ser 1 o -1." });
+    }
+
+    const like = await create_like( id_usuario, id_comentario, valor);
+
+    if (like === undefined ){
+        return res.status(500).json("Error interno del servidor");
+    }else{
+        res.json(like);
+    }
+});
+
+// Borrar un like. Para saber qué like borrar hay que especificar el usuario y el comentario
+// Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes(sin los [])
+// Comando para probar:
+/*
+curl -X DELETE "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]"
+*/
+app.delete('/api/likes', async (req, res) => {
+    const { id_usuario, id_comentario } = req.query;
+    if (!id_usuario || !id_comentario) {
+        return res.status(400).json({ error: "Se requiere id_usuario y id_comentario para eliminar un like." });
+    }
+    const likeEliminado = await del_like(id_usuario, id_comentario);
+    if (likeEliminado === undefined) {
+        return res.status(404).json({ message: "No se encontró un like con el id_usuario y id_comentario proporcionados." });
+    }
+    res.status(200).json(likeEliminado);
+});
+
+// Modificar un like. Cuando un usuario quiera cambiar la valoración de un comentario dado se puede
+// usar este endpoint. Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes(sin los [])
+// valor debe valer 1 o -1
+// Comando para probar:
+/*
+curl -X PUT "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]&valor=[valor]"
+*/
+app.put('/api/likes', async (req, res) => {
+    const { id_usuario, id_comentario, valor } = req.query;
+    if (!id_usuario || !id_comentario || valor === undefined) {
+        return res.status(400).json({ error: "Se requieren id_usuario, id_comentario y un nuevo valor." });
+    }
+    const nuevoValor = parseInt(valor, 10);
+    if (nuevoValor !== 1 && nuevoValor !== -1) {
+        return res.status(400).json({ error: "El valor del like debe ser 1 o -1." });
+    }
+    const likeActualizado = await update_like(id_usuario, id_comentario, nuevoValor);
+    if (likeActualizado === undefined) {
+        return res.status(404).json({ message: "No se encontró un like para actualizar con el id_usuario y id_comentario proporcionados." });
+    }
+    res.status(200).json(likeActualizado);
 });
