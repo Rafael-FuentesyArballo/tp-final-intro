@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <title id="titulo">Keystrokes</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <script src="../js/publicar.js" ></script>
+    <script src="../app.js" ></script>
+  </head>
+  <body id="articulo_pagina">
+    <nav id="nav" class="navbar" role="navigation" aria-label="main navigation">
+        
+    </nav>
+    <main>
+        <div style=" display: flex; align-items: center; flex-direction: column; padding-top: 2.5%;">
+            <form id="publicar_form" style="width: 80%">
+                <div class="field">
+                    <label class="label">Articulo</label>
+                    <div class="control">
+                        <input name="articulo" class="input" type="text" placeholder="">
+                    </div>
+                </div>
+                <div class="field has-addons">
+                    <div class="control">
+                        <label class="label">Precio</label>
+                        <input name="precio" class="input" type="number" placeholder="">
+                    </div>
+                </div>
+                <div class="field has-addons">
+                    <div class="control">
+                        <label class="label">Stock</label>
+                        <input name="stock" class="input" type="number" placeholder="">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Envio Gratis</label>
+                    <div class="control">
+                        <div class="select">
+                            <select id="envio" name="envio">
+                                <option>Si</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Ubicacion</label>
+                    <div class="control">
+                        <input name="ubicacion" class="input" type="text" placeholder="">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Descripcion</label>
+                    <div class="control">
+                        <textarea name="descripcion" class="textarea" placeholder="Describe las caracteristicas principales de tu producto &#129299;"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <label class="checkbox">
+                            <input id="checkbox" type="checkbox">
+                            I agree to the <a href="#">terms and conditions</a>
+                        </label>
+                    </div>
+                </div>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" id="boton_publicar" class="button is-link">Publicar</button>
+                    </div>
+                    <div class="control">
+                        <button class="button is-link is-light">Cancelar</button>
+                    </div>
+                </div>
+                <br>
+            </form>
+        </div>
+    </main>
+    <script>
+        agregar_nav()
+    </script>
+    <footer>
+        <div class="footer has-background-dark has-text-white">
+            <div class="container has-text-centered">
+                <p class="mb-0">© 2025 KeyStroke. Todos los derechos reservados.</p>
+                <p class="mb-0">Desarrollado por el equipo de KeyStroke</p>
+                <p class="mb-0">Con mucho amor.</p>
+            </div>
+        </div>
+    </footer>
+  </body>
+</html>
