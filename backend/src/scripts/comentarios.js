@@ -57,3 +57,17 @@ export async function create_comentario_hijo(id_autor, id_articulo, texto, id_co
     return undefined;
     }
 }
+
+export async function del_comentario(id) {
+    try {
+        const response = await dbclient.query(
+            "DELETE FROM comentarios WHERE id = $1 RETURNING * ", [id]);
+        if (response.rowCount === 0){
+            return undefined;
+        }
+        return response.rows[0]; // Devuelve el comentario eliminado
+    } catch (error) {
+        console.error("Error en del_comentario:", error);
+        return undefined;
+    }
+}
