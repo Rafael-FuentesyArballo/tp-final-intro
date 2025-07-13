@@ -179,9 +179,12 @@ import{
     get_all_articulos,
     get_one_articulo_id,
     get_all_articulos_id_vendedor,
+    get_one_vendedor_articulo_id,
     create_articulo,
     del_articulo,
     update_articulo,
+    get_calificaciones_articulo_id,
+    get_all_comentarios_id_articulo,
 } from './scripts/articulos.js';
 
 
@@ -201,6 +204,54 @@ app.get ('/api/articulos/:id', async (req,res) => {
       res.json(articulo);
 });
 
+//get one articulo con informacion extra (PARA PAGINA DE ARTICULO)
+//el get para los comentarios de un articulo esta en endpoints comentarios
+
+app.get ('/api/articulos/pagina/:id', async (req,res) => {
+    try{
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+    
+    const vendedor = await get_one_vendedor_articulo_id(req.params.id);
+    if ( vendedor === undefined ){
+        return res.status(404).json({Error: 'Vendedor no encontrado'});
+    }
+
+    const calificaciones = await get_calificaciones_articulo_id(req.params.id);
+    if ( calificaciones === undefined ){
+        return res.status(404).json({Error: 'Calificaciones no encontradas'});
+    }
+
+    res.json({
+        "articulo": "articulo",
+        "usuario_vendedor": "vendedor",
+        "calificaciones": "calificaciones"
+    })
+    }catch (error){
+        console.error("Error:", error);
+        res.status(500).json("Error interno del servidor");
+    }
+});
+
+//get all comentarios de un articulo con los usernames de los autores
+app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
+    try{
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+
+    const comentarios = await get_all_comentarios_id_articulo(req.params.id);
+
+    res.json(comentarios);
+
+    }catch(err){
+        console.error("Error:", err);
+        res.status(500).json("Error interno del servidor");
+    }
+});
 
 //get all articulos por id_vendedor
 app.get ('/api/articulos/por_vendedor/:id_vendedor', async (req,res) => {
@@ -224,13 +275,13 @@ curl -X POST http://localhost:3000/api/articulos/ \
 
 app.post('/api/articulos/', async (req,res) => {
     const descripcion = req.body.descripcion;
+    const titulo = req.body.titulo;
     const precio = req.body.precio;
     const ubicacion = req.body.ubicacion;
     const fecha = req.body.fecha || new Date().toISOString();
     const id_vendedor = req.body.id_vendedor;
     const id_comprador = req.body.id_comprador;
     const envio_gratis = req.body.envio_gratis;
-    const compatible_con = req.body.compatible_con;
     const stock = req.body.stock;
 
     if (descripcion === undefined){
@@ -243,7 +294,7 @@ app.post('/api/articulos/', async (req,res) => {
 
     const articulo = await create_articulo(
         descripcion, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
-        compatible_con, stock);
+        titulo, stock);
 
     if (articulo === undefined ){
         return res.status(500).json("Error interno del servidor");
@@ -322,4 +373,123 @@ app.put('/api/articulos/:id', async (req, res) => {
 
     // Éxito
     res.json(articuloActualizado);
+});
+
+///////////////////ENDPOINTS LIKES/////////////////////////
+import {
+    get_all_likes,
+    get_likes_by_comment,
+    get_karma_by_user,
+    create_like,
+    del_like,
+    update_like
+}from './scripts/likes.js'
+
+app.get ('/api/likes', async (req, res) =>{
+    const likes = await get_all_likes();
+    res.json(likes);
+});
+
+//get likes de un comentario
+app.get ('/api/likes/por_comentario/:id_comentario', async (req,res) => {
+    const likes = await get_likes_by_comment(req.params.id_comentario);
+    if ( likes === undefined ){
+        return res.status(404).json({Error: 'Likes no encontrados'});
+    }
+      res.json(likes);
+});
+
+app.get ('/api/likes/karma/:id_usuario', async (req,res) => {
+    const karma = await get_karma_by_user(req.params.id_usuario);
+    if ( karma === undefined ){
+        return res.status(404).json({Error: 'Karma no encontrado'});
+    }
+      res.json(karma);
+});
+
+//crear like
+// comando para probar:
+/*
+curl -X POST http://localhost:3000/api/likes/ \
+-H "Content-Type: application/json" \
+-d '{
+    "id_usuario": 1,
+    "id_comentario": 1,
+    "valor" : 1
+}'
+
+dislike 
+curl -X POST http://localhost:3000/api/likes/ \
+-H "Content-Type: application/json" \
+-d '{
+    "id_usuario": 3,
+    "id_comentario": 1,
+    "valor" : -1
+}'
+*/
+app.post('/api/likes/', async (req,res) => {
+    const id_usuario = req.body.id_usuario;
+    const id_comentario = req.body.id_comentario;
+    const valor = req.body.valor;
+
+    if (id_usuario === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de usuario");
+    }
+
+    if (id_comentario === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de comentario");
+    }
+
+    if (valor !== 1 && valor !== -1){
+        return res.status(400).json({ error: "El valor del like debe ser 1 o -1." });
+    }
+
+    const like = await create_like( id_usuario, id_comentario, valor);
+
+    if (like === undefined ){
+        return res.status(500).json("Error interno del servidor");
+    }else{
+        res.json(like);
+    }
+});
+
+// Borrar un like. Para saber qué like borrar hay que especificar el usuario y el comentario
+// Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes(sin los [])
+// Comando para probar:
+/*
+curl -X DELETE "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]"
+*/
+app.delete('/api/likes', async (req, res) => {
+    const { id_usuario, id_comentario } = req.query;
+    if (!id_usuario || !id_comentario) {
+        return res.status(400).json({ error: "Se requiere id_usuario y id_comentario para eliminar un like." });
+    }
+    const likeEliminado = await del_like(id_usuario, id_comentario);
+    if (likeEliminado === undefined) {
+        return res.status(404).json({ message: "No se encontró un like con el id_usuario y id_comentario proporcionados." });
+    }
+    res.status(200).json(likeEliminado);
+});
+
+// Modificar un like. Cuando un usuario quiera cambiar la valoración de un comentario dado se puede
+// usar este endpoint. Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes(sin los [])
+// valor debe valer 1 o -1
+// Comando para probar:
+/*
+curl -X PUT "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]&valor=[valor]"
+*/
+app.put('/api/likes', async (req, res) => {
+    const { id_usuario, id_comentario, valor } = req.query;
+    if (!id_usuario || !id_comentario || valor === undefined) {
+        return res.status(400).json({ error: "Se requieren id_usuario, id_comentario y un nuevo valor." });
+    }
+    const nuevoValor = parseInt(valor, 10);
+    if (nuevoValor !== 1 && nuevoValor !== -1) {
+        return res.status(400).json({ error: "El valor del like debe ser 1 o -1." });
+    }
+    const likeActualizado = await update_like(id_usuario, id_comentario, nuevoValor);
+    if (likeActualizado === undefined) {
+        return res.status(404).json({ message: "No se encontró un like para actualizar con el id_usuario y id_comentario proporcionados." });
+    }
+    res.status(200).json(likeActualizado);
 });
