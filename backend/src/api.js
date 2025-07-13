@@ -403,7 +403,7 @@ app.post('/api/likes/', async (req,res) => {
 });
 
 // Borrar un like. Para saber qué like borrar hay que especificar el usuario y el comentario
-// Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes
+// Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes(sin los [])
 // Comando para probar:
 /*
 curl -X DELETE "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]"
@@ -418,4 +418,27 @@ app.delete('/api/likes', async (req, res) => {
         return res.status(404).json({ message: "No se encontró un like con el id_usuario y id_comentario proporcionados." });
     }
     res.status(200).json(likeEliminado);
+});
+
+// Modificar un like. Cuando un usuario quiera cambiar la valoración de un comentario dado se puede
+// usar este endpoint. Podés reemplazar [id_usuario] e [id_comentario] con los datos correspondientes(sin los [])
+// valor debe valer 1 o -1
+// Comando para probar:
+/*
+curl -X PUT "http://localhost:3000/api/likes?id_usuario=[id_usuario]&id_comentario=[id_comentario]&valor=[valor]"
+*/
+app.put('/api/likes', async (req, res) => {
+    const { id_usuario, id_comentario, valor } = req.query;
+    if (!id_usuario || !id_comentario || valor === undefined) {
+        return res.status(400).json({ error: "Se requieren id_usuario, id_comentario y un nuevo valor." });
+    }
+    const nuevoValor = parseInt(valor, 10);
+    if (nuevoValor !== 1 && nuevoValor !== -1) {
+        return res.status(400).json({ error: "El valor del like debe ser 1 o -1." });
+    }
+    const likeActualizado = await update_like(id_usuario, id_comentario, nuevoValor);
+    if (likeActualizado === undefined) {
+        return res.status(404).json({ message: "No se encontró un like para actualizar con el id_usuario y id_comentario proporcionados." });
+    }
+    res.status(200).json(likeActualizado);
 });
