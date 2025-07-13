@@ -27,8 +27,14 @@ export async function get_one_comentario_id(id){
     }
 }
 
-export async function get_all_articulos_id_usuario(id_usuario){
-    const response = await dbclient.query("SELECT * FROM articulos WHERE id_usuario = $1",[id_usuario]);
+export async function get_all_comentarios_id_articulo(id_articulo){
+    const response = await dbclient.query("SELECT * FROM comentarios WHERE id_articulo = $1",[id_articulo]);
+    return response.rows;
+}
+
+
+export async function get_all_comentarios_id_usuario(id_usuario){
+    const response = await dbclient.query("SELECT * FROM comentarios WHERE id_usuario = $1",[id_usuario]);
     return response.rows;
 }
 

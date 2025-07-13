@@ -323,6 +323,35 @@ app.put('/api/articulos/:id', async (req, res) => {
     // Éxito
     res.json(articuloActualizado);
 });
+///////////////////ENDPOINTS COMENTARIOS/////////////////////////
+import {
+    get_all_comentarios,
+    get_one_comentario_id,
+    get_all_comentarios_id_articulo,
+    get_all_comentarios_id_usuario,
+    create_comentario_padre,
+    create_comentario_hijo,
+    del_comentario,
+    update_comentario
+}from './scripts/comentarios.js'
+
+app.get ('/api/comentarios', async (req, res) => {
+    const comentarios = await get_all_comentarios();
+    res.json(comentarios);
+});
+
+app.get ('/api/comentarios/:id', async (req, res) => {
+    const comentarios = await get_one_comentario_id(req.params.id);
+    if (comentarios === undefined){
+        return res.status(404).json({Error: 'Comentario no encontrado'});
+    }
+    res.json(comentarios);
+});
+
+app.get ('/api/comentarios/por_articulo/:id', async (req, res) => {
+    const comentariosArticulo = await get_all_comentarios_id_articulo(req.params.id);
+    res.json(comentariosArticulo);
+});
 
 ///////////////////ENDPOINTS LIKES/////////////////////////
 import {
@@ -343,7 +372,7 @@ app.get ('/api/likes', async (req, res) =>{
 app.get ('/api/likes/por_comentario/:id_comentario', async (req,res) => {
     const likes = await get_likes_by_comment(req.params.id_comentario);
     if ( likes === undefined ){
-        return res.status(404).json({Error: 'Likes no encontrados'});
+        return res.status(404).json({Error: 'Like no encontrado'});
     }
       res.json(likes);
 });
