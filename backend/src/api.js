@@ -184,7 +184,6 @@ import{
     del_articulo,
     update_articulo,
     get_calificaciones_articulo_id,
-    get_all_comentarios_id_articulo,
 } from './scripts/articulos.js';
 
 
@@ -205,7 +204,7 @@ app.get ('/api/articulos/:id', async (req,res) => {
 });
 
 //get one articulo con informacion extra (PARA PAGINA DE ARTICULO)
-//el get para los comentarios de un articulo esta en endpoints comentarios
+//da los datos del articulo, el nombre del vendedor y las calificaciones en un vector
 
 app.get ('/api/articulos/pagina/:id', async (req,res) => {
     try{
@@ -225,9 +224,9 @@ app.get ('/api/articulos/pagina/:id', async (req,res) => {
     }
 
     res.json({
-        "articulo": "articulo",
-        "usuario_vendedor": "vendedor",
-        "calificaciones": "calificaciones"
+        "articulo": articulo,
+        "usuario_vendedor": vendedor,
+        "calificaciones": calificaciones
     })
     }catch (error){
         console.error("Error:", error);
@@ -235,23 +234,6 @@ app.get ('/api/articulos/pagina/:id', async (req,res) => {
     }
 });
 
-//get all comentarios de un articulo con los usernames de los autores
-app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
-    try{
-    const articulo = await get_one_articulo_id(req.params.id);
-    if ( articulo === undefined ){
-        return res.status(404).json({Error: 'Articulo no encontrado'});
-    }
-
-    const comentarios = await get_all_comentarios_id_articulo(req.params.id);
-
-    res.json(comentarios);
-
-    }catch(err){
-        console.error("Error:", err);
-        res.status(500).json("Error interno del servidor");
-    }
-});
 
 //get all articulos por id_vendedor
 app.get ('/api/articulos/por_vendedor/:id_vendedor', async (req,res) => {
@@ -492,4 +474,44 @@ app.put('/api/likes', async (req, res) => {
         return res.status(404).json({ message: "No se encontró un like para actualizar con el id_usuario y id_comentario proporcionados." });
     }
     res.status(200).json(likeActualizado);
+});
+
+
+/////////////////endpoints comentarios////////////////////////////////
+
+import{
+    get_all_comentarios_id_articulo_users,
+    get_respuestas_id
+} from './scripts/comentarios.js'
+
+//get all comentarios de un articulo con los usernames de los autores
+app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
+    try{
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+
+    const comentarios = await get_all_comentarios_id_articulo_users(req.params.id);
+
+    res.json(comentarios);
+
+    }catch(err){
+        console.error("Error:", err);
+        res.status(500).json("Error interno del servidor");
+    }
+});
+
+//get all respuestas a un comentario con usernames de los autores
+
+app.get ('/api/comentarios/respuestas/:id_comentario', async (req,res) => {
+    try{
+        const respuestas = await get_respuestas_id(req.params.id_comentario);
+        if ( respuestas === undefined ){
+            return res.status(404).json({Error: 'Respuestas no encontrado'});
+        }
+        res.json(respuestas);
+    } catch(err){
+        console.error("Error:", err);
+    }
 });

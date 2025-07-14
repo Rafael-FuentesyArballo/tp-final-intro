@@ -28,8 +28,32 @@ export async function get_one_comentario_id(id){
 }
 
 export async function get_all_comentarios_id_articulo(id_articulo){
-    const response = await dbclient.query("SELECT * FROM comentarios WHERE id_articulo = $1",[id_articulo]);
+    try{
+        const response = await dbclient.query("SELECT * FROM comentarios WHERE id_articulo = $1",[id_articulo]);
+        return response.rows;
+    }catch(err){
+        console.error("Error en get_all_comentarios_id_articulo", err);
+    }
+}
+
+export async function get_all_comentarios_id_articulo_users(id_articulo){
+    try{
+    const response = await dbclient.query("SELECT c.*, u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id WHERE c.id_articulo = $1 ORDER BY c.fecha DESC;",[id_articulo]);
     return response.rows;
+    } catch(err){
+        console.error("Error en get_all_comentarios_id_articulo", err);
+        return undefined;
+    }
+}
+
+export async function get_respuestas_id(id_comentario){
+    try{
+        const response = await dbclient.query("SELECT c.*, u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id WHERE c.id_comentario_padre = $1 ORDER BY c.fecha DESC;",[id_comentario]);
+        return response.rows;
+    } catch(err){
+        console.error("Error en get_respuestas_id", err);
+        return undefined;
+    }
 }
 
 
