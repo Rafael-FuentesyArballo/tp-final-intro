@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).then((data)=>{
             console.log(data)
             data.forEach(element => {
+                console.log("agregando comentario")
                 agregar_comentario(element, div_principal)
             })
         }).catch((error)=>{
@@ -130,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return response.json();
         }).then(result => {
             console.log(result);
-            agregar_comentario(result, div_principal)
+            agregar_comentario(result[0], div_principal)
             contenido_comentario.value=""
         }).catch(error => {
             console.error("Error:", error);
