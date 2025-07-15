@@ -204,6 +204,7 @@ import{
     del_articulo,
     update_articulo,
     get_calificaciones_articulo_id,
+    get_imagen_articulo_id
 } from './scripts/articulos.js';
 
 
@@ -225,6 +226,7 @@ app.get ('/api/articulos/:id', async (req,res) => {
 
 //get one articulo con informacion extra (PARA PAGINA DE ARTICULO)
 //da los datos del articulo, el nombre del vendedor y las calificaciones en un vector
+//agregando url de imagen
 
 app.get ('/api/articulos/pagina/:id', async (req,res) => {
     try{
@@ -243,11 +245,16 @@ app.get ('/api/articulos/pagina/:id', async (req,res) => {
         return res.status(404).json({Error: 'Calificaciones no encontradas'});
     }
 
+    const imagen = await get_imagen_articulo_id(req.params.id);
+    
     res.json({
-        "articulo": articulo,
-        "usuario_vendedor": vendedor,
-        "calificaciones": calificaciones
-    })
+            articulo: articulo,
+            usuario_vendedor: vendedor,
+            calificaciones: calificaciones,
+            Imagen: imagen !== undefined 
+                ? imagen 
+                : { mensaje: "No hay imágenes disponibles para este artículo" }
+        });
     }catch (error){
         console.error("Error:", error);
         res.status(500).json("Error interno del servidor");
