@@ -1,65 +1,67 @@
 console.log("it's alive")
 
 const url_keystrokes = "http://localhost:3000"
-function agregar_nav(){
-    document.addEventListener('DOMContentLoaded', async () => {
-        const nav = document.querySelector("#nav") 
-        const nav_1 = `<div class="navbar-brand">
-                            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                            </a>
-                        </div>
-                        <div id="navbarBasicExample" class="navbar-menu">
-                            <div class="navbar-start">
-                                <a href="index.html" class="navbar-item">
-                                    Inicio
-                                </a>
-                                <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
-                                    Articulos
-                                </a>
-                                <a href="publicar.html" class="button is-info is-outlined">
-                                    Publicar
-                                </a>
-                            </div>
-                            <div class="navbar-end">
-                                <div class="navbar-item">
-                                    <div class="buttons">
-                                        <a href="register.html" class="button is-primary">
-                                        <strong>Registrarse</strong>
-                                        </a>
-                                        <a href="login.html" class="button is-light">
-                                        Iniciar Sesión
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
-        console.log(nav_1)
-        nav.insertAdjacentHTML('beforeend', nav_1)
-})
-}
+const authToken = localStorage.getItem('authToken');
+const user = localStorage.getItem('username');
+const id_user = localStorage.getItem('id');
 
-function esta_logeado() {
-    const authToken = localStorage.getItem('authToken');
-    return !!authToken
-}
-function estado_user(){
-    if(esta_logeado()){
-        agregar_nav_con_user()
-        console.log("estas logeado")
+
+async function estaLogeadoServidor() {
+    if (!authToken) {
+        console.log("No hay token en localStorage. Usuario no logeado.");
+        return false;
     }else{
-        agregar_nav()
-        console.log("no estas logeado :c")
+        try {
+        const response = await fetch(`${url_keystrokes}/api/verify-session`, {
+            method: 'GET', 
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
+        if (response.ok) {
+            console.log("Token validado por el servidor. Usuario logeado.");
+            return true;
+        } else if (response.status === 401 || response.status === 403) {
+            console.warn("Token inválido o expirado según el servidor. Cerrando sesión localmente.");
+            localStorage.removeItem('authToken'); 
+            return false;
+        } else {
+            console.error("Error al verificar token con el servidor:", response.status, response.statusText);
+            return false;
+        }
+    } catch (error) {
+        console.error("Error de conexión al verificar el token:", error);
+        return false;
+    }
     }
 }
 
+function estado_user(){
+    console.log(authToken)
+    estaLogeadoServidor()
+        .then(logeado => { 
+            if(logeado){
+                agregar_nav_con_user()
+                console.log("estas logeado")
+            } else {
+                agregar_nav()
+                logoutUser_not_redirection()
+                console.log("no estas logeado :c");
+            }
+        })
+        .catch(error => {
+            console.error("Error al determinar estado del usuario:", error);
+            agregar_nav();
+            logoutUser_not_redirection()
+            console.log("no estas logeado por error en la verificacion :c");
+        });
+}
+
 
 function agregar_nav(){
-    document.addEventListener('DOMContentLoaded', async () => {
+    
         const nav = document.querySelector("#nav") 
         const nav_1 = `<div class="navbar-brand">
                             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -95,12 +97,11 @@ function agregar_nav(){
                             </div>
                         </div>`;
         nav.insertAdjacentHTML('beforeend', nav_1)
-    })
 }
 
-function agregar_nav_con_user(element){
-    document.addEventListener('DOMContentLoaded', async () => {
-        const nav = document.querySelector("#nav") 
+ function agregar_nav_con_user(){
+        const nav = document.querySelector("#nav")
+        console.log("creando nav")
         const nav_1 = `<div class="navbar-brand">
                             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                                 <span aria-hidden="true"></span>
@@ -124,18 +125,19 @@ function agregar_nav_con_user(element){
                             <div class="navbar-end">
                                 <div class="navbar-item">
                                     <div class="buttons">
-                                        <a class="button is-primary">
-                                        <strong>${element.nombre_usuario}</strong>
-                                        </a>
+                                        <button id="boton_cerrar_sesion" ><a href="log_out.html" class="button is-primary">
+                                        <strong>${user}</strong>
+                                        </a></button>
                                     </div>
                                 </div>
                             </div>
                         </div>`;
         nav.insertAdjacentHTML('beforeend', nav_1)
-    })
+        const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion")
+        boton_cerrar_sesion.addEventListener('mouseover', alEntrarMouse);
+        boton_cerrar_sesion.addEventListener('mouseout', alSalirMouse);
 }
 function agregar_nav_sin_login_register(){
-    document.addEventListener('DOMContentLoaded', async () => {
         const nav = document.querySelector("#nav") 
         const nav_1 = `<div class="navbar-brand">
                             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -157,7 +159,6 @@ function agregar_nav_sin_login_register(){
                             
                         </div>`;
         nav.insertAdjacentHTML('beforeend', nav_1)
-    })
 }
 
 async function loginUser(username, password){
@@ -228,6 +229,62 @@ async function getProtectedData() {
 
 function logoutUser() {
     localStorage.removeItem('authToken')
+    localStorage.removeItem('username');
+    localStorage.removeItem('id');
     console.log('Sesión cerrada. Token eliminado.')
-    /*window.location.href = '/login.html' */
+    window.location.replace('login.html') 
 }
+function logoutUser_not_redirection() {
+    localStorage.removeItem('authToken')
+    localStorage.removeItem('username');
+    localStorage.removeItem('id');
+    console.log('Sesión cerrada. Token eliminado.')
+}
+
+
+function alEntrarMouse() {
+    const link = document.createElement("a")
+    link.href = "log_out.html"
+    const div_sesion = document.querySelector(".buttons")
+    const anchoRect = div_sesion.clientWidth;
+    const altoRect = div_sesion.clientHeight;
+    
+    link.className = "button is-primary";
+    boton_cerrar_sesion.className = "button";
+    boton_cerrar_sesion.textContent = "Cerrar sesion";
+    boton_cerrar_sesion.append(link)
+}
+
+function alSalirMouse() {
+    const div_sesion = document.querySelector(".buttons")
+    const link = document.createElement("a")
+    link.href = "log_out.html"
+    const anchoRect = div_sesion.clientWidth;
+    const altoRect = div_sesion.clientHeight;
+    link.className = "button is-primary";
+    boton_cerrar_sesion.className = "button";
+    boton_cerrar_sesion.textContent = "Cerrar sesion";
+    boton_cerrar_sesion.append(link)
+}
+
+/*
+function alEntrarMouse() {
+    const link = document.createElement("a")
+    link.href = "log_out.html"
+    
+    const div_sesion = document.querySelector(".buttons")
+    const anchoRect = div_sesion.clientWidth;
+    const altoRect = div_sesion.clientHeight;
+    console.log(altoRect)
+    boton_cerrar_sesion.style.width=anchoRect+"px"
+    boton_cerrar_sesion.style.height=altoRect+"px"
+    boton_cerrar_sesion.className = "button is-danger";
+    boton_cerrar_sesion.textContent = "Cerrar sesion";
+     boton_cerrar_sesion.innerHTML=`<a href="log_out.html"></a>`
+}
+
+function alSalirMouse() {
+    boton_cerrar_sesion.className = "button is-primary";
+    boton_cerrar_sesion.textContent = user;
+}
+*/

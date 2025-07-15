@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
         const article = document.querySelector("#article_comentario")
+        /*
         fetch(url_keystrokes).then((response)=>{
             console.log(response)
             return response.json()
@@ -80,5 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).catch((error)=>{
             console.log(error)
         })
+            */
     }
 })
