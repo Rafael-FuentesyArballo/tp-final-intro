@@ -67,14 +67,12 @@ export async function create_usuario (
     try{
         const response = await dbclient.query(
             "INSERT INTO usuarios ( nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados) VALUES ($1,$2,$3,$4,$5,$6,$7) returning *",
-            [nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados]
-        );
+            [nombre_usuario,contraseña,mail,fecha_creacion_usuario,rol,karma,articulos_comprados]);
+            return response.rows[0];
     } catch (err) {
     console.error("Error en create_usuario:", err);
     return undefined;
-}
-
-    return response.rows[0];
+    }
 }
 
 
