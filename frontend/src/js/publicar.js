@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     envio_gratis: envio_gratis,
                     id_vendedor: id_user,
                 };
+                console.log(data)
             
                 fetch( url_keystrokes+'/api/articulos/', {
                     method: "POST",
