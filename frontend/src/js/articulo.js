@@ -1,19 +1,22 @@
 
 async function agregar_comentario(element, div_principal){
+
     const fecha = new Date(element.fecha)
+    const dia = fecha.toLocaleDateString('es-AR')
+    const hora = fecha.toLocaleTimeString('es-AR')
 
     const comentario = `
                             <article class="media">
                                 <div class="media-content">
                                     <div class="content">
                                         <p>
-                                            <strong>${element.usuario_nombre}</strong>
+                                            <strong>${element.autor}</strong>
                                             <br>
                                             ${element.texto}
                                             <br>
                                             <small>
                                                 <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
-                                                · ${fecha.getDate()} ${fecha.getDay()}
+                                                · ${hora} ${dia}
                                             </small>
                                         </p>
                                     </div>
@@ -85,8 +88,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error("Error al buscar el articulo")
             }
         }).then((data)=>{
+            console.log(data)
             data.forEach(element => {
-                agregar_comentario(element)
+                agregar_comentario(element, div_principal)
             })
         }).catch((error)=>{
             console.log(error)
@@ -108,32 +112,30 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const dataToSend = {
             texto: comentando,
-            id_articulo: id
+            id_articulo: parseInt(id),
+            id_autor: parseInt(id_user),
         };
-        console.log(dataToSend)
         
-        /*
-        fetch( url_keystrokes+'/api/comentario/', {
+        
+        fetch(`${url_keystrokes}/api/comentarios/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(dataToSend),
         }).then(response => {
-            console.log(response)
             if (!response.ok) {
                 throw new Error("Datos ingresados incorrecta.");
             }
             return response.json();
         }).then(result => {
-            console.log(result.id);
-            agregar_comentario(dataToSend, div_principal)
+            console.log(result);
+            agregar_comentario(result, div_principal)
             contenido_comentario.value=""
         }).catch(error => {
             console.error("Error:", error);
             alert(error.message);
         });
-        */
     });
 })
 
