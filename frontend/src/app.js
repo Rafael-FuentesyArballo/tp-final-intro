@@ -73,7 +73,7 @@ function agregar_nav(){
                         </div>
                         <div id="navbarBasicExample" class="navbar-menu">
                             <div class="navbar-start">
-                                <a href="index.html" class="navbar-item">
+                                <a href="/" class="navbar-item">
                                     Inicio
                                 </a>
                                 <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
@@ -112,7 +112,7 @@ function agregar_nav(){
                         </div>
                         <div id="navbarBasicExample" class="navbar-menu">
                             <div class="navbar-start">
-                                <a href="index.html" class="navbar-item">
+                                <a href="/" class="navbar-item">
                                     Inicio
                                 </a>
                                 <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
@@ -149,7 +149,7 @@ function agregar_nav_sin_login_register(){
                         </div>
                         <div id="navbarBasicExample" class="navbar-menu">
                             <div class="navbar-start">
-                                <a href="index.html" class="navbar-item">
+                                <a href="/" class="navbar-item">
                                     Inicio
                                 </a>
                                 <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
@@ -242,28 +242,15 @@ function logoutUser_not_redirection() {
 }
 
 
-function alEntrarMouse() {
-    const link = document.createElement("a")
-    link.href = "log_out.html"
-    const div_sesion = document.querySelector(".buttons")
-    const anchoRect = div_sesion.clientWidth;
-    const altoRect = div_sesion.clientHeight;
-    
-    link.className = "button is-primary";
+function alEntrarMouse() {   
     boton_cerrar_sesion.className = "button";
     boton_cerrar_sesion.textContent = "Cerrar sesion";
-    boton_cerrar_sesion.append(link)
+    boton_cerrar_sesion.append(link) 
 }
 
 function alSalirMouse() {
-    const div_sesion = document.querySelector(".buttons")
-    const link = document.createElement("a")
-    link.href = "log_out.html"
-    const anchoRect = div_sesion.clientWidth;
-    const altoRect = div_sesion.clientHeight;
-    link.className = "button is-primary";
-    boton_cerrar_sesion.className = "button";
-    boton_cerrar_sesion.textContent = "Cerrar sesion";
+    boton_cerrar_sesion.className = "button is-primary";
+    boton_cerrar_sesion.textContent = user;
     boton_cerrar_sesion.append(link)
 }
 
