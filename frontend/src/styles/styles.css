@@ -11,6 +11,7 @@
     }
 }
 
+
 #div_usuario{
     display: flex;
     height: auto;
@@ -33,6 +34,7 @@
     text-align: center;
     justify-content: center;
 }
+
 #elementos_selector{
     list-style-type: none;
     height: 50%;
@@ -157,6 +159,7 @@ articulo principal
 
 
 #imagen_articulo_principal{
+    width: 50%;
     align-content: center;
 }
 #imagen_articulo_principal img{
@@ -207,4 +210,8 @@ articulo principal
     display: block;
     align-content: center;    
     width: 90%;
+}
+
+#info_articulo{
+    width: 50%;
 }

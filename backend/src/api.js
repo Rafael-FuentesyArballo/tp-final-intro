@@ -1,13 +1,21 @@
 //const express = require('express')
+
 import express, { json } from "express";
 import cors from "cors";
 import path from 'path';
 import { fileURLToPath } from "url";
 
+import jwt  from 'jsonwebtoken'
+import bcrypt from 'bcryptjs';
+
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, '../../frontend/src')));
@@ -21,6 +29,7 @@ app.listen(port, () => {
     console.log(`Server iniciado en puerto ${port}`)
 });
 
+
 // funciones de usuarios.js
 import{
     check_mail,
@@ -29,7 +38,7 @@ import{
     get_one_usuario_nombre,
     create_usuario,
     del_usuario,
-
+    login,
     update_usuario,
 } from './scripts/usuarios.js';
 
@@ -493,7 +502,9 @@ app.put('/api/likes', async (req, res) => {
 
 import{
     get_all_comentarios_id_articulo_users,
-    get_respuestas_id
+    get_respuestas_id,
+    create_comentario_padre,
+    get_all_comentarios_id_articulo_users_lasted
 } from './scripts/comentarios.js'
 
 //get all comentarios de un articulo con los usernames de los autores
@@ -527,3 +538,112 @@ app.get ('/api/comentarios/respuestas/:id_comentario', async (req,res) => {
         console.error("Error:", err);
     }
 });
+
+app.post('/api/comentarios/', async (req,res) => {
+    
+    const id_autor = req.body.id_autor;
+    const id_articulo = req.body.id_articulo;
+    const texto = req.body.texto;
+    
+    
+    if (id_autor === undefined){
+        return res.status(400).json("Error: debe proporcionar un id de usuario");
+    }
+
+    if (id_articulo === undefined){
+        return res.status(400).json("Error: debe proporcionar un id del articulo");
+    }
+    /*
+    if (texto.length() === 0){
+        return res.status(400).json({ error: "El comentario no debe estar vacio" });
+    }
+    */
+    const comentario = await create_comentario_padre(id_autor, id_articulo, texto);
+    
+    console.log(comentario)
+    if (comentario === undefined ){
+        return res.status(500).json("Error interno del servidor");
+    }else{
+        const comentario_agregado = await get_all_comentarios_id_articulo_users_lasted(id_articulo)
+        res.json(comentario_agregado);
+    }
+});
+
+
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body; 
+    console.log(email)
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Usuario y contraseña son obligatorios.' });
+    }
+    try{
+        const login_verify = await login(email, password);
+        console.log("api.js ", login_verify)
+        return res.status(200).json(login_verify)
+    }catch (error) {        
+        console.error('Error en la ruta /api/login:', error.message);
+        if (error.message === 'Credenciales inválidas.') {
+            return res.status(401).json({ message: error.message });
+        } else if (error.message === 'Error de configuración del servidor.') {
+            return res.status(500).json({ message: error.message });
+        } else {
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        }
+    }
+});
+
+function verifyToken(req, res, next) {
+    
+    const authHeader = req.headers['authorization'];
+    console.log(authHeader)
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
+    
+    console.log("token: ", token)
+    if (!token) {
+        return res.status(401).json({ message: 'Acceso denegado. No se proporcionó token.' });
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({ message: 'Token inválido o expirado.' });
+        }
+        req.user = user;
+        next();
+    });
+}
+
+
+app.get('/api/verify-session', verifyToken, (req, res) => {
+    res.status(200).json({
+        message: 'Sesión activa y token válido.',
+        user: {
+            id: req.user.id,   
+            username: req.user.username
+        }
+    });
+});
+app.post('/api/register', async (req,res) => {
+    const nombre = req.body.nombre_usuario;
+    const contra = req.body.contraseña;
+    const mail = req.body.mail;
+    const fecha = req.body.fecha_creacion_usuario || new Date().toISOString();
+    const rol = "Usuario"
+    const karma = 0; //karma inicial 0
+    const articulos = 0;
+
+    if ( await get_one_usuario_nombre(nombre) !== undefined ){
+        return res.status(400).json({ error: "Nombre en uso" });
+    }
+    if (await check_mail(mail)){
+        return res.status(400).json("Direccion de correo en uso por otro usuario");
+    }
+
+    const usuario = await create_usuario(nombre,contra,mail,fecha,rol,karma,articulos);
+
+    if (usuario === undefined ){
+        return res.sendStatus(500),json("Error al crear el usuario");
+    }else{
+        res.json(usuario);
+    }
+});
+
