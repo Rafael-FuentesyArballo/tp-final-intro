@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 
                 link.src = "primer_articulo.html"
+
                 elemetentoNuevo.src = ""
+
                 link.innerHTML= element.titulo
                 
                 strong.innerHTML=String(element.precio);

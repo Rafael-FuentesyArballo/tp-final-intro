@@ -94,15 +94,14 @@
     align-content: center;
     justify-content: flex-end;
     gap: 5%;
+    max-height: 100%;
     font-size: clamp(0.5rem, 1vw + 0.7rem, 1rem);
+    height: auto;
+    width: auto;
 }
 
 .articulo img{
     border-radius: 1rem;
-    min-width: 15rem;
-    min-height: 15rem;
-    width: 75%;
-    height: 75%;
 }
 
 .imagen_articulo{
@@ -117,6 +116,7 @@
 
 .descripcion_articulo{
     align-content: center;
+    width: 50%;
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 5%;
@@ -185,6 +185,9 @@ articulo principal
 }
 #strong_titulo_articulo_principal{
     font-size: clamp(0.5rem, 4vw + 0.7rem, 4rem);
+}
+#precio{
+    font-size: clamp(0.1rem, 2vw + 0.5rem, 2rem);
 }
 
 #descripcion_articulo article{
