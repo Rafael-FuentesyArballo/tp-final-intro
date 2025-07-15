@@ -52,6 +52,16 @@ export async function get_calificaciones_articulo_id(id_articulo){
     }
 }
 
+export async function get_imagen_articulo_id(id_articulo){
+    try{
+    const response = await dbclient.query("SELECT id_articulo, url_imagen FROM imagenes WHERE id_articulo = $1",[id_articulo]);
+    return response.rows[0];
+    } catch(err){
+        console.error("Error en get_imagen_articulo_id", err);
+        return undefined;
+    }
+}
+
 export async function create_articulo(
     descripcion,
     titulo,
