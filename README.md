@@ -1,23 +1,51 @@
-# tp-final-intro
-Tp final de introduccion al desarrollo de software 
-Grupo: Thomas Acosta, Rafael Fuentes y Arballo, Luis Diaz Omar, Celeste Bertelemy.
+# Keystroke
+Este es Trabajo Práctico para la materia **Introducción al desarrollo de software** de la cátedra de Manuel Camejo.
 
-Entidades/tablas:
+Creado por _The Keystrokers_
+# Miembros
+* Thomas Acosta
+* Rafael Fuentes y Arballo
+* Luis Diaz Omar
+* Celeste Bertelemy
 
-Usuarios:
-    -Id
-    -Nombre
+## Funcionalidades
+* Comprar y vender artículos
+* Dejar comentarios
+* Calificar comentarios y artículos
+* Registrarse con un usuario propio
 
-Publicaciones:
-    -Id?
-    -Id_usuario
-    -Texto
+<details>
+  <summary> <h2>Imágenes</h2> </summary>
+![Página de inicio.]()
+![Artículo]()
+![Comentarios]()
+</details>
 
-Comentarios:
-    -Id?
-    -Id_usuario
-    -Id_publicacion
-    -Texto
+<details>
+  <summary> <h2>Cómo levantar la página</h2> </summary>
 
-    A definir el maximo de caracteres para publicaciones y comentarios
+  ## Prerequisitos
+| Herramienta | Link |
+| ----------- | ---- |
+| Git | https://git-scm.com/ |
+| Docker | https://www.docker.com/ |
+| Node.js | https://nodejs.org/es |
+## Cómo levantar la página
+* Cloná el repositorio
+```
+git clone git@github.com:Rafael-FuentesyArballo/tp-final-intro.git
+```
+* Levantá la base de datos
+```
+cd backend/ && docker compose up
+```
+* Levantá el backed
+```
+cd backend/ && npm run dev
+```
+* En tu navegador ingresa
+```
+http://localhost:3000/
 
+```
+</details>
