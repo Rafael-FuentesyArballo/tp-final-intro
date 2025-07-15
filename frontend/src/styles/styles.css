@@ -104,7 +104,8 @@
 
 .imagen_articulo{
     align-content: center;
-    
+    width: 50%;
+    height: 100%;
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 5%;
@@ -118,6 +119,8 @@
     padding-right: 5%;
     padding-top: 5%;
     padding-bottom: 5%;
+    width: 50%;
+    
 }
 #article_comentario{
     display: block;
