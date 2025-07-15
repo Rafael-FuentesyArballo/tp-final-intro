@@ -1,6 +1,7 @@
 
 async function agregar_comentario(element, div_principal){
-     
+    const fecha = new Date(element.fecha)
+
     const comentario = `
                             <article class="media">
                                 <div class="media-content">
@@ -12,7 +13,7 @@ async function agregar_comentario(element, div_principal){
                                             <br>
                                             <small>
                                                 <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
-                                                · ${element.tiempo_publicacion }
+                                                · ${fecha.getDate()} ${fecha.getDay()}
                                             </small>
                                         </p>
                                     </div>
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const id_punto_encuentro = document.querySelector("#punto_de_encuentro_articulo_principal")
         const id_descripcion = document.querySelector("#id_descripcion_articulo_principal")
         
-        fetch(`${url_keystrokes}/api/articulos/${id}`).then((response)=>{
+        fetch(`${url_keystrokes}/api/articulos/pagina/${id}`).then((response)=>{
             if(!response.ok){
                 throw new Error("Error al buscar el articulo")
             }
@@ -45,13 +46,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const elemtentoNuevo = document.createElement("img")
             const punto_vendedor = document.createElement("li")
             const punto_de_encuentro = document.createElement("li")
-            
+            const numero_precio = document.createElement("small")
+
             elemtentoNuevo.src = data
-            titulo.innerHTML= data.titulo
+            titulo.innerHTML= data.articulo.titulo
             titulo_html.innerHTML= data.titulo
             
-            punto_de_encuentro.innerHTML= data.ubicacion
-            id_descripcion.innerHTML=data.descripcion
+            punto_de_encuentro.innerHTML= data.articulo.ubicacion
+            id_descripcion.innerHTML=data.articulo.descripcion
+            numero_precio.append("$"+data.articulo.precio)
+            precio.append(numero_precio)
             
             id_vendedor.append(punto_vendedor)
             id_punto_encuentro.append(punto_de_encuentro)
@@ -73,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         })
 
         
-        fetch(url_keystrokes+"api/articulos/").then((response)=>{
+        fetch(`${url_keystrokes}/api/articulos/pagina/comentarios/${id}`).then((response)=>{
             if(response.ok){
                 return response.json();
             }

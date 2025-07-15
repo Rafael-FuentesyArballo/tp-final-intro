@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 
                 link.src = "primer_articulo.html"
-                //elemetentoNuevo.src = element.imagen;
+                elemetentoNuevo.src = "https://http2.mlstatic.com/D_NQ_NP_833775-MLA77889439738_082024-O.webp"
                 link.innerHTML= element.titulo
                 
                 strong.innerHTML=String(element.precio);
