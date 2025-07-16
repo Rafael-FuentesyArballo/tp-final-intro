@@ -101,6 +101,7 @@ function agregar_nav(){
 
  function agregar_nav_con_user(){
         const nav = document.querySelector("#nav")
+        const UserDisplay = localStorage.getItem('Email')
         console.log("creando nav")
         const nav_1 = `<div class="navbar-brand">
                             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -126,7 +127,7 @@ function agregar_nav(){
                                 <div class="navbar-item">
                                     <div class="buttons">
                                         <button id="boton_cerrar_sesion" ><a href="log_out.html" class="button is-primary">
-                                        <strong>${user}</strong>
+                                        <strong>${UserDisplay}</strong>
                                         </a></button>
                                     </div>
                                 </div>
@@ -135,18 +136,14 @@ function agregar_nav(){
         nav.insertAdjacentHTML('beforeend', nav_1)
         const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion")
         if (boton_cerrar_sesion) {
-        // Asignar el evento click para cerrar sesión (redirige a login.html)
-        boton_cerrar_sesion.addEventListener('click', logoutUser); 
+        boton_cerrar_sesion.addEventListener('click', logoutUser);
 
-        // Definir las funciones de mouseover y mouseout aquí dentro o pasarlas con contexto
         boton_cerrar_sesion.addEventListener('mouseover', function() {
-            this.className = "button"; // 'this' se refiere a boton_cerrar_sesion
-            this.querySelector('strong').textContent = "Cerrar sesión"; // Modificar el texto del strong dentro del botón
+            this.querySelector('strong').textContent = "Cerrar sesión";
         });
 
         boton_cerrar_sesion.addEventListener('mouseout', function() {
-            this.className = "button is-primary";
-            this.querySelector('strong').textContent = username || 'Usuario'; // Volver al nombre de usuario
+            this.querySelector('strong').textContent = UserDisplay || 'Email';
         });
     }
 }
