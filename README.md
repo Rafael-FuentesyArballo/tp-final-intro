@@ -35,21 +35,9 @@ Creado por _The Keystrokers_
 ```
 git clone git@github.com:Rafael-FuentesyArballo/tp-final-intro.git
 ```
-* Levantá la base de datos
+* Instalá las dependencias necesarias
 ```
-make docker-up
-```
-* Apagá la base de datos
-```
-make docker-down
-```
-* Limpiá la base de datos
-```
-make clean
-```
-* Levantá el backed
-```
-make dev
+make install-deps
 ```
 * Levantá la base de datos y el backend
 ```
@@ -59,5 +47,26 @@ make all
 ```
 http://localhost:3000/
 
+```
+</details>
+
+<details>
+  <summary><h2>Comandos de Makefile incluidos</h2></summary>
+  
+* Levantar la base de datos
+```
+make docker-up
+```
+* Apagar la base de datos
+```
+make docker-down
+```
+* Limpir la base de datos
+```
+make clean
+```
+* Levantar el backed
+```
+make dev
 ```
 </details>
