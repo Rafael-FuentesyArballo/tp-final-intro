@@ -96,9 +96,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const form_comentario_1 = document.querySelector("#form_comentario")
     const contenido_comentario = document.querySelector("#contenido_comentario")
     form_comentario_1.addEventListener('submit', async (event) => {
+        event.preventDefault();
         estaLogeadoServidor().then(logeado => {
             if(logeado){
-                event.preventDefault();
         
                 const formData = new FormData(form_comentario_1);
                 const comentando = formData.get("contenido_comentario")
@@ -138,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return false
             }
         }).then(data =>{
-            event.preventDefault();
             if(!data){
                 console.log("no estas logeado por error en la verificacion :c");
                 alert("Debes registrarte o iniciar sesion para comentar")
