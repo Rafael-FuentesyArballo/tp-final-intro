@@ -145,7 +145,7 @@ function agregar_nav_con_user() {
         });
 
         boton_cerrar_sesion.addEventListener('mouseout', function() {
-            this.querySelector('strong').textContent = currentUserDisplayName || 'Usuario';
+            this.querySelector('strong').textContent = UserDisplay || 'Usuario';
         });
     }
 }

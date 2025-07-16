@@ -124,6 +124,13 @@
     width: 50%;
     
 }
+
+.no-shadow{
+    box-shadow: none;
+}
+
+
+
 #article_comentario{
     display: block;
     word-break: break-word;
