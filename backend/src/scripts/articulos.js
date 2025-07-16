@@ -13,7 +13,7 @@ const dbclient = new Pool({
 await dbclient.connect()
 
 export async function get_all_articulos(){
-    const response = await dbclient.query("SELECT * FROM articulos");
+    const response = await dbclient.query("SELECT a.*, i.url_imagen FROM articulos AS a FULL JOIN imagenes AS i on a.id = i.id_articulo;");
     return response.rows;
 }
 

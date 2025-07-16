@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return response.json()
         }).then(data=>{
             data.forEach(element => {
+                console.log(element)
                 const elemetentoNuevo = document.createElement("img")
                 const titulo = document.createElement("h1")
                 const link = document.createElement("a")
@@ -24,8 +25,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 
                 link.src = "primer_articulo.html"
-
-                elemetentoNuevo.src = ""
+                
+                if(!(element.url_imagen===null)){
+                    elemetentoNuevo.src = element.url_imagen
+                }else{
+                    elemetentoNuevo.src ="https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg"
+                }
+                
+                
 
                 link.innerHTML= element.titulo
                 
