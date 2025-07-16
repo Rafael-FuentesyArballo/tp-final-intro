@@ -99,43 +99,55 @@ function agregar_nav(){
         nav.insertAdjacentHTML('beforeend', nav_1)
 }
 
- function agregar_nav_con_user(){
-        const nav = document.querySelector("#nav")
-        console.log("creando nav")
-        const nav_1 = `<div class="navbar-brand">
-                            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
-                                <span aria-hidden="true"></span>
+function agregar_nav_con_user() {
+    const nav = document.querySelector("#nav");
+    const UserDisplay = localStorage.getItem('username');
+    console.log("creando nav");
+    nav.innerHTML = '';
+    const nav_1 = `<div class="navbar-brand">
+                        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>
+                    </div>
+                    <div id="navbarBasicExample" class="navbar-menu">
+                        <div class="navbar-start">
+                            <a href="/" class="navbar-item">
+                                Inicio
+                            </a>
+                            <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
+                                Articulos
+                            </a>
+                            <a href="publicar.html" class="button is-info is-outlined">
+                                Publicar
                             </a>
                         </div>
-                        <div id="navbarBasicExample" class="navbar-menu">
-                            <div class="navbar-start">
-                                <a href="/" class="navbar-item">
-                                    Inicio
-                                </a>
-                                <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
-                                    Articulos
-                                </a>
-                                <a href="publicar.html" class="button is-info is-outlined">
-                                    Publicar
-                                </a>
-                            </div>
-                            <div class="navbar-end">
-                                <div class="navbar-item">
-                                    <div class="buttons">
-                                        <button id="boton_cerrar_sesion" ><a href="log_out.html" class="button is-primary">
-                                        <strong>${user}</strong>
-                                        </a></button>
-                                    </div>
+                        <div class="navbar-end">
+                            <div class="navbar-item">
+                                <div class="buttons">
+                                    <button id="boton_cerrar_sesion" class="button is-primary">
+                                    <strong>${UserDisplay || 'Usuario'}</strong>
+                                    </button>
                                 </div>
                             </div>
-                        </div>`;
-        nav.insertAdjacentHTML('beforeend', nav_1)
-        const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion")
-        boton_cerrar_sesion.addEventListener('mouseover', alEntrarMouse);
-        boton_cerrar_sesion.addEventListener('mouseout', alSalirMouse);
+                        </div>
+                    </div>`;
+    nav.insertAdjacentHTML('beforeend', nav_1);
+
+    const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion");
+    if (boton_cerrar_sesion) {
+        boton_cerrar_sesion.addEventListener('click', logoutUser);
+
+        boton_cerrar_sesion.addEventListener('mouseover', function() {
+            this.querySelector('strong').textContent = "Cerrar sesión";
+        });
+
+        boton_cerrar_sesion.addEventListener('mouseout', function() {
+            this.querySelector('strong').textContent = currentUserDisplayName || 'Usuario';
+        });
+    }
 }
 function agregar_nav_sin_login_register(){
         const nav = document.querySelector("#nav") 
@@ -242,7 +254,7 @@ function logoutUser_not_redirection() {
 }
 
 
-function alEntrarMouse() {   
+/*function alEntrarMouse() {   
     boton_cerrar_sesion.className = "button";
     boton_cerrar_sesion.textContent = "Cerrar sesion";
     boton_cerrar_sesion.append(link) 
@@ -252,7 +264,7 @@ function alSalirMouse() {
     boton_cerrar_sesion.className = "button is-primary";
     boton_cerrar_sesion.textContent = user;
     boton_cerrar_sesion.append(link)
-}
+}*/
 document.addEventListener('DOMContentLoaded', () => {
   
   const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);

@@ -292,6 +292,7 @@ app.post('/api/articulos/', async (req,res) => {
     const id_comprador = req.body.id_comprador;
     const envio_gratis = req.body.envio_gratis;
     const stock = req.body.stock;
+    const url_imagen = req.body.url_imagen;
 
     if (descripcion === undefined){
         return res.status(400).json("Error: descripcion no puede ser nula");
@@ -300,11 +301,11 @@ app.post('/api/articulos/', async (req,res) => {
     if (precio === undefined){
         return res.status(400).json("Error: se debe proveer precio");
     }
-
+    
+    
     const articulo = await create_articulo(
-        descripcion, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
-        titulo, stock);
-
+        descripcion, titulo, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
+        stock);
     if (articulo === undefined ){
         return res.status(500).json("Error interno del servidor");
     }else{

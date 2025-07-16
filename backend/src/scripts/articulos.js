@@ -77,6 +77,20 @@ export async function create_articulo(
             "INSERT INTO articulos (descripcion,titulo,precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning *",
             [descripcion,titulo, precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock]
         );
+        console.log(response.rows[0].id)
+        return response.rows[0];
+    } catch (err) {
+        console.error("Error en create_articulo:", err.stack);
+        return undefined;
+    }
+}
+
+export async function create_imagen_articulo(url_imagen,id_articulo) {
+    try{
+        const response = await dbclient.query(
+            "INSERT INTO imagenes (id_articulo,url_imagen) VALUES ($1,$2) returning *",
+            [id_articulo,url_imagen]
+        );
         return response.rows[0];
     } catch (err) {
         console.error("Error en create_articulo:", err.stack);
