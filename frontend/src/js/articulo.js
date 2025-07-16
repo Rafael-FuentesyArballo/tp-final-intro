@@ -54,6 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (String(data.Imagen.mensaje) === "No hay imágenes disponibles para este artículo"){
                 console.log("no imagen disponible")
                 imagen_articulo.src = "https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg"       
+            }else{
+                imagen_articulo.src = data.Imagen.url_imagen
             }
 
             

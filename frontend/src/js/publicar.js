@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         descripcion: formData.get("descripcion"),
                         envio_gratis: envio_gratis,
                         id_vendedor: parseInt(id_user),
+                        url_imagen: formData.get("url_articulo"),
                     };
                     console.log(data)
                 

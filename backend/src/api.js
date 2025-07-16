@@ -204,7 +204,7 @@ import{
     del_articulo,
     update_articulo,
     get_calificaciones_articulo_id,
-    get_imagen_articulo_id
+    get_imagen_articulo_id,
 } from './scripts/articulos.js';
 
 
@@ -305,7 +305,7 @@ app.post('/api/articulos/', async (req,res) => {
     
     const articulo = await create_articulo(
         descripcion, titulo, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
-        stock);
+        stock,url_imagen);
     if (articulo === undefined ){
         return res.status(500).json("Error interno del servidor");
     }else{

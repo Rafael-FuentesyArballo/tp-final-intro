@@ -54,8 +54,8 @@ export async function get_calificaciones_articulo_id(id_articulo){
 
 export async function get_imagen_articulo_id(id_articulo){
     try{
-    const response = await dbclient.query("SELECT id_articulo, url_imagen FROM imagenes WHERE id_articulo = $1",[id_articulo]);
-    return response.rows[0];
+        const response = await dbclient.query("SELECT id_articulo, url_imagen FROM imagenes WHERE id_articulo = $1",[id_articulo]);
+        return response.rows[0];
     } catch(err){
         console.error("Error en get_imagen_articulo_id", err);
         return undefined;
@@ -71,21 +71,27 @@ export async function create_articulo(
     id_vendedor,
     id_comprador,
     envio_gratis,
-    stock) {
+    stock,
+    url_imagen) {
     try{
         const response = await dbclient.query(
             "INSERT INTO articulos (descripcion,titulo,precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning *",
             [descripcion,titulo, precio,ubicacion,fecha,id_vendedor,id_comprador,envio_gratis,stock]
         );
         console.log(response.rows[0].id)
-        return response.rows[0];
+        const imagen = create_imagen_articulo(response.rows[0].id,url_imagen)
+        if (imagen === undefined ){
+            return res.status(500).json("Error interno del servidor");
+        }else{
+            return response.rows[0];
+        }
     } catch (err) {
         console.error("Error en create_articulo:", err.stack);
         return undefined;
     }
 }
 
-export async function create_imagen_articulo(url_imagen,id_articulo) {
+async function create_imagen_articulo(id_articulo, url_imagen) {
     try{
         const response = await dbclient.query(
             "INSERT INTO imagenes (id_articulo,url_imagen) VALUES ($1,$2) returning *",
