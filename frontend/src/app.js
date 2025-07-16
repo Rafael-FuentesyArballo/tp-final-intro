@@ -134,8 +134,21 @@ function agregar_nav(){
                         </div>`;
         nav.insertAdjacentHTML('beforeend', nav_1)
         const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion")
-        boton_cerrar_sesion.addEventListener('mouseover', alEntrarMouse);
-        boton_cerrar_sesion.addEventListener('mouseout', alSalirMouse);
+        if (boton_cerrar_sesion) {
+        // Asignar el evento click para cerrar sesión (redirige a login.html)
+        boton_cerrar_sesion.addEventListener('click', logoutUser); 
+
+        // Definir las funciones de mouseover y mouseout aquí dentro o pasarlas con contexto
+        boton_cerrar_sesion.addEventListener('mouseover', function() {
+            this.className = "button"; // 'this' se refiere a boton_cerrar_sesion
+            this.querySelector('strong').textContent = "Cerrar sesión"; // Modificar el texto del strong dentro del botón
+        });
+
+        boton_cerrar_sesion.addEventListener('mouseout', function() {
+            this.className = "button is-primary";
+            this.querySelector('strong').textContent = username || 'Usuario'; // Volver al nombre de usuario
+        });
+    }
 }
 function agregar_nav_sin_login_register(){
         const nav = document.querySelector("#nav") 
@@ -242,7 +255,7 @@ function logoutUser_not_redirection() {
 }
 
 
-function alEntrarMouse() {   
+/*function alEntrarMouse() {   
     boton_cerrar_sesion.className = "button";
     boton_cerrar_sesion.textContent = "Cerrar sesion";
     boton_cerrar_sesion.append(link) 
@@ -252,7 +265,7 @@ function alSalirMouse() {
     boton_cerrar_sesion.className = "button is-primary";
     boton_cerrar_sesion.textContent = user;
     boton_cerrar_sesion.append(link)
-}
+}*/
 document.addEventListener('DOMContentLoaded', () => {
   
   const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
