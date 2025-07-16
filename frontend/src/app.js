@@ -101,6 +101,7 @@ function agregar_nav(){
 
  function agregar_nav_con_user(){
         const nav = document.querySelector("#nav")
+        const UserDisplay = localStorage.getItem('Email')
         console.log("creando nav")
         const nav_1 = `<div class="navbar-brand">
                             <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -126,7 +127,7 @@ function agregar_nav(){
                                 <div class="navbar-item">
                                     <div class="buttons">
                                         <button id="boton_cerrar_sesion" ><a href="log_out.html" class="button is-primary">
-                                        <strong>${user}</strong>
+                                        <strong>${UserDisplay}</strong>
                                         </a></button>
                                     </div>
                                 </div>
@@ -134,8 +135,17 @@ function agregar_nav(){
                         </div>`;
         nav.insertAdjacentHTML('beforeend', nav_1)
         const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion")
-        boton_cerrar_sesion.addEventListener('mouseover', alEntrarMouse);
-        boton_cerrar_sesion.addEventListener('mouseout', alSalirMouse);
+        if (boton_cerrar_sesion) {
+        boton_cerrar_sesion.addEventListener('click', logoutUser);
+
+        boton_cerrar_sesion.addEventListener('mouseover', function() {
+            this.querySelector('strong').textContent = "Cerrar sesión";
+        });
+
+        boton_cerrar_sesion.addEventListener('mouseout', function() {
+            this.querySelector('strong').textContent = UserDisplay || 'Email';
+        });
+    }
 }
 function agregar_nav_sin_login_register(){
         const nav = document.querySelector("#nav") 
@@ -242,7 +252,7 @@ function logoutUser_not_redirection() {
 }
 
 
-function alEntrarMouse() {   
+/* function alEntrarMouse() {   
     boton_cerrar_sesion.className = "button";
     boton_cerrar_sesion.textContent = "Cerrar sesion";
     boton_cerrar_sesion.append(link) 
@@ -252,7 +262,8 @@ function alSalirMouse() {
     boton_cerrar_sesion.className = "button is-primary";
     boton_cerrar_sesion.textContent = user;
     boton_cerrar_sesion.append(link)
-}
+}*/
+
 document.addEventListener('DOMContentLoaded', () => {
   
   const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
