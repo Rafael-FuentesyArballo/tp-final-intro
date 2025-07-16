@@ -47,7 +47,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             } catch (error) {
                 console.error("Error:", error);
+                mostrarMensajeCredeciales(error)
+                /*
                 alert(error.message);
+                */
             }
         });
     } else {
@@ -60,6 +63,19 @@ function mostrarMensaje(texto) {
 
     const mensajeDiv = document.createElement("div");
     mensajeDiv.className = "notification is-success";
+    mensajeDiv.textContent = texto;
+
+    container.prepend(mensajeDiv);
+
+    setTimeout(() => {
+        mensajeDiv.remove();
+    }, 6000);
+}
+function mostrarMensajeCredeciales(texto) {
+    const container = document.querySelector(".section") || document.body;
+
+    const mensajeDiv = document.createElement("div");
+    mensajeDiv.className = "notification is-danger";
     mensajeDiv.textContent = texto;
 
     container.prepend(mensajeDiv);

@@ -58,8 +58,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     elemetentoNuevo.src ="https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg"
                 }
                 
-                
-
                 link.innerHTML= element.titulo
                 
                 strong.innerHTML=String("$ "+element.precio);
