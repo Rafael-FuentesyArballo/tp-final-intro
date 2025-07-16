@@ -511,7 +511,8 @@ import{
     get_all_comentarios_id_articulo_users,
     get_respuestas_id,
     create_comentario_padre,
-    get_all_comentarios_id_articulo_users_lasted
+    get_all_comentarios_id_articulo_users_lasted,
+    get_all_comentarios_for_articulos_lasted
 } from './scripts/comentarios.js'
 
 //get all comentarios de un articulo con los usernames de los autores
@@ -532,11 +533,24 @@ app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
     }
 });
 
+
+
 //get all respuestas a un comentario con usernames de los autores
 
 app.get ('/api/comentarios/respuestas/:id_comentario', async (req,res) => {
     try{
         const respuestas = await get_respuestas_id(req.params.id_comentario);
+        if ( respuestas === undefined ){
+            return res.status(404).json({Error: 'Respuestas no encontrado'});
+        }
+        res.json(respuestas);
+    } catch(err){
+        console.error("Error:", err);
+    }
+});
+app.get ('/api/comentarios/recientes', async (req,res) => {
+    try{
+        const respuestas = await get_all_comentarios_for_articulos_lasted();
         if ( respuestas === undefined ){
             return res.status(404).json({Error: 'Respuestas no encontrado'});
         }

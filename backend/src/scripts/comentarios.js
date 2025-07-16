@@ -54,6 +54,15 @@ export async function get_all_comentarios_id_articulo_users_lasted(id_articulo){
         return undefined;
     }
 }
+export async function get_all_comentarios_for_articulos_lasted(){
+    try{
+    const response = await dbclient.query("SELECT c.*,a.titulo , u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id FULL JOIN articulos a  ON c.id_articulo = a.id  ORDER BY c.fecha ASC limit 20;");
+    return response.rows;
+    } catch(err){
+        console.error("Error en get_all_comentarios_id_articulo", err);
+        return undefined;
+    }
+}
 
 export async function get_respuestas_id(id_comentario){
     try{

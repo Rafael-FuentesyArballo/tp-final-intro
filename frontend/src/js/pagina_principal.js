@@ -1,3 +1,29 @@
+async function agregar_comentario(element, div_principal){
+    const fecha = new Date(element.fecha)
+    const dia = fecha.toLocaleDateString('es-AR')
+    const hora = fecha.toLocaleTimeString('es-AR')
+
+    const comentario = `
+                            <article id="comentario_reciente" class="media">
+                                <a class="has-text-primary" href="articulo_plantilla.html?id=${element.id}" >${element.titulo} </a>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p> 
+                                            <strong>${element.autor}</strong>
+                                            <br>
+                                            ${element.texto}
+                                            <br>
+                                            <small>
+                                                <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
+                                                · ${hora} ${dia}
+                                            </small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                        `;
+    div_principal.insertAdjacentHTML('beforeend', comentario)
+}
 document.addEventListener('DOMContentLoaded', async () => {
     const pagina_principal_articulos = document.querySelector("#pagina_principal_articulos") 
     if(pagina_principal_articulos){
@@ -6,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return response.json()
         }).then(data=>{
             data.forEach(element => {
-                console.log(element)
                 const elemetentoNuevo = document.createElement("img")
                 const titulo = document.createElement("h1")
                 const link = document.createElement("a")
@@ -16,7 +41,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const div3 = document.createElement("div")
                 const strong = document.createElement("strong")
                 
-                link.classList.add("nombre_articulo")
+                link.classList.add("has-text-primary")
+                titulo.classList.add("titulo_articulo")
                 link.href=String("articulo_plantilla.html"+"?id="+element.id)
                 div.classList.add("articulo_prueba")
                 div1.classList.add("articulo")
@@ -36,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 link.innerHTML= element.titulo
                 
-                strong.innerHTML=String(element.precio);
+                strong.innerHTML=String("$ "+element.precio);
 
                 titulo.append(link)
                 div1.append(div2)
@@ -51,45 +77,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
         const article = document.querySelector("#article_comentario")
-        /*
-        fetch(url_keystrokes).then((response)=>{
+        
+        fetch(url_keystrokes+"/api/comentarios/recientes").then((response)=>{
             console.log(response)
             return response.json()
         }).then(data=>{
+            console.log("comentario ultimos", data)
+            
             data.forEach(element => {
-                const div1 = document.createElement("div")
-                const div2 = document.createElement("div")
-                const p = document.createElement("p")
-                const usuario_comentario = document.createElement("strong")
-                const nick_comentario = document.createElement("small")
-                const tiempo_comentario = document.createElement("small")
-                const separador = document.createElement("br")
-
-                div1.classList.add("media-content")
-                div2.classList.add("content")
-                
-                usuario_comentario.classList.add("usuario_comentario")
-                nick_comentario.classList.add("nick_comentario")
-                tiempo_comentario.classList.add("tiempo_comentario")
-                
-                usuario_comentario.innerHTML=element
-                nick_comentario.innerHTML=element
-                tiempo_comentario.innerHTML=element
-                
-                
-                p.append(usuario_comentario)
-                p.append(nick_comentario)
-                p.append(tiempo_comentario)
-                p.append(separador)
-                console.log(p)
-                p.append(String(element))
-                div2.append(p)
-                div1.append(div2)
-                article.append(div1)
+                agregar_comentario(element,article)
             })
         }).catch((error)=>{
             console.log(error)
         })
-            */
     }
 })
