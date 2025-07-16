@@ -37,11 +37,23 @@ git clone git@github.com:Rafael-FuentesyArballo/tp-final-intro.git
 ```
 * Levantá la base de datos
 ```
-cd backend/ && docker compose up
+make docker-up
+```
+* Apagá la base de datos
+```
+make docker-down
+```
+* Limpiá la base de datos
+```
+make clean
 ```
 * Levantá el backed
 ```
-cd backend/ && npm run dev
+make dev
+```
+* Levantá la base de datos y el backend
+```
+make all
 ```
 * En tu navegador ingresa
 ```
