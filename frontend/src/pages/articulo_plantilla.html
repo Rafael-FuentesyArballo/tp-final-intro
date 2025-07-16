@@ -12,6 +12,7 @@
     <nav id="nav" class="navbar" role="navigation" aria-label="main navigation">
     </nav>
     <main>
+      <section class="section">
         <div id="articulo_principal">
             <div>
                 <div id="imagen_articulo_principal">
@@ -49,24 +50,25 @@
             
           </div>
           <div>
-              <article id="caja_comentario_articulo_principal" class="media">
+              <article id="caja_comentario_articulo_principal" class="media box no-shadow" >
                 <div class="media-content">
                   <form id="form_comentario">
                     <div class="field">
-                        <p class="control">
-                            <textarea id="contenido_comentario" name="contenido_comentario" class="textarea" placeholder="Agregar comentario..."required></textarea>
-                        </p>
+                      <p class="control">
+                        <textarea id="contenido_comentario" name="contenido_comentario" class="textarea" placeholder="Agregar comentario..." required></textarea>
+                      </p>
                     </div>
                     <div class="field">
-                        <p class="control">
-                            <button id="boton_comentar" type="submit" class="button">Comentar</button>
-                        </p>
+                      <p class="control">
+                        <button id="boton_comentar" type="submit" class="button is-primary is-fullwidth">Comentar</button>
+                      </p>
                     </div>
                   </form>
                 </div>
             </article>
           </div>
         </div>
+      </section>
     </main>
     <script>
       estado_user()
