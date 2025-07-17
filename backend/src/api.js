@@ -5,6 +5,7 @@ import cors from "cors";
 import path from 'path';
 import { fileURLToPath } from "url";
 
+
 import jwt  from 'jsonwebtoken'
 import bcrypt from 'bcryptjs';
 
@@ -534,8 +535,10 @@ import{
     get_respuestas_id,
     create_comentario_padre,
     get_all_comentarios_id_articulo_users_lasted,
-    get_all_comentarios_for_articulos_lasted
+    get_all_comentarios_for_articulos_lasted,
+    get_all_comentarios_id_articulo 
 } from './scripts/comentarios.js'
+
 
 //get all comentarios de un articulo con los usernames de los autores
 app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
