@@ -15,8 +15,8 @@ async function agregar_comentario(element, div_principal){
                                             ${element.texto}
                                             <br>
                                             <small>
-                                                <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
-                                                · ${hora} ${dia}
+                                                <a href="#" class="like_button" data-comment-id="${element.id}"></a>
+                                                ${hora} · ${dia}
                                             </small>
                                         </p>
                                     </div>
