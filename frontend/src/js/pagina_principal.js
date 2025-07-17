@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentPage--;
             fetchArticulos(lista);
         }
+        
     });
     nextPageBtn.addEventListener('click', () => {
         console.log("cclick")
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             currentPage++;
             fetchArticulos(lista);
         }
+        prevPageBtn.classList.replace("pagination-previous is-disabled","pagination-previous")
     });
 })
 
