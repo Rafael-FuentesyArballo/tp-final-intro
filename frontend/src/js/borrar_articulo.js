@@ -14,9 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     console.log("No se pudo borrar el articulo");
                     logoutUser()
                 }finally {
-                    /*
                     window.location.replace(url_keystrokes+"/pages/pagina_principal_articulos_plantilla.html")
-                    */
                 }
             }
             else{

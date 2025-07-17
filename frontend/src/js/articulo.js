@@ -25,9 +25,16 @@ async function agregar_comentario(element, div_principal){
                         `;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
+async function boton_borra_articulo(div_principal){
+    const comentario = `<button id="buttton_delete" class="button is-danger">Borrar publicacion</button>
+                        `;
+    div_principal.insertAdjacentHTML('beforeend', comentario)
+}
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     const div_principal = document.querySelector("#comentarios_articulo_principal")   
+    const div_boton_borra = document.querySelector("#informacio_articulo_principal")  
     const articulo_pagina = document.querySelector("#articulo_pagina") 
     const titulo_html = document.querySelector("#titulo")
     const parametro_url = new URLSearchParams(window.location.search)
@@ -40,6 +47,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const id_descripcion = document.querySelector("#id_descripcion_articulo_principal")
         
         fetch(`${url_keystrokes}/api/articulos/pagina/${id}`).then((response)=>{
+            if(response.status === 404){
+                window.location.replace("404.html")
+            }
             if(!response.ok){
                 throw new Error("Error al buscar el articulo")
             }
@@ -58,7 +68,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 imagen_articulo.src = data.Imagen.url_imagen
             }
 
-            
             titulo.innerHTML= data.articulo.titulo
             titulo_html.innerHTML= data.titulo
             
@@ -71,7 +80,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             id_vendedor.append(data.usuario_vendedor.nombre_usuario)
             id_punto_encuentro.append(punto_de_encuentro)
             imagen.append(imagen_articulo)
-        }).catch((error)=>{
+            return data.articulo.id_vendedor
+        }).then((nombre_vendedor)=>{
+            if(nombre_vendedor === parseInt(id_user)){
+                console.log("agregando boton borrar")
+                boton_borra_articulo(div_boton_borra)
+            }
+        }).
+        catch((error)=>{
             console.log(error)
         })
         
@@ -90,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             })
         }).catch((error)=>{
             console.log(error)
-        })    
+        })
     }
 
     const form_comentario_1 = document.querySelector("#form_comentario")
