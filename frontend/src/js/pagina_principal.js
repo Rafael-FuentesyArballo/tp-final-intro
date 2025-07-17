@@ -51,10 +51,8 @@ function cargarArticulos(articulos,lista) {
                 div1.append(div3);
                 div3.append(titulo);
                 div3.append(strong);
-                div2.append(elemetentoNuevo);
-
+                div2.append(elemetentoNuevo);                
                 
-
                 lista.append(div1);
             });
     } catch (error) {

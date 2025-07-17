@@ -26,8 +26,12 @@ async function agregar_comentario(element, div_principal){
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 async function boton_borra_articulo(div_principal){
-    const comentario = `<button id="buttton_delete" class="button is-danger">Borrar publicacion</button>
+    const comentario = `<button style="margin-left: 1%" id="buttton_delete" class="button is-danger">Borrar publicacion</button>
                         `;
+    div_principal.insertAdjacentHTML('beforeend', comentario)
+}
+async function boton_editar_articulo(div_principal){
+    const comentario = `<button id="buttton_edit" class="button is-info">Editar</button>`;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 
@@ -84,6 +88,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).then((nombre_vendedor)=>{
             if(nombre_vendedor === parseInt(id_user)){
                 console.log("agregando boton borrar")
+                console.log("agregando boton editar")
+                boton_editar_articulo(div_boton_borra)
                 boton_borra_articulo(div_boton_borra)
             }
         }).
@@ -159,6 +165,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert("Debes registrarte o iniciar sesion para comentar")
             }
         })
-    });        
+        
+    }); 
+    setTimeout(() => {
+        const btnEditar = document.getElementById('buttton_edit');
+        const parametro_url = new URLSearchParams(window.location.search)
+        const id = parametro_url.get('id')
+        btnEditar.addEventListener("click", () => window.location.href = `editar_articulo.html?id=${id}`);
+    }, "3000")
 })
 
