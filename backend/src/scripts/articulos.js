@@ -12,9 +12,37 @@ const dbclient = new Pool({
 
 await dbclient.connect()
 
-export async function get_all_articulos(){
-    const response = await dbclient.query("SELECT a.*, i.url_imagen FROM articulos AS a FULL JOIN imagenes AS i on a.id = i.id_articulo;");
-    return response.rows;
+export async function get_total_articulos_count() {
+    try {
+        const response = await dbclient.query("SELECT COUNT(*) FROM articulos;");
+        return parseInt(response.rows[0].count);
+    } catch (error) {
+        console.error("Error al obtener el conteo total de artículos:", error);
+        throw error;
+    }
+}
+
+export async function get_all_articulos(page, limit){
+    const parsedPage = parseInt(page);
+    const parsedLimit = parseInt(limit);
+
+    const defaultPage = 1;
+    const defaultLimit = 10;
+
+    const actualPage = isNaN(parsedPage) || parsedPage <= 0 ? defaultPage : parsedPage;
+    const actualLimit = isNaN(parsedLimit) || parsedLimit <= 0 ? defaultLimit : parsedLimit;
+
+    const offset = (actualPage - 1) * actualLimit;
+
+    try{
+        const response = await dbclient.query("SELECT a.*, i.url_imagen FROM articulos AS a FULL JOIN imagenes AS i on a.id = i.id_articulo ORDER BY a.fecha DESC LIMIT $1 OFFSET $2;",
+        [actualLimit, offset] 
+        );
+        return response.rows;
+    }catch (error) {
+        console.error("Error al obtener artículos paginados:", error);
+        throw error; 
+    }
 }
 
 
@@ -108,7 +136,7 @@ export async function del_articulo(id) {
     try {
         const response = await dbclient.query(
             "DELETE FROM articulos WHERE id = $1 RETURNING * ", [id]);
-            return response.rows[0]; // Devuelve el articulo eliminado
+            return response.rows[0]; 
     } catch (error) {
         console.error("Error en del_articulo:", error);
         return undefined;
@@ -120,30 +148,30 @@ export async function del_articulo(id) {
 
 export async function update_articulo(id, nuevosDatos) {
     try {
-        // preparar campos y valores para la consulta SQL
+        
         const campos = [];
         const valores = [];
         let contador = 1;
 
-        // iterar sobre los campos a actualizar
+        
         for (const [key, value] of Object.entries(nuevosDatos)) {
             campos.push(`${key} = $${contador}`);
             valores.push(value);
             contador++;
         }
 
-        // armar la consulta SQL
+        
         const query = `
             UPDATE articulos 
             SET ${campos.join(', ')} 
             WHERE id = $${contador}
             RETURNING *  
-        `;  // Devuelve el registro actualizado
+        `;  
         valores.push(id);
 
-        // hacer la consulta
+        
         const result = await dbclient.query(query, valores);
-        return result.rows[0]; // retorna el articulo actualizado
+        return result.rows[0];
     } catch (err) {
         console.error("Error en update_articulo:", err);
         return undefined;
