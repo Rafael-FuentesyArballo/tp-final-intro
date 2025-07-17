@@ -163,7 +163,11 @@ articulo principal
         justify-content: center
     }
 }
-
+#nav_paginas{
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+}
 
 #imagen_articulo_principal{
     width: 50%;

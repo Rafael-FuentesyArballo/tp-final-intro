@@ -205,14 +205,36 @@ import{
     update_articulo,
     get_calificaciones_articulo_id,
     get_imagen_articulo_id,
+    get_total_articulos_count,
 } from './scripts/articulos.js';
 
 
 
 //get all articulos
 app.get ('/api/articulos/', async (req,res) => {
-    const articulos = await get_all_articulos();
-    res.json(articulos);
+    const page = req.query.page || 1; 
+    const limit = req.query.limit || 10; 
+    try {
+        const articulos = await get_all_articulos(page, limit);
+        const totalItems = await get_total_articulos_count(); 
+        console.log({
+            articulos: articulos,
+            currentPage: parseInt(page),
+            itemsPerPage: parseInt(limit),
+            totalItems: totalItems,
+            totalPages: Math.ceil(totalItems / limit) 
+        })
+        res.json({
+            articulos: articulos,
+            currentPage: parseInt(page),
+            itemsPerPage: parseInt(limit),
+            totalItems: totalItems,
+            totalPages: Math.ceil(totalItems / limit) 
+        });
+    } catch (error) {
+        console.error("Error en la ruta /api/articulos:", error);
+        res.status(500).json({ error: "Error interno del servidor al obtener artículos." });
+    }
 });
 
 //get one articulo POR ID

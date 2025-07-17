@@ -1,3 +1,4 @@
+
 // carga de artículos, botón Editar y comentarios recientes
 
 const currentUserId = parseInt(localStorage.getItem('id'), 10);
@@ -114,7 +115,6 @@ function agregar_comentario(element, div_principal) {
     const fecha = new Date(element.fecha);
     const dia = fecha.toLocaleDateString('es-AR');
     const hora = fecha.toLocaleTimeString('es-AR');
-
     const comentario = `
         <article id="comentario_reciente" class="media">
             <a class="has-text-primary" href="articulo_plantilla.html?id=${element.id}">${element.titulo}</a>
@@ -144,3 +144,4 @@ document.addEventListener("DOMContentLoaded", () => {
         cargarComentarios();
     }
 });
+
