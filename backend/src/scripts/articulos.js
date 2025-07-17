@@ -173,6 +173,7 @@ export async function update_articulo(id, nuevosDatos) {
 
         
         const result = await dbclient.query(query, valores);
+        console.log("result")
         return result.rows[0];
     } catch (err) {
         console.error("Error en update_articulo:", err);

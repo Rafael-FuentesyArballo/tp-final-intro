@@ -385,7 +385,8 @@ app.put('/api/articulos/:id', async (req, res) => {
     }
 
     // Validar si los campos a editar estan en los permitidos
-    const camposPermitidos = ['titulo', 'descripcion', 'precio', 'ubicacion', 'id_comprador', 'envio_gratis', 'stock' ];
+    
+    const camposPermitidos = ['titulo', 'descripcion', 'precio', 'ubicacion',  'id_vendedor', 'envio_gratis', 'stock', ];
     const camposSolicitados = Object.keys(datosActualizados);
     const camposInvalidos = camposSolicitados.filter(campo => !camposPermitidos.includes(campo));
 
@@ -401,6 +402,7 @@ app.put('/api/articulos/:id', async (req, res) => {
 
     // Actualizar en la base de datos
     const articuloActualizado = await update_articulo(id, datosActualizados);
+    console.log(articuloActualizado)
     if (!articuloActualizado) {
         return res.status(500).json({ error: "Error al actualizar el articulo" });
     }

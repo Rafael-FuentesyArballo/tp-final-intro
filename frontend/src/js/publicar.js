@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if(terminos_condiciones===true){
                     const data = {
-                        titulo: formData.get("articulo"),
+                        titulo: formData.get("titulo"),
                         precio:  parseInt(formData.get("precio")),
                         stock:  parseInt(formData.get("stock")),
                         ubicacion: formData.get("ubicacion"),
