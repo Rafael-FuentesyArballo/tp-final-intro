@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Artículo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <script src="../js/editar.js"></script>
+    <script src="../app.js"></script>
+</head>
+<body class="section">
+    <div class="container">
+        <h1 class="title">Editar Artículo</h1>
+        <form id="form_editar">
+            <div class="field">
+                <label class="label">Título</label>
+                <div class="control">
+                    <input class="input" type="text" id="titulo" required>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Precio</label>
+                <div class="control">
+                    <input class="input" type="number" id="precio" required>
+                </div>
+            </div>
+            <div class="control">
+                <button class="button is-primary" type="submit">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    estado_user()
+</script>
+</html>
