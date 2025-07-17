@@ -136,12 +136,13 @@ export async function del_articulo(id) {
     try {
         const response = await dbclient.query(
             "DELETE FROM articulos WHERE id = $1 RETURNING * ", [id]);
-            return response.rows[0]; 
+        console.log(response)
+        if (response.rowCount === 0){
+            return undefined;
+        }
+        return response.rows[0]; 
     } catch (error) {
         console.error("Error en del_articulo:", error);
-        return undefined;
-    }
-    if (response.rowCount === 0){
         return undefined;
     }
 }
