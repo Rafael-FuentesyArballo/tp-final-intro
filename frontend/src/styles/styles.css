@@ -124,6 +124,13 @@
     width: 50%;
     
 }
+
+.no-shadow{
+    box-shadow: none;
+}
+
+
+
 #article_comentario{
     display: block;
     word-break: break-word;
@@ -156,7 +163,11 @@ articulo principal
         justify-content: center
     }
 }
-
+#nav_paginas{
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+}
 
 #imagen_articulo_principal{
     width: 50%;
@@ -164,9 +175,12 @@ articulo principal
 }
 #imagen_articulo_principal img{
     border-radius: 1rem;
-    min-width: 15rem;
-    min-height: 15rem;
-    width: 50%;
+    min-width: 5rem;
+    min-height: 5rem;
+}
+#comentario_reciente{
+    display: flex;
+    flex-direction: column;
 }
 
 #descripcion_articulo{
@@ -184,6 +198,7 @@ articulo principal
     word-break: break-word;
 }
 #strong_titulo_articulo_principal{
+    word-break: break-word;
     font-size: clamp(0.5rem, 4vw + 0.7rem, 4rem);
 }
 #precio{

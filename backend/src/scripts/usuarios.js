@@ -160,7 +160,7 @@ export async function login(mail, password) {
         }
     } catch (err) {
         console.error('Error en el proceso de login:', err.stack);
-        throw new Error("Error interno del servidor.")
+        throw new Error("Credenciales inválidas.")
     }
 }
 

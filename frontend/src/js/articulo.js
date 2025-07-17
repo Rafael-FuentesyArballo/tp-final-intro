@@ -45,13 +45,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             return response.json();
         }).then((data)=>{
+            console.log(data)
             
-            const elemtentoNuevo = document.createElement("img")
+            const imagen_articulo = document.createElement("img")
             const punto_vendedor = document.createElement("li")
             const punto_de_encuentro = document.createElement("li")
             const numero_precio = document.createElement("small")
+            if (String(data.Imagen.mensaje) === "No hay imágenes disponibles para este artículo"){
+                console.log("no imagen disponible")
+                imagen_articulo.src = "https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg"       
+            }else{
+                imagen_articulo.src = data.Imagen.url_imagen
+            }
 
-            elemtentoNuevo.src = data
+            
             titulo.innerHTML= data.articulo.titulo
             titulo_html.innerHTML= data.titulo
             
@@ -61,24 +68,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             precio.append(numero_precio)
             
             id_vendedor.append(punto_vendedor)
+            id_vendedor.append(data.usuario_vendedor.nombre_usuario)
             id_punto_encuentro.append(punto_de_encuentro)
-            imagen.append(elemtentoNuevo)
+            imagen.append(imagen_articulo)
         }).catch((error)=>{
             console.log(error)
         })
-
-        fetch(`${url_keystrokes}/api/usuarios/${id}`).then((response)=>{
-            if(!response.ok){
-                throw new Error("Error al buscar el articulo")
-            }
-            return response.json();
-        }).then((data)=>{
-            console.log(data)
-            id_vendedor.append(String(data.nombre_usuario))
-        }).catch((error)=>{
-            console.log(error)
-        })
-
         
         fetch(`${url_keystrokes}/api/articulos/pagina/comentarios/${id}`).then((response)=>{
             if(response.ok){
@@ -90,6 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).then((data)=>{
             console.log(data)
             data.forEach(element => {
+                console.log("agregando comentario")
                 agregar_comentario(element, div_principal)
             })
         }).catch((error)=>{
@@ -101,41 +97,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     const contenido_comentario = document.querySelector("#contenido_comentario")
     form_comentario_1.addEventListener('submit', async (event) => {
         event.preventDefault();
-    
-        const formData = new FormData(form_comentario_1);
-        const comentando = formData.get("contenido_comentario")
-
-        if (!comentando.trim()) {
-            alert("No ha comentado nada");
-            return;
-        }
-
-        const dataToSend = {
-            texto: comentando,
-            id_articulo: parseInt(id),
-            id_autor: parseInt(id_user),
-        };
+        estaLogeadoServidor().then(logeado => {
+            if(logeado){
         
-        
-        fetch(`${url_keystrokes}/api/comentarios/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(dataToSend),
-        }).then(response => {
-            if (!response.ok) {
-                throw new Error("Datos ingresados incorrecta.");
+                const formData = new FormData(form_comentario_1);
+                const comentando = formData.get("contenido_comentario")
+
+                if (!comentando.trim()) {
+                    alert("No ha comentado nada");
+                    return;
+                }
+
+                const dataToSend = {
+                    texto: comentando,
+                    id_articulo: parseInt(id),
+                    id_autor: parseInt(id_user),
+                };
+                
+                fetch(`${url_keystrokes}/api/comentarios/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(dataToSend),
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error("Datos ingresados incorrecta.");
+                    }
+                    return response.json();
+                }).then(result => {
+                    console.log(result);
+                    agregar_comentario(result[0], div_principal)
+                    contenido_comentario.value=""
+                }).catch(error => {
+                    console.error("Error:", error);
+                    alert(error.message);
+                });
+                return true 
+            }else{
+                return false
             }
-            return response.json();
-        }).then(result => {
-            console.log(result);
-            agregar_comentario(result, div_principal)
-            contenido_comentario.value=""
-        }).catch(error => {
-            console.error("Error:", error);
-            alert(error.message);
-        });
-    });
+        }).then(data =>{
+            if(!data){
+                console.log("no estas logeado por error en la verificacion :c");
+                alert("Debes registrarte o iniciar sesion para comentar")
+            }
+        })
+    });        
 })
 

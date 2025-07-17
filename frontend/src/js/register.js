@@ -25,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 const resultado = await response.json();
                 console.log("Usuario creado:", resultado);
-                alert("Registro exitoso");
+                localStorage.setItem("mensajeRegistro", "Registro exitoso. Ahora iniciá sesión.");
+                window.location.href = "login.html";
             } else {
                 const error = await response.json();
                 alert(error.error || "Error en el registro");

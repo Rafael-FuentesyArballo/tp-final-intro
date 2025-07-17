@@ -19,38 +19,74 @@ CREATE TABLE articulos (
     id_vendedor int references usuarios(id),
     id_comprador int references usuarios(id),
     envio_gratis boolean,
-    stock int -- si llega a 0 se pausa la publicación
+    stock int 
 );
 
 CREATE TABLE imagenes (
     id serial primary key,
-    id_articulo int references articulos(id) not null,
+    id_articulo int not null, -- Declara la columna
     url_imagen varchar(255) not null,
-    orden int default 0
+    orden int default 0,
+    CONSTRAINT fk_imagenes_articulo 
+        FOREIGN KEY (id_articulo) 
+        REFERENCES articulos(id)  
+        ON DELETE CASCADE         
 );
 
 CREATE TABLE calificaciones (
     id serial primary key,
-    id_articulo int references articulos(id) not null,
-    id_usuario int references usuarios(id) not null,
-    valor int check (valor >= 0 and valor <= 5) -- 5 a 1 estrella
+    id_articulo int not null, 
+    id_usuario int not null,  
+    valor int check (valor >= 0 and valor <= 5),
+
+    CONSTRAINT fk_calificaciones_articulo 
+        FOREIGN KEY (id_articulo)         
+        REFERENCES articulos(id)          
+        ON DELETE CASCADE,                
+    CONSTRAINT fk_calificaciones_usuario  
+        FOREIGN KEY (id_usuario)          
+        REFERENCES usuarios(id)           
+        ON DELETE NO ACTION               
 );
 
 CREATE TABLE comentarios (
     id serial primary key,
-    id_autor int references usuarios(id) not null,
-    id_comentario_padre int references comentarios(id),
+    id_autor int not null,
+    id_comentario_padre int, 
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     texto varchar(100) not null,
-    id_articulo int references articulos(id) not null
+    id_articulo int not null, 
+
+    CONSTRAINT fk_comentarios_usuarios
+        FOREIGN KEY (id_autor)
+        REFERENCES usuarios(id),
+
+    CONSTRAINT fk_comentarios_padre
+        FOREIGN KEY (id_comentario_padre)
+        REFERENCES comentarios(id)
+        ON DELETE CASCADE, 
+
+    CONSTRAINT fk_comentarios_articulo
+        FOREIGN KEY (id_articulo)
+        REFERENCES articulos(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE likes (
     id serial primary key,
-    id_usuario int references usuarios(id),
-    id_comentario int references comentarios(id),
+    id_usuario int, 
+    id_comentario int not null, 
     valor int check (valor = 1 OR valor = -1),
-    unique (id_usuario, id_comentario)
+    unique (id_usuario, id_comentario),
+
+    CONSTRAINT fk_likes_usuario       
+        FOREIGN KEY (id_usuario)      
+        REFERENCES usuarios(id)       
+        ON DELETE NO ACTION,          
+    CONSTRAINT fk_likes_comentario    
+        FOREIGN KEY (id_comentario)   
+        REFERENCES comentarios(id)    
+        ON DELETE CASCADE             
 );
 
 INSERT INTO usuarios (nombre_usuario, contraseña, mail, rol, articulos_comprados)
@@ -96,7 +132,8 @@ VALUES (2, 1, 1),
         (6, 7, 1);
 
 INSERT INTO imagenes (id_articulo, url_imagen, orden)
-VALUES  (2, 'https://dummyimage.com/600x400/5c5c5c/ffffff&text=Bicicleta', 1),
+VALUES  (1, 'https://dummyimage.com/600x400/5c5c5c/ffffff&text=Bicicleta', 1),
+        (2, 'https://dummyimage.com/600x400/5c5c5c/ffffff&text=Bicicleta', 1),
         (3, 'https://dummyimage.com/600x400/3d3d3d/ffffff&text=Monitor', 1),
         (3, 'https://dummyimage.com/600x400/4f4f4f/ffffff&text=Monitor_Vista2', 2),
         (4, 'https://dummyimage.com/600x400/2b2b2b/ffffff&text=Teclado', 1),

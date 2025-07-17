@@ -10,15 +10,26 @@
   </head>
   <body id="pagina_principal_articulos">
     <nav id="nav" class="navbar" role="navigation" aria-label="main navigation">
+      
     </nav>
     <main>
       <div id="conjunto_elementos">
         <section id="articulos">
             <ul id="lista_articulos">
             </ul>
+            <div id="nav_paginas" style="margin-right: 5%;">
+                <nav  class="pagination is-centered" role="navigation" aria-label="pagination">
+                <a id="prevPageBtn" class="pagination-previous" title="This is the first page">Anterior</a>
+                <ul class="pagination-list">
+                  <p id="endOfResultsMessage" class="end-message"></p>
+                  <span class="page-info" id="pageInfo">Página 1 de X</span>
+                </ul>
+                <a id="nextPageBtn" href="#" class="pagination-next">Siguiente</a>
+              </nav>
+            </div>
         </section>
-        <aside>
-            <h2>KeyStroke</h2>
+        <aside class="mt-5 mr-5">
+            <strong id="has-text-primary" >Ultimos comentarios</strong>
           <ul id="elementos_selector">
             <article id="article_comentario" class="media">
                 

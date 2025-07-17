@@ -5,9 +5,9 @@ import cors from "cors";
 import path from 'path';
 import { fileURLToPath } from "url";
 
+
 import jwt  from 'jsonwebtoken'
 import bcrypt from 'bcryptjs';
-
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,7 +18,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../../frontend/src')));
+app.use(express.static(path.join(__dirname, '../../frontend/src/')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../../frontend/src/pages/index.html'));
 });
@@ -205,15 +205,38 @@ import{
     del_articulo,
     update_articulo,
     get_calificaciones_articulo_id,
-    get_imagen_articulo_id
+    get_imagen_articulo_id,
+    get_total_articulos_count,
+
 } from './scripts/articulos.js';
 
 
 
 //get all articulos
 app.get ('/api/articulos/', async (req,res) => {
-    const articulos = await get_all_articulos();
-    res.json(articulos);
+    const page = req.query.page || 1; 
+    const limit = req.query.limit || 10; 
+    try {
+        const articulos = await get_all_articulos(page, limit);
+        const totalItems = await get_total_articulos_count(); 
+        console.log({
+            articulos: articulos,
+            currentPage: parseInt(page),
+            itemsPerPage: parseInt(limit),
+            totalItems: totalItems,
+            totalPages: Math.ceil(totalItems / limit) 
+        })
+        res.json({
+            articulos: articulos,
+            currentPage: parseInt(page),
+            itemsPerPage: parseInt(limit),
+            totalItems: totalItems,
+            totalPages: Math.ceil(totalItems / limit) 
+        });
+    } catch (error) {
+        console.error("Error en la ruta /api/articulos:", error);
+        res.status(500).json({ error: "Error interno del servidor al obtener artículos." });
+    }
 });
 
 //get one articulo POR ID
@@ -293,6 +316,7 @@ app.post('/api/articulos/', async (req,res) => {
     const id_comprador = req.body.id_comprador;
     const envio_gratis = req.body.envio_gratis;
     const stock = req.body.stock;
+    const url_imagen = req.body.url_imagen;
 
     if (descripcion === undefined){
         return res.status(400).json("Error: descripcion no puede ser nula");
@@ -301,11 +325,11 @@ app.post('/api/articulos/', async (req,res) => {
     if (precio === undefined){
         return res.status(400).json("Error: se debe proveer precio");
     }
-
+    
+    
     const articulo = await create_articulo(
-        descripcion, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
-        titulo, stock);
-
+        descripcion, titulo, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
+        stock,url_imagen);
     if (articulo === undefined ){
         return res.status(500).json("Error interno del servidor");
     }else{
@@ -511,8 +535,11 @@ import{
     get_all_comentarios_id_articulo_users,
     get_respuestas_id,
     create_comentario_padre,
-    get_all_comentarios_id_articulo_users_lasted
+    get_all_comentarios_id_articulo_users_lasted,
+    get_all_comentarios_for_articulos_lasted,
+    get_all_comentarios_id_articulo 
 } from './scripts/comentarios.js'
+
 
 //get all comentarios de un articulo con los usernames de los autores
 app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
@@ -532,11 +559,24 @@ app.get ('/api/articulos/pagina/comentarios/:id', async (req,res) => {
     }
 });
 
+
+
 //get all respuestas a un comentario con usernames de los autores
 
 app.get ('/api/comentarios/respuestas/:id_comentario', async (req,res) => {
     try{
         const respuestas = await get_respuestas_id(req.params.id_comentario);
+        if ( respuestas === undefined ){
+            return res.status(404).json({Error: 'Respuestas no encontrado'});
+        }
+        res.json(respuestas);
+    } catch(err){
+        console.error("Error:", err);
+    }
+});
+app.get ('/api/comentarios/recientes', async (req,res) => {
+    try{
+        const respuestas = await get_all_comentarios_for_articulos_lasted();
         if ( respuestas === undefined ){
             return res.status(404).json({Error: 'Respuestas no encontrado'});
         }
