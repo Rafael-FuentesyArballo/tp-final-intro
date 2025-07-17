@@ -132,13 +132,12 @@ VALUES (2, 1, 1),
         (6, 7, 1);
 
 INSERT INTO imagenes (id_articulo, url_imagen, orden)
-VALUES  (1, 'https://dummyimage.com/600x400/5c5c5c/ffffff&text=Bicicleta', 1),
-        (2, 'https://dummyimage.com/600x400/5c5c5c/ffffff&text=Bicicleta', 1),
-        (3, 'https://dummyimage.com/600x400/3d3d3d/ffffff&text=Monitor', 1),
-        (3, 'https://dummyimage.com/600x400/4f4f4f/ffffff&text=Monitor_Vista2', 2),
-        (4, 'https://dummyimage.com/600x400/2b2b2b/ffffff&text=Teclado', 1),
-        (5, 'https://dummyimage.com/600x400/6e6e6e/ffffff&text=Silla', 1),
-        (6, 'https://dummyimage.com/600x400/1a1a1a/ffffff&text=Auriculares', 1);
+VALUES  (1, 'https://dummyimage.com/600x400/5c5c5c/ffffff&text=DUMMY', 1),
+        (2, 'https://actitudsports.com.ar/wp-content/uploads/2022/01/IMG-20220119-WA0018.jpg', 1),
+        (3, 'https://statics.qloud.com.ar/clan-co-10-2020/179_31-08-2023-10-08-07-11.jpg', 1),
+        (4, 'https://logitechar.vtexassets.com/arquivos/ids/157858-1200-1200?v=637491936029800000&width=1200&height=1200&aspect=true', 1),
+        (5, 'https://media.falabella.com/sodimacAR/1030213/w=1036,h=832,f=webp,fit=contain,q=85', 1),
+        (6, 'https://media.johnlewiscontent.com/i/JohnLewis/238906544?fmt=auto&$background-off-white$&wid=640&hei=853', 1);
 
 INSERT INTO calificaciones (id_articulo, id_usuario, valor)
 VALUES  (2, 1, 5),
