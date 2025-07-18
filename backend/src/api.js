@@ -275,7 +275,7 @@ app.get ('/api/articulos/pagina/:id', async (req,res) => {
             articulo: articulo,
             usuario_vendedor: vendedor,
             calificaciones: calificaciones,
-            Imagen: imagen !== undefined 
+            Imagen: (imagen && imagen !== "")
                 ? imagen 
                 : { mensaje: "No hay imágenes disponibles para este artículo" }
         });
@@ -325,7 +325,9 @@ app.post('/api/articulos/', async (req,res) => {
     if (precio === undefined){
         return res.status(400).json("Error: se debe proveer precio");
     }
-    
+    if (url_imagen === ""){
+        url_imagen = "NOT-IMAGE"
+    }
     
     const articulo = await create_articulo(
         descripcion, titulo, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
