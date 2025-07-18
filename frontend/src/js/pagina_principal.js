@@ -37,7 +37,7 @@ function cargarArticulos(articulos,lista) {
                 div2.classList.add("imagen_articulo");
                 div3.classList.add("descripcion_articulo");
 
-                if (element.url_imagen !== null) {
+                if (String(element.url_imagen) !== "NOT-IMAGE" ) {
                     elemetentoNuevo.src = element.url_imagen;
                 } else {
                     elemetentoNuevo.src = "https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg";
@@ -176,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentPage++;
             fetchArticulos(lista);
         }
-        prevPageBtn.classList.replace("pagination-previous is-disabled","pagination-previous")
     });
 });
 

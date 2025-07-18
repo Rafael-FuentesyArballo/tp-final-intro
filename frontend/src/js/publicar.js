@@ -38,17 +38,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 }else{
                     envio_gratis = false
                 }
-                
+                url_imagen_contenido=formData.get("url_articulo")
+                if(url_imagen_contenido === ""){
+                    url_imagen_contenido="NOT-IMAGE"
+                }
+                console.log(url_imagen_contenido)
                 if(terminos_condiciones===true){
                     const data = {
-                        titulo: formData.get("titulo"),
+                        titulo: formData.get("articulo"),
                         precio:  parseInt(formData.get("precio")),
                         stock:  parseInt(formData.get("stock")),
                         ubicacion: formData.get("ubicacion"),
                         descripcion: formData.get("descripcion"),
                         envio_gratis: envio_gratis,
                         id_vendedor: parseInt(id_user),
-                        url_imagen: formData.get("url_articulo"),
+                        url_imagen: url_imagen_contenido,
                     };
                     console.log(data)
                 
