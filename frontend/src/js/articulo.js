@@ -73,7 +73,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             titulo.innerHTML= data.articulo.titulo
-            titulo_html.innerHTML= data.titulo
+            titulo_html.innerHTML = data.articulo.titulo
+
             
             punto_de_encuentro.innerHTML= data.articulo.ubicacion
             id_descripcion.innerHTML=data.articulo.descripcion
