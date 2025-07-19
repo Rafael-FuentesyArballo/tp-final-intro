@@ -101,54 +101,70 @@ function agregar_nav(){
 
 function agregar_nav_con_user() {
     const nav = document.querySelector("#nav");
-    const UserDisplay = localStorage.getItem('username');
-    console.log("creando nav");
+    const UserDisplay = localStorage.getItem('username') || 'Usuario';
     nav.innerHTML = '';
-    const nav_1 = `<div class="navbar-brand">
-                        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                        </a>
-                    </div>
-                    <div id="navbarBasicExample" class="navbar-menu">
-                        <div class="navbar-start">
-                            <a href="/" class="navbar-item">
-                                Inicio
-                            </a>
-                            <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">
-                                Articulos
-                            </a>
-                            <a href="publicar.html" class="button is-info is-outlined">
-                                Publicar
-                            </a>
+
+    const nav_1 = `
+        <div class="navbar-brand">
+            <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarBasicExample" class="navbar-menu">
+            <div class="navbar-start">
+                <a href="/" class="navbar-item">Inicio</a>
+                <a href="pagina_principal_articulos_plantilla.html" class="navbar-item">Artículos</a>
+                <a href="publicar.html" class="button is-info is-outlined">Publicar</a>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="dropdown is-right" id="userDropdown">
+                        <div class="dropdown-trigger">
+                            <button class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span class="icon is-small">
+                                    <img src="/img/avatar_defaut.jpg" style="width: 24px; height: 24px; border-radius: 50%;">
+                                </span>
+                                <span>${UserDisplay}</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                            </button>
                         </div>
-                        <div class="navbar-end">
-                            <div class="navbar-item">
-                                <div class="buttons">
-                                    <button id="boton_cerrar_sesion" class="button is-primary">
-                                    <strong>${UserDisplay || 'Usuario'}</strong>
-                                    </button>
-                                </div>
+                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                            <div class="dropdown-content">
+                                <a href="configuracion.html" class="dropdown-item">
+                                    Configuración
+                                </a>
+                                <hr class="dropdown-divider">
+                                <a id="cerrarSesionBtn" class="dropdown-item">
+                                    Cerrar sesión
+                                </a>
                             </div>
                         </div>
-                    </div>`;
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
     nav.insertAdjacentHTML('beforeend', nav_1);
 
-    const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion");
-    if (boton_cerrar_sesion) {
-        boton_cerrar_sesion.addEventListener('click', logoutUser);
+    const dropdown = document.querySelector("#userDropdown");
+    const trigger = dropdown.querySelector(".dropdown-trigger button");
 
-        boton_cerrar_sesion.addEventListener('mouseover', function() {
-            this.querySelector('strong').textContent = "Cerrar sesión";
-        });
+    trigger.addEventListener("click", (e) => {
+        e.preventDefault();
+        dropdown.classList.toggle("is-active");
+    });
 
-        boton_cerrar_sesion.addEventListener('mouseout', function() {
-            this.querySelector('strong').textContent = UserDisplay || 'Usuario';
-        });
-    }
-    nav_dinamica()
+    const cerrarSesionBtn = document.querySelector("#cerrarSesionBtn");
+    cerrarSesionBtn.addEventListener('click', () => {
+        logoutUser();
+    });
+    nav_dinamica();
 }
 function agregar_nav_sin_login_register(){
         const nav = document.querySelector("#nav") 
