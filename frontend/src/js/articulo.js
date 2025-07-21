@@ -15,8 +15,8 @@ async function agregar_comentario(element, div_principal){
                                             ${element.texto}
                                             <br>
                                             <small>
-                                                <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
-                                                · ${hora} ${dia}
+                                                <a href="#" class="like_button" data-comment-id="${element.id}"></a>
+                                                ${hora} · ${dia}
                                             </small>
                                         </p>
                                     </div>
@@ -26,8 +26,12 @@ async function agregar_comentario(element, div_principal){
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 async function boton_borra_articulo(div_principal){
-    const comentario = `<button id="buttton_delete" class="button is-danger">Borrar publicacion</button>
+    const comentario = `<button style="margin-left: 1%" id="buttton_delete" class="button is-danger">Borrar publicacion</button>
                         `;
+    div_principal.insertAdjacentHTML('beforeend', comentario)
+}
+async function boton_editar_articulo(div_principal){
+    const comentario = `<button id="buttton_edit" class="button is-info">Editar</button>`;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 
@@ -61,15 +65,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             const punto_vendedor = document.createElement("li")
             const punto_de_encuentro = document.createElement("li")
             const numero_precio = document.createElement("small")
-            if (String(data.Imagen.mensaje) === "No hay imágenes disponibles para este artículo"){
+            if (String(data.Imagen.url_imagen) === "NOT-IMAGE"){
                 console.log("no imagen disponible")
-                imagen_articulo.src = "https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg"       
+                imagen_articulo.src = "https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg"
             }else{
                 imagen_articulo.src = data.Imagen.url_imagen
             }
 
             titulo.innerHTML= data.articulo.titulo
-            titulo_html.innerHTML= data.titulo
+            titulo_html.innerHTML = data.articulo.titulo
+
             
             punto_de_encuentro.innerHTML= data.articulo.ubicacion
             id_descripcion.innerHTML=data.articulo.descripcion
@@ -84,6 +89,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }).then((nombre_vendedor)=>{
             if(nombre_vendedor === parseInt(id_user)){
                 console.log("agregando boton borrar")
+                console.log("agregando boton editar")
+                boton_editar_articulo(div_boton_borra)
                 boton_borra_articulo(div_boton_borra)
             }
         }).
@@ -159,6 +166,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 alert("Debes registrarte o iniciar sesion para comentar")
             }
         })
-    });        
+        
+    }); 
+    setTimeout(() => {
+        const btnEditar = document.getElementById('buttton_edit');
+        const parametro_url = new URLSearchParams(window.location.search)
+        const id = parametro_url.get('id')
+        btnEditar.addEventListener("click", () => window.location.href = `editar_articulo.html?id=${id}`);
+    }, "3000")
 })
 

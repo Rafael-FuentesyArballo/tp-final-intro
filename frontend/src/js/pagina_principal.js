@@ -37,7 +37,7 @@ function cargarArticulos(articulos,lista) {
                 div2.classList.add("imagen_articulo");
                 div3.classList.add("descripcion_articulo");
 
-                if (element.url_imagen !== null) {
+                if (String(element.url_imagen) !== "NOT-IMAGE" ) {
                     elemetentoNuevo.src = element.url_imagen;
                 } else {
                     elemetentoNuevo.src = "https://www.webempresa.com/foro/wp-content/uploads/wpforo/attachments/3200/318277=80538-Sin_imagen_disponible.jpg";
@@ -51,10 +51,8 @@ function cargarArticulos(articulos,lista) {
                 div1.append(div3);
                 div3.append(titulo);
                 div3.append(strong);
-                div2.append(elemetentoNuevo);
-
+                div2.append(elemetentoNuevo);                
                 
-
                 lista.append(div1);
             });
     } catch (error) {
@@ -124,8 +122,8 @@ function agregar_comentario(element, div_principal) {
                         ${element.texto}
                         <br>
                         <small>
-                            <a href="#" class="like_button" data-comment-id="${element.id}">Like</a>
-                            · ${hora} ${dia}
+                            <a href="#" class="like_button" data-comment-id="${element.id}"></a>
+                            ${hora} · ${dia}
                         </small>
                     </p>
                 </div>
@@ -178,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentPage++;
             fetchArticulos(lista);
         }
-        prevPageBtn.classList.replace("pagination-previous is-disabled","pagination-previous")
     });
 });
 
