@@ -275,7 +275,7 @@ app.get ('/api/articulos/pagina/:id', async (req,res) => {
             articulo: articulo,
             usuario_vendedor: vendedor,
             calificaciones: calificaciones,
-            Imagen: imagen !== undefined 
+            Imagen: (imagen && imagen !== "")
                 ? imagen 
                 : { mensaje: "No hay imágenes disponibles para este artículo" }
         });
@@ -325,7 +325,9 @@ app.post('/api/articulos/', async (req,res) => {
     if (precio === undefined){
         return res.status(400).json("Error: se debe proveer precio");
     }
-    
+    if (url_imagen === ""){
+        url_imagen = "NOT-IMAGE"
+    }
     
     const articulo = await create_articulo(
         descripcion, titulo, precio, ubicacion, fecha, id_vendedor, id_comprador, envio_gratis,
@@ -385,7 +387,8 @@ app.put('/api/articulos/:id', async (req, res) => {
     }
 
     // Validar si los campos a editar estan en los permitidos
-    const camposPermitidos = ['titulo', 'descripcion', 'precio', 'ubicacion', 'id_comprador', 'envio_gratis', 'stock' ];
+    
+    const camposPermitidos = ['titulo', 'descripcion', 'precio', 'ubicacion',  'id_vendedor', 'envio_gratis', 'stock', ];
     const camposSolicitados = Object.keys(datosActualizados);
     const camposInvalidos = camposSolicitados.filter(campo => !camposPermitidos.includes(campo));
 
@@ -401,6 +404,7 @@ app.put('/api/articulos/:id', async (req, res) => {
 
     // Actualizar en la base de datos
     const articuloActualizado = await update_articulo(id, datosActualizados);
+    console.log(articuloActualizado)
     if (!articuloActualizado) {
         return res.status(500).json({ error: "Error al actualizar el articulo" });
     }

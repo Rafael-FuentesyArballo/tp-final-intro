@@ -1,9 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const button_delete_article = document.getElementById('buttton_delete');
+    
     const parametro_url = new URLSearchParams(window.location.search)
     const id = parametro_url.get('id')
-    button_delete_article.addEventListener('click', () => { 
+    setTimeout(() => {
+        const button_delete_article = document.getElementById('buttton_delete');
+        button_delete_article.addEventListener('click', async() => { 
         console.log("cclick")
         estaLogeadoServidor().then(logeado => { 
             if(logeado){
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             logoutUser()
         }) 
     })    
+    }, "3000")
 })
 
 async function borrar_articulo(id) {
