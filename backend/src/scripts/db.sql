@@ -46,7 +46,7 @@ CREATE TABLE calificaciones (
     CONSTRAINT fk_calificaciones_usuario  
         FOREIGN KEY (id_usuario)          
         REFERENCES usuarios(id)           
-        ON DELETE NO ACTION               
+        ON DELETE CASCADE              
 );
 
 CREATE TABLE comentarios (
@@ -59,7 +59,8 @@ CREATE TABLE comentarios (
 
     CONSTRAINT fk_comentarios_usuarios
         FOREIGN KEY (id_autor)
-        REFERENCES usuarios(id),
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_comentarios_padre
         FOREIGN KEY (id_comentario_padre)
@@ -82,7 +83,7 @@ CREATE TABLE likes (
     CONSTRAINT fk_likes_usuario       
         FOREIGN KEY (id_usuario)      
         REFERENCES usuarios(id)       
-        ON DELETE NO ACTION,          
+        ON DELETE CASCADE,          
     CONSTRAINT fk_likes_comentario    
         FOREIGN KEY (id_comentario)   
         REFERENCES comentarios(id)    
