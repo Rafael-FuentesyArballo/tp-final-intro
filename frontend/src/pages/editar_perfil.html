@@ -38,8 +38,16 @@
                         </div>
                         <div class="field has-text-centered mt-5">
                             <button id="button_save_changes" class="button is-primary" type="submit" >Guardar Cambios</button>
-                        </div>
+                        </div>                        
                     </form>
+                    <div class="field has-text-centered mt-5">
+                            <dialog id="windows_delete_user">
+                                <p>Seguro que quiere eliminar su perfil, se borrara todos sus articulos publicados.</p>
+                                <button id="button_delete_user" type="submit" class="button is-danger">Borrar Perfil</button>
+                                <button class="button" onclick="document.getElementById('windows_delete_user').close()">Cancelar</button>
+                            </dialog>
+                            <button class="button is-danger" onclick="document.getElementById('windows_delete_user').showModal()">Borrar Perfil</button>
+                        </div>
                 </div>
             </div>
         </div>
