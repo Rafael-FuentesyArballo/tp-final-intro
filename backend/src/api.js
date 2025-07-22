@@ -147,6 +147,8 @@ curl -X PUT http://localhost:3000/api/usuarios/2 \
 app.put('/api/usuarios/:id', async (req, res) => {
     const id = req.params.id;
     const datosActualizados = req.body;
+    console.log("el id es: ", id )
+    console.log("actulizando perfil",datosActualizados)
 
     // validar id y al menos 1 campo
     if (!id || Object.keys(datosActualizados).length === 0) {
@@ -154,7 +156,7 @@ app.put('/api/usuarios/:id', async (req, res) => {
     }
 
     // Validar si los campos a editar estan en los permitidos
-    const camposPermitidos = ['nombre_usuario', 'mail', 'rol', 'karma'];
+    const camposPermitidos = ['nombre_usuario', 'mail', 'contraseña'];
     const camposSolicitados = Object.keys(datosActualizados);
     const camposInvalidos = camposSolicitados.filter(campo => !camposPermitidos.includes(campo));
 
@@ -164,6 +166,7 @@ app.put('/api/usuarios/:id', async (req, res) => {
 
     // Validar existencia del usuario
     const usuarioExistente = await get_one_usuario_id(id);
+    console.log("existe el usuario: " , usuarioExistente)
     if (!usuarioExistente) {
         return res.status(404).json({ error: "Usuario no encontrado" });
     }
@@ -176,17 +179,20 @@ app.put('/api/usuarios/:id', async (req, res) => {
         }
     }
 
-    if (check_mail(datosActualizados.mail)) {
+    if (!check_mail(datosActualizados.mail)) {
+            console.log("mail ya existe")
             return res.status(400).json({ error: "La direccion de correo esta en uso" });
     }
 
     // Actualizar en la base de datos
     const usuarioActualizado = await update_usuario(id, datosActualizados);
     if (!usuarioActualizado) {
+        console.log("error al actulizar el perfil")
         return res.status(500).json({ error: "Error al actualizar el usuario" });
     }
 
     // Éxito
+    console.log(usuarioActualizado)
     res.json(usuarioActualizado);
 });
 

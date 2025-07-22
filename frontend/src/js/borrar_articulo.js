@@ -1,10 +1,11 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
-    
     const parametro_url = new URLSearchParams(window.location.search)
     const id = parametro_url.get('id')
     setTimeout(() => {
         const button_delete_article = document.getElementById('buttton_delete');
+        
+        button_delete_article.classList.remove('is-loading')
         button_delete_article.addEventListener('click', async() => { 
         console.log("cclick")
         estaLogeadoServidor().then(logeado => { 

@@ -26,12 +26,12 @@ async function agregar_comentario(element, div_principal){
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 async function boton_borra_articulo(div_principal){
-    const comentario = `<button style="margin-left: 1%" id="buttton_delete" class="button is-danger">Borrar publicacion</button>
+    const comentario = `<button style="margin-left: 1%" id="buttton_delete" class="button is-danger is-loading">Borrar publicacion</button>
                         `;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 async function boton_editar_articulo(div_principal){
-    const comentario = `<button id="buttton_edit" class="button is-info">Editar</button>`;
+    const comentario = `<button id="buttton_edit" class="button is-info is-loading" >Editar</button>`;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 
@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         estaLogeadoServidor().then(logeado => {
             if(logeado){
-        
                 const formData = new FormData(form_comentario_1);
                 const comentando = formData.get("contenido_comentario")
 
@@ -170,6 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }); 
     setTimeout(() => {
         const btnEditar = document.getElementById('buttton_edit');
+        btnEditar.classList.remove('is-loading')
         const parametro_url = new URLSearchParams(window.location.search)
         const id = parametro_url.get('id')
         btnEditar.addEventListener("click", () => window.location.href = `editar_articulo.html?id=${id}`);

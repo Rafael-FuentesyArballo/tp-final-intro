@@ -127,19 +127,45 @@ function agregar_nav_con_user() {
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <button id="boton_cerrar_sesion" class="button is-primary">
-                                    <strong>${UserDisplay || 'Usuario'}</strong>
-                                    </button>
+                                    <div id="boton_configuracion_perfil" class="dropdown is-right is-hoverable">
+                                        <div class="dropdown-trigger">
+                                            <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu5">
+                                            <strong>${UserDisplay || 'Usuario'}</strong>
+                                            <span class="icon is-small">
+                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                            </span>
+                                            </button>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu5" role="menu">
+                                            <div class="dropdown-content">
+                                                <a id="editar_perfil" href="#" class="dropdown-item">Editar perfil</a>
+                                            <div class="dropdown-item">
+                                                <p>
+                                                <button id="boton_cerrar_sesion" class="button is-danger" aria-haspopup="true" aria-controls="dropdown-menu5">
+                                                <strong>Cerrar sesion</strong>
+                                                </p>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>`;
     nav.insertAdjacentHTML('beforeend', nav_1);
-
+    /*
+    const boton_configuracion_perfil = document.querySelector("#boton_configuracion_perfil");
+    */
     const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion");
+    const editar_perfil= document.querySelector("#editar_perfil");
+    
     if (boton_cerrar_sesion) {
+        /*
+        boton_configuracion_perfil.classList.replace('is-loading')
+        */
+        editar_perfil.addEventListener('click', editUser);
         boton_cerrar_sesion.addEventListener('click', logoutUser);
-
+        /*
         boton_cerrar_sesion.addEventListener('mouseover', function() {
             this.querySelector('strong').textContent = "Cerrar sesión";
         });
@@ -147,7 +173,9 @@ function agregar_nav_con_user() {
         boton_cerrar_sesion.addEventListener('mouseout', function() {
             this.querySelector('strong').textContent = UserDisplay || 'Usuario';
         });
+        */
     }
+    
     nav_dinamica()
 }
 function agregar_nav_sin_login_register(){
@@ -253,6 +281,9 @@ function logoutUser_not_redirection() {
     localStorage.removeItem('username');
     localStorage.removeItem('id');
     console.log('Sesión cerrada. Token eliminado.')
+}
+function editUser() {
+    window.location.replace('editar_perfil.html') 
 }
 
 
