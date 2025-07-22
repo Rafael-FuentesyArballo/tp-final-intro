@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="../styles/styleEditUser.css">
     <script src="../app.js" ></script>
     <script src="../js/editar_perfil.js" ></script>
     <title>Perfil - KeyStroke</title>
@@ -42,7 +43,8 @@
                     </form>
                     <div class="field has-text-centered mt-5">
                             <dialog id="windows_delete_user">
-                                <p>Seguro que quiere eliminar su perfil, se borrara todos sus articulos publicados.</p>
+                                <p>¿Seguro que quiere eliminar su perfil <br>
+                                    Se borrara todos sus articulos publicados.</p>
                                 <button id="button_delete_user" type="submit" class="button is-danger">Borrar Perfil</button>
                                 <button class="button" onclick="document.getElementById('windows_delete_user').close()">Cancelar</button>
                             </dialog>

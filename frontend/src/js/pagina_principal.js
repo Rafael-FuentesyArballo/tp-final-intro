@@ -29,6 +29,7 @@ function cargarArticulos(articulos,lista) {
                 const div3 = document.createElement("div");
                 const strong = document.createElement("strong");
 
+                link.classList.add("titulo_articulo");
                 link.classList.add("has-text-primary");
                 titulo.classList.add("titulo_articulo");
                 link.href = "articulo_plantilla.html?id=" + element.id;
