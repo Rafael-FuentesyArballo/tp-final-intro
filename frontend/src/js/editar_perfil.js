@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     console.error(error);
                     alert("No se pudo actualizar el perfil");
                 })
-                
             }else{
                 return false
             }
