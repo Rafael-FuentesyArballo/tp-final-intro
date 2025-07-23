@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <title>Configuracion - KeyStroke</title>
+    <script src="../app.js"></script>
+    <script src="../js/editar_perfil.js"></script>
+</head>
+<body>
+    <nav id="nav" class="navbar" role="navigation" aria-label="main navigation"> </nav>
+    <main>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">Configuración de cuenta</h1>
+
+                <div class="box">
+                <h2 class="subtitle">Información básica</h2>
+                <div class="field">
+                    <label class="label">Nombre de usuario</label>
+                    <p class="help is-info">Nick actual: <strong>ejemplo</strong></p>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Nuevo nombre de usuario">
+                    </div>
+                </div>
+
+                      <div class="field">
+                        <label class="label">Correo electrónico</label>
+                        <p class="help is-info">Email actual: <strong>correo@ejemplo.com</strong></p>
+                        <div class="control">
+                        <input class="input" type="email" placeholder="Nuevo correo electrónico" name="email">
+                        </div>
+                    </div>
+
+                <button class="button is-link">Guardar cambios</button>
+                </div>
+
+                <div class="box">
+                <h2 class="subtitle">Cambiar contraseña</h2>
+
+                <div class="field">
+                    <label class="label">Contraseña actual</label>
+                    <div class="control">
+                    <input class="input" type="password">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Nueva contraseña</label>
+                    <div class="control">
+                    <input class="input" type="password">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Confirmar nueva contraseña</label>
+                    <div class="control">
+                    <input class="input" type="password">
+                    </div>
+                </div>
+
+                <button class="button is-danger">Actualizar contraseña</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script>
+        estado_user()
+    </script>
+</body>
+</html>

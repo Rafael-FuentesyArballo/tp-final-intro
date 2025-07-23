@@ -102,9 +102,9 @@ function agregar_nav(){
 function agregar_nav_con_user() {
     const nav = document.querySelector("#nav");
     const UserDisplay = localStorage.getItem('username');
-    console.log("creando nav");
+    
     nav.innerHTML = '';
-    const nav_1 = `<div class="navbar-brand">
+    const nav_1 = ` <div class="navbar-brand">
                         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
@@ -127,23 +127,25 @@ function agregar_nav_con_user() {
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <div id="boton_configuracion_perfil" class="dropdown is-right is-hoverable">
+                                    <div id="boton_configuracion_perfil" class="dropdown is-right">
                                         <div class="dropdown-trigger">
-                                            <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu5">
-                                            <strong>${UserDisplay || 'Usuario'}</strong>
-                                            <span class="icon is-small">
-                                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                            </span>
+                                            <button id="boton_toggle_dropdown" class="button is-info is-flex is-align-items-center" aria-haspopup="true" aria-controls="dropdown-menu5">
+                                                <span class="image is-32x32 mr-2">
+                                                    <img id="avatar_usuario" class="is-rounded" src="/img/avatar_defaut.jpg" alt="User avatar">
+                                                </span>
+                                                <span><strong>${UserDisplay || 'Usuario'}</strong></span>
+                                                <span class="icon is-small ml-1">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
                                             </button>
                                         </div>
-                                        <div class="dropdown-menu" id="dropdown-menu5" role="menu">
+                                        <div class="dropdown-menu" id="dropdown-menu5" role="menu" hidden>
                                             <div class="dropdown-content">
-                                                <a id="editar_perfil" href="#" class="dropdown-item">Editar perfil</a>
+                                            <a id="editar_perfil" href="#" class="dropdown-item">Editar perfil</a>
                                             <div class="dropdown-item">
-                                                <p>
-                                                <button id="boton_cerrar_sesion" class="button is-danger" aria-haspopup="true" aria-controls="dropdown-menu5">
-                                                <strong>Cerrar sesion</strong>
-                                                </p>
+                                                <button id="boton_cerrar_sesion" class="button is-danger">
+                                                <strong>Cerrar sesión</strong>
+                                                </button>
                                             </div>
                                             </div>
                                         </div>
@@ -153,11 +155,11 @@ function agregar_nav_con_user() {
                         </div>
                     </div>`;
     nav.insertAdjacentHTML('beforeend', nav_1);
-    /*
+
     const boton_configuracion_perfil = document.querySelector("#boton_configuracion_perfil");
-    */
     const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion");
     const editar_perfil= document.querySelector("#editar_perfil");
+    const boton_toggle_dropdown = document.querySelector("#boton_toggle_dropdown");
     
     if (boton_cerrar_sesion) {
         /*
@@ -175,8 +177,13 @@ function agregar_nav_con_user() {
         });
         */
     }
-    
-    nav_dinamica()
+    if (boton_toggle_dropdown && boton_configuracion_perfil) {
+        boton_toggle_dropdown.addEventListener('click', () => {
+            boton_configuracion_perfil.classList.toggle("is-active");
+        });
+    }
+
+    nav_dinamica();
 }
 function agregar_nav_sin_login_register(){
         const nav = document.querySelector("#nav") 
