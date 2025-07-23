@@ -10,50 +10,64 @@
     <title>Perfil - KeyStroke</title>
 </head>
 <body>
-    <nav id="nav" class="navbar" role="navigation" aria-label="main navigation">
-            
-    </nav>
-    <section class="section">
-        <div class="container">
-            <h1 class="title has-text-centered">Editar Perfil</h1>
-            <div class="columns is-centered">
-                <div class="column is-5">
-                    <form id="form_editar_perfil" >
-                        <div class="field">
-                            <label class="label">Correo electrónico</label>
-                            <div class="control">
-                            <input class="input" type="email" name="mail" required>
-                            </div>
+    <nav id="nav" class="navbar" role="navigation" aria-label="main navigation"> </nav>
+    <main>
+        <section class="section">
+            <div class="container box" style="max-width: 500px;">
+                <div class="has-text-centered">
+                    <figure class="image is-128x128 is-inline-block mb-4">
+                        <img
+                        class="is-rounded"
+                        src="../img/avatar_defaut.jpg"
+                        alt="Foto de perfil"
+                        aria-hidden="true">
+                    </figure>
+                    <h1 class="title is-4">Editar perfil</h1>
+                </div>
+                <div id="mensaje_error" class="notification is-danger is-light is-hidden">
+                    Por favor, complete todos los campos.
+                </div>
+
+                <form id="form_editar_perfil">
+                    <div class="field">
+                        <label class="label">Nombre de usuario</label>
+                        <div class="control">
+                        <input class="input" type="text" name="nombre_usuario" placeholder="Nuevo nombre de usuario">
                         </div>
-                        <div class="field">
-                            <label class="label">Usuario</label>
-                            <div class="control">
-                            <input class="input" type="text" name="nombre_usuario" required>
-                            </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Correo electrónico</label>
+                        <div class="control">
+                        <input class="input" type="email" name="mail" placeholder="Nuevo correo electrónico">
                         </div>
-                        <div class="field">
-                            <label class="label">Contraseña</label>
-                            <div class="control">
-                            <input class="input" type="password" name="contraseña" required>
-                            </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">Contraseña</label>
+                        <div class="control">
+                        <input class="input" type="password" name="contraseña" placeholder="Nueva contraseña">
                         </div>
-                        <div class="field has-text-centered mt-5">
-                            <button id="button_save_changes" class="button is-primary" type="submit" >Guardar Cambios</button>
-                        </div>                        
-                    </form>
-                    <div class="field has-text-centered mt-5">
-                            <dialog id="windows_delete_user">
-                                <p>¿Seguro que quiere eliminar su perfil <br>
-                                    Se borrara todos sus articulos publicados.</p>
-                                <button id="button_delete_user" type="submit" class="button is-danger">Borrar Perfil</button>
-                                <button class="button" onclick="document.getElementById('windows_delete_user').close()">Cancelar</button>
-                            </dialog>
-                            <button class="button is-danger" onclick="document.getElementById('windows_delete_user').showModal()">Borrar Perfil</button>
+                    </div>
+
+                    <div class="field is-grouped is-grouped-centered mt-4">
+                        <div class="control">
+                            <button type="submit" class="button is-link">Guardar cambios</button>
                         </div>
+                    </div>
+                </form>
+                <div class="field has-text-centered mt-5">
+                    <dialog id="windows_delete_user">
+                        <p>¿Seguro que quiere eliminar su perfil <br>
+                        Se borrara todos sus articulos publicados.</p>
+                        <button id="button_delete_user" type="button" class="button is-danger">Borrar Perfil</button>
+                        <button class="button" onclick="document.getElementById('windows_delete_user').close()">Cancelar</button>
+                    </dialog>
+                    <button class="button is-danger" onclick="document.getElementById('windows_delete_user').showModal()">Borrar Perfil</button>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
     <script>
         agregar_nav_sin_login_register()
     </script>
