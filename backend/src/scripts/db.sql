@@ -16,7 +16,7 @@ CREATE TABLE articulos (
     precio int not null check (precio > 0),
     ubicacion varchar(50),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    id_vendedor int references usuarios(id),
+    id_vendedor int references usuarios(id) ON DELETE CASCADE,
     id_comprador int references usuarios(id),
     envio_gratis boolean,
     stock int 

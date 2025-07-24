@@ -58,35 +58,50 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
 
             button_delete_user.addEventListener("click", async () => {
-                const mensajeError = document.getElementById("mensaje_error");
+            const mensajeError = document.getElementById("mensaje_error");
 
-                try {
-                    const response = await fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
+            try {
+                // falta agregar delete de los comentarios 
+                const comentsariosResponse = await fetch(`${url_keystrokes}/api/comentarios/`)
+
+                const articulosResponse = await fetch(`${url_keystrokes}/api/articulos/por_vendedor/${id_user}`);
+                if (!articulosResponse.ok) throw new Error("No se pudieron obtener los artículos");
+                const articulos = await articulosResponse.json();
+                console.log(articulos);
+                
+                for (const id of articulos) {
+                    const resDel = await fetch(`${url_keystrokes}/api/articulos/${id}`, {
                         method: "DELETE",
                         headers: { "Content-Type": "application/json" },
                     });
-
-                    if (!response.ok) throw new Error("Error al borrar el perfil");
-
-                    mensajeError.classList.remove("is-hidden");
-                    mensajeError.classList.remove("is-danger");
-                    mensajeError.classList.add("is-success");
-                    mensajeError.textContent = "Perfil borrado con éxito";
-
-                    // Esperá 2 segundos antes de redirigir
-                    setTimeout(() => {
-                        logoutUser_not_redirection();
-                        window.location.href = "pagina_principal_articulos_plantilla.html";
-                    }, 2000);
-
-                } catch (error) {
-                    console.error(error);
-                    mensajeError.classList.remove("is-hidden");
-                    mensajeError.classList.remove("is-success");
-                    mensajeError.classList.add("is-danger");
-                    mensajeError.textContent = "No se pudo borrar el perfil. Intente nuevamente.";
+                    if (!resDel.ok) console.warn(`No se pudo borrar el artículo con ID ${id}`);
                 }
-            });
+
+                const response = await fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                if (!response.ok) throw new Error("Error al borrar el perfil");
+
+                mensajeError.classList.remove("is-hidden");
+                mensajeError.classList.remove("is-danger");
+                mensajeError.classList.add("is-success");
+                mensajeError.textContent = "Perfil borrado con éxito";
+
+                setTimeout(() => {
+                    logoutUser_not_redirection();
+                    window.location.href = "pagina_principal_articulos_plantilla.html";
+                }, 1500);
+
+            } catch (error) {
+                console.error(error);
+                mensajeError.classList.remove("is-hidden");
+                mensajeError.classList.remove("is-success");
+                mensajeError.classList.add("is-danger");
+                mensajeError.textContent = "No se pudo borrar el perfil. Intente nuevamente.";
+            }
+        });
         })
         .catch((error) => {
             console.error(error);
