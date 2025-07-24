@@ -1,71 +1,95 @@
-
-
 document.addEventListener("DOMContentLoaded", async () => {
-    
-    const button_delete_user = document.getElementById('button_delete_user');
-    const form = document.getElementById('form_editar_perfil');
-    estaLogeadoServidor().then(logeado => {
-        if(logeado){
+    const form = document.getElementById("form_editar_perfil");
+    const mensajeError = document.getElementById("mensaje_error");
+    const button_delete_user = document.getElementById("button_delete_user");
+
+    estaLogeadoServidor()
+        .then((logeado) => {
+            if (!logeado) throw new Error("No logeado");
+
             form.addEventListener("submit", async (e) => {
                 e.preventDefault();
-                console.log("login verificado")            
+
+                const nombre = form.nombre_usuario.value.trim();
+                const mail = form.mail.value.trim();
+                const contra = form.contraseña.value.trim();
+
+                if (!nombre || !mail || !contra) {
+                    mensajeError.classList.remove("is-hidden");
+                    mensajeError.textContent = "Por favor, complete todos los campos.";
+                    return;
+                }
+
+                mensajeError.classList.add("is-hidden");
+
                 const formData = new FormData(form);
                 const dataToSend = {
                     mail: formData.get("mail"),
-                    contraseña:  formData.get("contraseña"),
-                    nombre_usuario:  formData.get("nombre_usuario"),
+                    contraseña: formData.get("contraseña"),
+                    nombre_usuario: formData.get("nombre_usuario"),
                 };
-                console.log(dataToSend)
 
-                fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(dataToSend),
-                }).then(response => {
+                try {
+                    const response = await fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(dataToSend),
+                    });
+
                     if (!response.ok) throw new Error("Error al actualizar");
-                    alert("Perfil actualizado con éxito");
-                    if(response === true){
-                        console.log("perfil actualizado")
-                        logoutUser()
+
+                    mensajeError.classList.remove("is-hidden");
+                    mensajeError.classList.remove("is-danger");
+                    mensajeError.classList.add("is-success");
+                    mensajeError.textContent = "Perfil actualizado con éxito";
+
+                    setTimeout(() => {
+                        logoutUser();
                         window.location.href = "login.html";
-                    }
-                    else{
-                        logoutUser()
-                    }
-                }).catch (error => {
+                    }, 1500);
+                    
+                } catch (error) {
                     console.error(error);
-                    alert("No se pudo actualizar el perfil");
-                })
+                    mensajeError.classList.remove("is-hidden");
+                    mensajeError.classList.remove("is-success");
+                    mensajeError.classList.add("is-danger");
+                    mensajeError.textContent = "No se pudo actualizar el perfil. Intente de nuevo.";
+                }
             });
 
             button_delete_user.addEventListener("click", async () => {
-                console.log("borrando perfil")            
-                fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                }).then(response => {
+                const mensajeError = document.getElementById("mensaje_error");
+
+                try {
+                    const response = await fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
+                        method: "DELETE",
+                        headers: { "Content-Type": "application/json" },
+                    });
+
                     if (!response.ok) throw new Error("Error al borrar el perfil");
-                    alert("Perfil borrado con éxito");
-                    if(response === true){
-                        console.log("perfil borrado")
-                        logoutUser_not_redirection()
+
+                    mensajeError.classList.remove("is-hidden");
+                    mensajeError.classList.remove("is-danger");
+                    mensajeError.classList.add("is-success");
+                    mensajeError.textContent = "Perfil borrado con éxito";
+
+                    // Esperá 2 segundos antes de redirigir
+                    setTimeout(() => {
+                        logoutUser_not_redirection();
                         window.location.href = "pagina_principal_articulos_plantilla.html";
-                    }
-                    else{
-                        logoutUser()
-                    }
-                }).catch (error => {
+                    }, 2000);
+
+                } catch (error) {
                     console.error(error);
-                    alert("No se pudo borrar el perfil");
-                })
+                    mensajeError.classList.remove("is-hidden");
+                    mensajeError.classList.remove("is-success");
+                    mensajeError.classList.add("is-danger");
+                    mensajeError.textContent = "No se pudo borrar el perfil. Intente nuevamente.";
+                }
             });
-        }else{
-            throw new Error("Error al verificar el perfil");
-        }
-    })
-    .catch(error => {
-        console.error(error);
-        logoutUser()
-    })
-    
+        })
+        .catch((error) => {
+            console.error(error);
+            logoutUser();
+        });
 });
