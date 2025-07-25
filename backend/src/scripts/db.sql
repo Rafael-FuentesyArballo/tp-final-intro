@@ -6,7 +6,7 @@ CREATE TABLE usuarios (
     fecha_creacion_usuario TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     rol varchar(50),
     karma int,
-    articulos_comprados int
+    articulos_comprados int 
 );
 
 CREATE TABLE articulos (
@@ -16,10 +16,18 @@ CREATE TABLE articulos (
     precio int not null check (precio > 0),
     ubicacion varchar(50),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    id_vendedor int references usuarios(id),
-    id_comprador int references usuarios(id),
+    id_vendedor int,
+    id_comprador int,
     envio_gratis boolean,
-    stock int 
+    stock int,
+    CONSTRAINT fk_articulos_id_vendedor
+        FOREIGN KEY (id_vendedor)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE, 
+    CONSTRAINT fk_articulos_id_comprador
+        FOREIGN KEY (id_comprador)
+        REFERENCES usuarios(id)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE imagenes (

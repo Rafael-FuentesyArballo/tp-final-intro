@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const id = parametro_url.get('id')
     setTimeout(() => {
         const button_delete_article = document.getElementById('buttton_delete');
-        
-        button_delete_article.classList.remove('is-loading')
+        if(button_delete_article){
+            button_delete_article.classList.remove('is-loading')
         button_delete_article.addEventListener('click', async() => { 
         console.log("cclick")
         estaLogeadoServidor().then(logeado => { 
@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log("no estas logeado por error en la verificacion :c", error);
             logoutUser()
         }) 
-    })    
+        })
+        }    
     }, "3000")
 })
 

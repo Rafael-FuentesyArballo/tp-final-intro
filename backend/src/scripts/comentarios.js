@@ -27,6 +27,17 @@ export async function get_one_comentario_id(id){
     }
 }
 
+export async function get_one_comentario_id_username(id){
+    const response = await dbclient.query("SELECT c.*, u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON u.id = id_autor  where c.id = $1 ",[id]);
+    if (response.rowCount === 0 ){
+        return undefined;
+    }
+    else{
+        console.log("el dato actulizado",response.rows[0])
+        return response.rows[0];
+    }
+}
+
 export async function get_all_comentarios_id_articulo(id_articulo){
     try{
         const response = await dbclient.query("SELECT * FROM comentarios WHERE id_articulo = $1",[id_articulo]);
@@ -120,32 +131,16 @@ export async function del_comentario(id) {
     }
 }
 
-export async function update_comentario(id, nuevosDatos) {
+export async function update_comentario(id, id_autor, text) {
     try {
-        // preparar campos y valores para la consulta SQL
-        const campos = [];
-        const valores = [];
-        let contador = 1;
-
-        // iterar sobre los campos a actualizar
-        for (const [key, value] of Object.entries(nuevosDatos)) {
-            campos.push(`${key} = $${contador}`);
-            valores.push(value);
-            contador++;
-        }
-
-        // armar la consulta SQL
-        const query = `
+        const result = await dbclient.query(`
             UPDATE comentarios 
-            SET ${campos.join(', ')} 
-            WHERE id = $${contador}
-            RETURNING *  
-        `;  // Devuelve el registro actualizado
-        valores.push(id);
-
-        // hacer la consulta
-        const result = await dbclient.query(query, valores);
-        return result.rows[0]; // retorna el comentario actualizado
+            SET texto=$1, fecha=NOW()
+            WHERE id = $2
+            AND id_autor = $3
+            RETURNING * `, [text, id, id_autor]);
+        
+        return result.rows[0]; 
     } catch (err) {
         console.error("Error en update_comentario:", err);
         return undefined;

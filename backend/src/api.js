@@ -547,7 +547,9 @@ import{
     create_comentario_padre,
     get_all_comentarios_id_articulo_users_lasted,
     get_all_comentarios_for_articulos_lasted,
-    get_all_comentarios_id_articulo 
+    get_all_comentarios_id_articulo,
+    get_one_comentario_id_username,
+    update_comentario
 } from './scripts/comentarios.js'
 
 
@@ -597,11 +599,9 @@ app.get ('/api/comentarios/recientes', async (req,res) => {
 });
 
 app.post('/api/comentarios/', async (req,res) => {
-    
     const id_autor = req.body.id_autor;
     const id_articulo = req.body.id_articulo;
     const texto = req.body.texto;
-    
     
     if (id_autor === undefined){
         return res.status(400).json("Error: debe proporcionar un id de usuario");
@@ -625,6 +625,33 @@ app.post('/api/comentarios/', async (req,res) => {
         res.json(comentario_agregado);
     }
 });
+
+app.put('/api/comentario/:id', async (req, res) => {
+    const id = req.params.id;
+    const id_autor = req.body.id_autor;
+    const text = req.body.texto;
+    console.log("el id es: ", id )
+    console.log(String(text))
+
+    if (!id || text.length === 0) {
+        return res.status(400).json({ error: "Se requiere ID y al menos un campo para actualizar" });
+    }
+
+    const comentarioActualizados = await update_comentario(id, id_autor,text);
+    if (!comentarioActualizados) {
+        console.log("error al actulizar el comentario")
+        return res.status(500).json({ error: "Error al actualizar el comentario" });
+    }
+    const comentario = await get_one_comentario_id_username(id)
+    if (!comentario) {
+        console.log("error al obtener el comentario")
+        return res.status(500).json({ error: "Error al obtener el comentario" });
+    }
+    console.log(comentario)
+    res.json(comentario);
+});
+
+
 
 
 app.post('/api/login', async (req, res) => {
@@ -670,7 +697,15 @@ function verifyToken(req, res, next) {
 }
 
 
-app.get('/api/verify-session', verifyToken, (req, res) => {
+app.get('/api/verify-session', verifyToken, async (req, res) => {
+
+    const usuario = await get_one_usuario_id(req.user.id)
+    if(!usuario){
+        return res.status(403).json({ message: 'Token inválido o expirado.' });
+    }
+    console.log(usuario)
+    
+    
     res.status(200).json({
         message: 'Sesión activa y token válido.',
         user: {

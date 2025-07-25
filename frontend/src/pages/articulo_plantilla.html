@@ -47,7 +47,16 @@
         </div>
         <div>
           <div id="comentarios_articulo_principal">
-            
+            <dialog id="windows_edit_user">
+              <strong>Editar Comentario</strong> 
+              <button class="delete" onclick="document.getElementById('windows_edit_user').close()"></button>
+              <br>
+              <form id="form_comentario_a_actualizar">
+                <textarea id="textarea_editar_comentario" name="contenido_comentario_a_actualizar" class="textarea"></textarea>
+              </form>
+              <button id="boton_editar_comentario" type="button" class="button is-info">Editar</button>
+              <button id="boton_borrar_comentario" type="button" class="button is-danger">Borrar Comentario</button>
+            </dialog>
           </div>
           <div>
               <article id="caja_comentario_articulo_principal" class="media">
