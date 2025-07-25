@@ -1,5 +1,6 @@
 
 async function agregar_comentario(element, div_principal){
+    console.log(element)
     const fecha = new Date(element.fecha)
     const dia = fecha.toLocaleDateString('es-AR')
     const hora = fecha.toLocaleTimeString('es-AR')
@@ -24,7 +25,9 @@ async function agregar_comentario(element, div_principal){
                         `;
     div_principal.insertAdjacentHTML('beforeend', comentario)
     if(element.id_autor === parseInt(id_user)){
+        console.log(element.id)
         const comentario_info_editar = document.getElementById(`comentario_info_editar_${element.id}`)
+        console.log(comentario_info_editar)
         comentario_info_editar.insertAdjacentHTML('beforeend', `<button id="boton_editar_${element.id}" class="boton_editar button is-small is-info" value="${element.id}"
             >Editar</button>`)
     }

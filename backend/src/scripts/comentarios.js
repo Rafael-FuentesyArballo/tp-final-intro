@@ -59,12 +59,24 @@ export async function get_all_comentarios_id_articulo_users(id_articulo){
 export async function get_all_comentarios_id_articulo_users_lasted(id_articulo){
     try{
     const response = await dbclient.query("SELECT c.*, u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id WHERE c.id_articulo = $1 ORDER BY c.fecha ASC LIMIT 1;",[id_articulo]);
+    
     return response.rows;
     } catch(err){
         console.error("Error en get_all_comentarios_id_articulo", err);
         return undefined;
     }
 }
+
+export async function get_all_info_id_comentario(id_comentario){
+    try{
+    const response = await dbclient.query("SELECT c.*, u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id WHERE c.id = $1;",[id_comentario]);
+    return response.rows;
+    } catch(err){
+        console.error("Error en get_all_comentarios_id_articulo", err);
+        return undefined;
+    }
+}
+
 export async function get_all_comentarios_for_articulos_lasted(){
     try{
     const response = await dbclient.query("SELECT c.*,a.titulo , u.nombre_usuario AS autor FROM comentarios c JOIN usuarios u ON c.id_autor = u.id JOIN articulos a ON c.id_articulo = a.id  ORDER BY c.fecha ASC limit 10;");

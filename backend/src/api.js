@@ -549,7 +549,8 @@ import{
     get_all_comentarios_for_articulos_lasted,
     get_all_comentarios_id_articulo,
     get_one_comentario_id_username,
-    update_comentario
+    update_comentario,
+    get_all_info_id_comentario
 } from './scripts/comentarios.js'
 
 
@@ -621,7 +622,8 @@ app.post('/api/comentarios/', async (req,res) => {
     if (comentario === undefined ){
         return res.status(500).json("Error interno del servidor");
     }else{
-        const comentario_agregado = await get_all_comentarios_id_articulo_users_lasted(id_articulo)
+        console.log("id comentario", comentario.id)
+        const comentario_agregado = await get_all_info_id_comentario(comentario.id)
         res.json(comentario_agregado);
     }
 });
