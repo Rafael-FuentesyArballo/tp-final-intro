@@ -57,34 +57,29 @@ document.addEventListener("DOMContentLoaded", async () => {
                 }
             });
 
-            button_delete_user.addEventListener("click", async () => {
-                const mensajeError = document.getElementById("mensaje_error");
-
+            button_delete_user.addEventListener('click', async () => {
                 try {
                     const response = await fetch(`${url_keystrokes}/api/usuarios/${id_user}`, {
-                        method: "DELETE",
-                        headers: { "Content-Type": "application/json" },
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
                     });
 
-                    if (!response.ok) throw new Error("Error al borrar el perfil");
+                    if (!response.ok) throw new Error('Error al borrar el perfil');
 
-                    mensajeError.classList.remove("is-hidden");
-                    mensajeError.classList.remove("is-danger");
-                    mensajeError.classList.add("is-success");
-                    mensajeError.textContent = "Perfil borrado con éxito";
+                    mensajeError.classList.remove('is-hidden', 'is-danger');
+                    mensajeError.classList.add('is-success');
+                    mensajeError.textContent = 'Perfil borrado con éxito';
 
-                    // Esperá 2 segundos antes de redirigir
                     setTimeout(() => {
-                        logoutUser_not_redirection();
-                        window.location.href = "pagina_principal_articulos_plantilla.html";
-                    }, 2000);
+                    logoutUser_not_redirection();
+                    window.location.href = 'pagina_principal_articulos_plantilla.html';
+                    }, 1500);
 
                 } catch (error) {
                     console.error(error);
-                    mensajeError.classList.remove("is-hidden");
-                    mensajeError.classList.remove("is-success");
-                    mensajeError.classList.add("is-danger");
-                    mensajeError.textContent = "No se pudo borrar el perfil. Intente nuevamente.";
+                    mensajeError.classList.remove('is-hidden', 'is-success');
+                    mensajeError.classList.add('is-danger');
+                    mensajeError.textContent = 'No se pudo borrar el perfil. Intente nuevamente.';
                 }
             });
         })
