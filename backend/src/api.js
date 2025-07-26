@@ -254,6 +254,14 @@ app.get ('/api/articulos/:id', async (req,res) => {
       res.json(articulo);
 });
 
+app.get ('/api/busqueda/articulos/', async (req,res) => {
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+      res.json(articulo);
+});
+
 //get one articulo con informacion extra (PARA PAGINA DE ARTICULO)
 //da los datos del articulo, el nombre del vendedor y las calificaciones en un vector
 //agregando url de imagen
