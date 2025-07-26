@@ -550,7 +550,8 @@ import{
     get_all_comentarios_id_articulo,
     get_one_comentario_id_username,
     update_comentario,
-    get_all_info_id_comentario
+    get_all_info_id_comentario,
+    del_comentario
 } from './scripts/comentarios.js'
 
 
@@ -652,7 +653,23 @@ app.put('/api/comentario/:id', async (req, res) => {
     console.log(comentario)
     res.json(comentario);
 });
+app.delete('/api/comentario/:id', async (req, res) => {
+    const id = req.params.id;
+    
+    console.log("el id del comentario a borrar es: ", id )
 
+    if (!id ) {
+        return res.status(400).json({ error: "Se requiere ID y al menos un campo para actualizar" });
+    }
+
+    const comentarioBorrado = await del_comentario(id);
+    if (!comentarioBorrado) {
+        console.log("error al borrar el comentario")
+        return res.status(500).json({ error: "Error al borrar el comentario" });
+    }
+    
+    res.json(comentarioBorrado);
+});
 
 
 

@@ -6,7 +6,7 @@ async function agregar_comentario(element, div_principal){
     const hora = fecha.toLocaleTimeString('es-AR')
 
     const comentario = `
-                        <article class="media">
+                        <article id="article_${element.id}" class="media">
                             <div class="media-content">
                                 <div class="content">
                                     <div id="comentario_${element.id}">
@@ -54,6 +54,10 @@ async function actulizar_comentario(element){
         comentario_info_editar.insertAdjacentHTML('beforeend', `<button id="boton_editar_${element.id}" class="boton_editar button is-small is-info" value="${element.id}"
             >Editar</button>`)
     }
+}
+async function borrar_comentario(element, div_principal){
+    const article_a_borrar = document.getElementById(`article_${element.id}`);
+    article_a_borrar.remove()
 }
 
 
@@ -213,17 +217,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout( () => {
         const comentario = document.querySelectorAll(".boton_editar")
         let boton_editar_seleccionado = new Number()
-        comentario.forEach(boton => {
-            boton.addEventListener('click', async () => {
-                boton_editar_seleccionado = parseInt(boton.value)
-                const texto = document.querySelector(`#texto_contenido_${boton.value}`)
+        const lista = document.getElementById('comentarios_articulo_principal');
+        lista.addEventListener('click', function(event) {
+            if (event.target.id.startsWith('boton_editar_')) {
+                console.log('Hiciste clic en: ' + event.target.value);
+                boton_editar_seleccionado = parseInt(event.target.value)
+                const texto = document.querySelector(`#texto_contenido_${event.target.value}`)                
                 const textarea = document.querySelector("#textarea_editar_comentario")
-                textarea.innerHTML=texto.textContent
+                if(texto.textContent !== null){
+                    textarea.innerHTML=texto.textContent
+                }
                 document.getElementById('windows_edit_user').showModal()
-            })
-        })
+            }
+        });
 
-        const boton_editar_comentario = document.querySelector("#boton_editar_comentario")
+        const boton_editar_comentario = document.querySelector("#boton_enviar_editar_comentario")
         boton_editar_comentario.addEventListener('click', async () => {
             estaLogeadoServidor()
                 .then((logeado) => {
@@ -250,6 +258,37 @@ document.addEventListener('DOMContentLoaded', async () => {
                     return response.json()
                 }).then( result => {
                     actulizar_comentario(result)
+                    document.getElementById('windows_edit_user').close()
+                }).catch(error => {
+                    console.error(error);
+                } )
+            })
+            .catch((error) => {
+                console.error(error);
+                logoutUser();
+            });
+        })
+
+        const boton_borrar_comentario = document.querySelector("#boton_borrar_comentario")
+        boton_borrar_comentario.addEventListener('click', async () => {
+            estaLogeadoServidor()
+                .then((logeado) => {
+                if (!logeado) throw new Error("No logeado");
+
+                if(id_user === undefined ){
+                    throw new Error("Error al usuario del contenido a actulizar");
+                }
+
+                fetch(`${url_keystrokes}/api/comentario/${boton_editar_seleccionado}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                }).then(response => {
+                    if (!response.ok) throw new Error("Error al actualizar");
+
+                    return response.json()
+                }).then( result => {
+                    console.log("el comentario borrado es", result)
+                    borrar_comentario(result, div_principal)
                     document.getElementById('windows_edit_user').close()
                 }).catch(error => {
                     console.error(error);
