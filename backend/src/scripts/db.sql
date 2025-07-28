@@ -13,7 +13,7 @@ CREATE TABLE articulos (
     id serial primary key,
     titulo varchar(50),
     descripcion varchar(500),
-    precio int not null check (precio > 0),
+    precio BIGINT not null check (precio > 0),
     ubicacion varchar(50),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     id_vendedor int references usuarios(id) ON DELETE CASCADE,
@@ -62,7 +62,7 @@ CREATE TABLE comentarios (
     id_autor int not null,
     id_comentario_padre int, 
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    texto varchar(100) not null,
+    texto varchar(500) not null,
     id_articulo int not null, 
 
     CONSTRAINT fk_comentarios_usuarios

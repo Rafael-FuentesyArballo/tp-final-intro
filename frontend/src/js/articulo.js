@@ -1,4 +1,5 @@
 
+
 async function agregar_comentario(element, div_principal){
     console.log(element)
     const fecha = new Date(element.fecha)
@@ -113,7 +114,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             punto_de_encuentro.innerHTML= data.articulo.ubicacion
             id_descripcion.innerHTML=data.articulo.descripcion
-            numero_precio.append("$"+data.articulo.precio)
+            
+            const formatterEsAR = new Intl.NumberFormat('es-AR');
+
+            numero_precio.append(`$`+`${formatterEsAR.format(parseInt(data.articulo.precio))}`)
             precio.append(numero_precio)
             
             id_vendedor.append(punto_vendedor)
@@ -217,17 +221,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout( () => {
         const comentario = document.querySelectorAll(".boton_editar")
         let boton_editar_seleccionado = new Number()
+        let textarea =  document.querySelector("#textarea_editar_comentario")
         const lista = document.getElementById('comentarios_articulo_principal');
+        let texto = null
         lista.addEventListener('click', function(event) {
             if (event.target.id.startsWith('boton_editar_')) {
                 console.log('Hiciste clic en: ' + event.target.value);
                 boton_editar_seleccionado = parseInt(event.target.value)
-                const texto = document.querySelector(`#texto_contenido_${event.target.value}`)                
-                const textarea = document.querySelector("#textarea_editar_comentario")
-                if(texto.textContent !== null){
-                    textarea.innerHTML=texto.textContent
-                }
+                texto =  document.querySelector(`#texto_contenido_${event.target.value}`)
+                textarea.innerHTML=texto.textContent
                 document.getElementById('windows_edit_user').showModal()
+                texto.textContent = null
             }
         });
 
@@ -248,7 +252,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     id_autor: parseInt(id_user),
                     texto: texto,
                 };
-                fetch(`${url_keystrokes}/api/comentario/${id}`, {
+                fetch(`${url_keystrokes}/api/comentario/${boton_editar_seleccionado}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(dataToSend),

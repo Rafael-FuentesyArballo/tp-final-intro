@@ -19,6 +19,7 @@ function cargarArticulos(articulos,lista) {
     }
     if(lista){
         try {
+            const formatterEsAR = new Intl.NumberFormat('es-AR');
             articulos.forEach(element => {
                 const elemetentoNuevo = document.createElement("img");
                 const titulo = document.createElement("h1");
@@ -28,8 +29,10 @@ function cargarArticulos(articulos,lista) {
                 const div2 = document.createElement("div");
                 const div3 = document.createElement("div");
                 const strong = document.createElement("strong");
+                const hr = document.createElement("hr");
 
                 link.classList.add("titulo_articulo");
+                hr.classList.add("separador_articulos");
                 link.classList.add("has-text-primary");
                 titulo.classList.add("titulo_articulo");
                 link.href = "articulo_plantilla.html?id=" + element.id;
@@ -45,7 +48,7 @@ function cargarArticulos(articulos,lista) {
                 }
 
                 link.innerHTML = element.titulo;
-                strong.innerHTML = "$ " + element.precio;
+                strong.innerHTML = "$ " + `${formatterEsAR.format(parseInt(element.precio))}`;
 
                 titulo.append(link);
                 div1.append(div2);
@@ -53,8 +56,9 @@ function cargarArticulos(articulos,lista) {
                 div3.append(titulo);
                 div3.append(strong);
                 div2.append(elemetentoNuevo);                
-                
                 lista.append(div1);
+                lista.append(hr)
+                
             });
     } catch (error) {
         console.error(error);
@@ -113,8 +117,8 @@ function agregar_comentario(element, div_principal) {
     const dia = fecha.toLocaleDateString('es-AR');
     const hora = fecha.toLocaleTimeString('es-AR');
     const comentario = `
-        <article id="comentario_reciente" class="media">
-            <a class="has-text-primary" href="articulo_plantilla.html?id=${element.id}">${element.titulo}</a>
+        <article id="comentario_reciente"  >
+            <a class="has-text-primary" href="articulo_plantilla.html?id=${element.id_articulo}">${element.titulo}</a>
             <div class="media-content">
                 <div class="content">
                     <p>
@@ -129,6 +133,7 @@ function agregar_comentario(element, div_principal) {
                     </p>
                 </div>
             </div>
+            <hr class="separador_comentarios" >
         </article>
     `;
     div_principal.insertAdjacentHTML('beforeend', comentario);

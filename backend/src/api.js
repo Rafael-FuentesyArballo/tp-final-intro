@@ -642,6 +642,7 @@ app.put('/api/comentario/:id', async (req, res) => {
     const id_autor = req.body.id_autor;
     const text = req.body.texto;
     console.log("el id es: ", id )
+    console.log("el id del autor: ", id_autor)
     console.log(String(text))
 
     if (!id || text.length === 0) {
