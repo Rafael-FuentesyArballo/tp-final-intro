@@ -231,7 +231,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 texto =  document.querySelector(`#texto_contenido_${event.target.value}`)
                 textarea.innerHTML=texto.textContent
                 document.getElementById('windows_edit_user').showModal()
-                texto.textContent = null
             }
         });
 
@@ -263,6 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }).then( result => {
                     actulizar_comentario(result)
                     document.getElementById('windows_edit_user').close()
+                    texto.textContent = null
                 }).catch(error => {
                     console.error(error);
                 } )

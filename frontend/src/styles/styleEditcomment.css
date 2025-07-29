@@ -1,5 +1,5 @@
 dialog::backdrop {
-    background-color: rgba(155, 39, 39, 0.6);
+    background-color: rgba(46, 149, 175, 0.6);
   
     backdrop-filter: blur(5px);
     transition: backdrop-filter 0.3s ease-out, 
@@ -41,4 +41,7 @@ dialog:not([open])::backdrop {
         background-color: rgba(0, 0, 0, 0);
         backdrop-filter: blur(0px);
     }
+}
+#windows_edit_user{
+    background-color: #2e333d;
 }
