@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     estaLogeadoServidor().then(logeado => { 
         if(logeado){
-            const url_keystrokes = "http://localhost:3000"
+            
             const form = document.querySelector("#publicar_form")
             const envio = document.querySelector("#envio")
             const checkbox = document.querySelector("#checkbox")
