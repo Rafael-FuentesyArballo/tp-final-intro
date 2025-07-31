@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const url_keystrokes = "http://localhost:3000";
+    const url_keystrokes = "https://tp-final-intro-8rou.onrender.com";
     const myForm = document.querySelector("#formulario");
 
     // muestra un mensajito si se registró
