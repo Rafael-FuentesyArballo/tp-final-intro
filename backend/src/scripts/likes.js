@@ -2,13 +2,11 @@
 
 import { response } from 'express';
 import { Pool } from 'pg'
- 
+
+import { config } from "dotenv";
+config({path: 'src/scripts/.env'});
 const dbclient = new Pool({
-  user: 'postgres',
-  password: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  database: 'keystroke-db',
+  connectionString: process.env.DATABASE_URL,
 })
 await dbclient.connect()
 

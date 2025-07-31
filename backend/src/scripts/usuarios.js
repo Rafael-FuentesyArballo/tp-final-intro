@@ -7,11 +7,7 @@ import { Pool } from 'pg'
 import jwt  from 'jsonwebtoken'
  
 const dbclient = new Pool({
-  user: 'postgres',
-  password: 'postgres',
-  host: 'localhost',
-  port: 5432,
-  database: 'keystroke-db',
+  connectionString: process.env.DATABASE_URL,
 })
 await dbclient.connect()
 
