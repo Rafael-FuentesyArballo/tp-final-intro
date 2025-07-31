@@ -1,6 +1,6 @@
 console.log("it's alive")
 
-const url_keystrokes = "http://localhost:3000"
+const url_keystrokes = "https://tp-final-intro-8rou.onrender.com"
 const authToken = localStorage.getItem('authToken');
 const user = localStorage.getItem('username');
 const id_user = localStorage.getItem('id');
