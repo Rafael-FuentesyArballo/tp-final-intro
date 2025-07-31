@@ -102,9 +102,9 @@ function agregar_nav(){
 function agregar_nav_con_user() {
     const nav = document.querySelector("#nav");
     const UserDisplay = localStorage.getItem('username');
-    console.log("creando nav");
+    
     nav.innerHTML = '';
-    const nav_1 = `<div class="navbar-brand">
+    const nav_1 = ` <div class="navbar-brand">
                         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
@@ -127,19 +127,47 @@ function agregar_nav_con_user() {
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <button id="boton_cerrar_sesion" class="button is-primary">
-                                    <strong>${UserDisplay || 'Usuario'}</strong>
-                                    </button>
+                                    <div id="boton_configuracion_perfil" class="dropdown is-right">
+                                        <div class="dropdown-trigger">
+                                            <button id="boton_toggle_dropdown" class="button is-info is-flex is-align-items-center" aria-haspopup="true" aria-controls="dropdown-menu5">
+                                                <span class="image is-32x32 mr-2">
+                                                    <img id="avatar_usuario" class="is-rounded" src="/img/avatar_defaut.jpg" alt="User avatar">
+                                                </span>
+                                                <span><strong>${UserDisplay || 'Usuario'}</strong></span>
+                                                <span class="icon is-small ml-1">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <div class="dropdown-menu" id="dropdown-menu5" role="menu" hidden>
+                                            <div class="dropdown-content">
+                                            <a id="editar_perfil" href="#" class="dropdown-item">Editar perfil</a>
+                                            <div class="dropdown-item">
+                                                <button id="boton_cerrar_sesion" class="button is-danger">
+                                                <strong>Cerrar sesión</strong>
+                                                </button>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>`;
     nav.insertAdjacentHTML('beforeend', nav_1);
 
+    const boton_configuracion_perfil = document.querySelector("#boton_configuracion_perfil");
     const boton_cerrar_sesion = document.querySelector("#boton_cerrar_sesion");
+    const editar_perfil= document.querySelector("#editar_perfil");
+    const boton_toggle_dropdown = document.querySelector("#boton_toggle_dropdown");
+    
     if (boton_cerrar_sesion) {
+        /*
+        boton_configuracion_perfil.classList.replace('is-loading')
+        */
+        editar_perfil.addEventListener('click', editUser);
         boton_cerrar_sesion.addEventListener('click', logoutUser);
-
+        /*
         boton_cerrar_sesion.addEventListener('mouseover', function() {
             this.querySelector('strong').textContent = "Cerrar sesión";
         });
@@ -147,8 +175,15 @@ function agregar_nav_con_user() {
         boton_cerrar_sesion.addEventListener('mouseout', function() {
             this.querySelector('strong').textContent = UserDisplay || 'Usuario';
         });
+        */
     }
-    nav_dinamica()
+    if (boton_toggle_dropdown && boton_configuracion_perfil) {
+        boton_toggle_dropdown.addEventListener('click', () => {
+            boton_configuracion_perfil.classList.toggle("is-active");
+        });
+    }
+
+    nav_dinamica();
 }
 function agregar_nav_sin_login_register(){
         const nav = document.querySelector("#nav") 
@@ -253,6 +288,9 @@ function logoutUser_not_redirection() {
     localStorage.removeItem('username');
     localStorage.removeItem('id');
     console.log('Sesión cerrada. Token eliminado.')
+}
+function editUser() {
+    window.location.replace('editar_perfil.html') 
 }
 
 

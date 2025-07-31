@@ -6,20 +6,28 @@ CREATE TABLE usuarios (
     fecha_creacion_usuario TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     rol varchar(50),
     karma int,
-    articulos_comprados int
+    articulos_comprados int 
 );
 
 CREATE TABLE articulos (
     id serial primary key,
     titulo varchar(50),
     descripcion varchar(500),
-    precio int not null check (precio > 0),
+    precio BIGINT not null check (precio > 0),
     ubicacion varchar(50),
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    id_vendedor int references usuarios(id),
+    id_vendedor int references usuarios(id) ON DELETE CASCADE,
     id_comprador int references usuarios(id),
     envio_gratis boolean,
-    stock int 
+    stock int,
+    CONSTRAINT fk_articulos_id_vendedor
+        FOREIGN KEY (id_vendedor)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE, 
+    CONSTRAINT fk_articulos_id_comprador
+        FOREIGN KEY (id_comprador)
+        REFERENCES usuarios(id)
+        ON DELETE SET NULL
 );
 
 CREATE TABLE imagenes (
@@ -46,7 +54,7 @@ CREATE TABLE calificaciones (
     CONSTRAINT fk_calificaciones_usuario  
         FOREIGN KEY (id_usuario)          
         REFERENCES usuarios(id)           
-        ON DELETE NO ACTION               
+        ON DELETE CASCADE              
 );
 
 CREATE TABLE comentarios (
@@ -54,12 +62,13 @@ CREATE TABLE comentarios (
     id_autor int not null,
     id_comentario_padre int, 
     fecha TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    texto varchar(100) not null,
+    texto varchar(500) not null,
     id_articulo int not null, 
 
     CONSTRAINT fk_comentarios_usuarios
         FOREIGN KEY (id_autor)
-        REFERENCES usuarios(id),
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE,
 
     CONSTRAINT fk_comentarios_padre
         FOREIGN KEY (id_comentario_padre)
@@ -82,7 +91,7 @@ CREATE TABLE likes (
     CONSTRAINT fk_likes_usuario       
         FOREIGN KEY (id_usuario)      
         REFERENCES usuarios(id)       
-        ON DELETE NO ACTION,          
+        ON DELETE CASCADE,          
     CONSTRAINT fk_likes_comentario    
         FOREIGN KEY (id_comentario)   
         REFERENCES comentarios(id)    

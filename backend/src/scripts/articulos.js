@@ -56,6 +56,18 @@ export async function get_one_articulo_id(id){
     }
 }
 
+export async function get_all_articulo_like(busqueda){
+
+    const patronILIKE = `%${busqueda}%`;
+    const response = await dbclient.query("SELECT * FROM articulos WHERE titulo ilike $1", [patronILIKE]);
+    if (response.rowCount === 0 ){
+        return undefined;
+    }
+    else{
+        return response.rows[0];
+    }
+}
+
 export async function get_all_articulos_id_vendedor(id_vendedor){
     const response = await dbclient.query("SELECT * FROM articulos WHERE id_vendedor = $1",[id_vendedor]);
     return response.rows;

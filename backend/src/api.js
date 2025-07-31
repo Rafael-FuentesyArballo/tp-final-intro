@@ -147,6 +147,8 @@ curl -X PUT http://localhost:3000/api/usuarios/2 \
 app.put('/api/usuarios/:id', async (req, res) => {
     const id = req.params.id;
     const datosActualizados = req.body;
+    console.log("el id es: ", id )
+    console.log("actulizando perfil",datosActualizados)
 
     // validar id y al menos 1 campo
     if (!id || Object.keys(datosActualizados).length === 0) {
@@ -154,7 +156,7 @@ app.put('/api/usuarios/:id', async (req, res) => {
     }
 
     // Validar si los campos a editar estan en los permitidos
-    const camposPermitidos = ['nombre_usuario', 'mail', 'rol', 'karma'];
+    const camposPermitidos = ['nombre_usuario', 'mail', 'contraseña'];
     const camposSolicitados = Object.keys(datosActualizados);
     const camposInvalidos = camposSolicitados.filter(campo => !camposPermitidos.includes(campo));
 
@@ -164,6 +166,7 @@ app.put('/api/usuarios/:id', async (req, res) => {
 
     // Validar existencia del usuario
     const usuarioExistente = await get_one_usuario_id(id);
+    console.log("existe el usuario: " , usuarioExistente)
     if (!usuarioExistente) {
         return res.status(404).json({ error: "Usuario no encontrado" });
     }
@@ -176,17 +179,20 @@ app.put('/api/usuarios/:id', async (req, res) => {
         }
     }
 
-    if (check_mail(datosActualizados.mail)) {
+    if (!check_mail(datosActualizados.mail)) {
+            console.log("mail ya existe")
             return res.status(400).json({ error: "La direccion de correo esta en uso" });
     }
 
     // Actualizar en la base de datos
     const usuarioActualizado = await update_usuario(id, datosActualizados);
     if (!usuarioActualizado) {
+        console.log("error al actulizar el perfil")
         return res.status(500).json({ error: "Error al actualizar el usuario" });
     }
 
     // Éxito
+    console.log(usuarioActualizado)
     res.json(usuarioActualizado);
 });
 
@@ -241,6 +247,14 @@ app.get ('/api/articulos/', async (req,res) => {
 
 //get one articulo POR ID
 app.get ('/api/articulos/:id', async (req,res) => {
+    const articulo = await get_one_articulo_id(req.params.id);
+    if ( articulo === undefined ){
+        return res.status(404).json({Error: 'Articulo no encontrado'});
+    }
+      res.json(articulo);
+});
+
+app.get ('/api/busqueda/articulos/', async (req,res) => {
     const articulo = await get_one_articulo_id(req.params.id);
     if ( articulo === undefined ){
         return res.status(404).json({Error: 'Articulo no encontrado'});
@@ -541,7 +555,11 @@ import{
     create_comentario_padre,
     get_all_comentarios_id_articulo_users_lasted,
     get_all_comentarios_for_articulos_lasted,
-    get_all_comentarios_id_articulo 
+    get_all_comentarios_id_articulo,
+    get_one_comentario_id_username,
+    update_comentario,
+    get_all_info_id_comentario,
+    del_comentario
 } from './scripts/comentarios.js'
 
 
@@ -591,11 +609,9 @@ app.get ('/api/comentarios/recientes', async (req,res) => {
 });
 
 app.post('/api/comentarios/', async (req,res) => {
-    
     const id_autor = req.body.id_autor;
     const id_articulo = req.body.id_articulo;
     const texto = req.body.texto;
-    
     
     if (id_autor === undefined){
         return res.status(400).json("Error: debe proporcionar un id de usuario");
@@ -615,10 +631,55 @@ app.post('/api/comentarios/', async (req,res) => {
     if (comentario === undefined ){
         return res.status(500).json("Error interno del servidor");
     }else{
-        const comentario_agregado = await get_all_comentarios_id_articulo_users_lasted(id_articulo)
+        console.log("id comentario", comentario.id)
+        const comentario_agregado = await get_all_info_id_comentario(comentario.id)
         res.json(comentario_agregado);
     }
 });
+
+app.put('/api/comentario/:id', async (req, res) => {
+    const id = req.params.id;
+    const id_autor = req.body.id_autor;
+    const text = req.body.texto;
+    console.log("el id es: ", id )
+    console.log("el id del autor: ", id_autor)
+    console.log(String(text))
+
+    if (!id || text.length === 0) {
+        return res.status(400).json({ error: "Se requiere ID y al menos un campo para actualizar" });
+    }
+
+    const comentarioActualizados = await update_comentario(id, id_autor,text);
+    if (!comentarioActualizados) {
+        console.log("error al actulizar el comentario")
+        return res.status(500).json({ error: "Error al actualizar el comentario" });
+    }
+    const comentario = await get_one_comentario_id_username(id)
+    if (!comentario) {
+        console.log("error al obtener el comentario")
+        return res.status(500).json({ error: "Error al obtener el comentario" });
+    }
+    console.log(comentario)
+    res.json(comentario);
+});
+app.delete('/api/comentario/:id', async (req, res) => {
+    const id = req.params.id;
+    
+    console.log("el id del comentario a borrar es: ", id )
+
+    if (!id ) {
+        return res.status(400).json({ error: "Se requiere ID y al menos un campo para actualizar" });
+    }
+
+    const comentarioBorrado = await del_comentario(id);
+    if (!comentarioBorrado) {
+        console.log("error al borrar el comentario")
+        return res.status(500).json({ error: "Error al borrar el comentario" });
+    }
+    
+    res.json(comentarioBorrado);
+});
+
 
 
 app.post('/api/login', async (req, res) => {
@@ -664,7 +725,15 @@ function verifyToken(req, res, next) {
 }
 
 
-app.get('/api/verify-session', verifyToken, (req, res) => {
+app.get('/api/verify-session', verifyToken, async (req, res) => {
+
+    const usuario = await get_one_usuario_id(req.user.id)
+    if(!usuario){
+        return res.status(403).json({ message: 'Token inválido o expirado.' });
+    }
+    console.log(usuario)
+    
+    
     res.status(200).json({
         message: 'Sesión activa y token válido.',
         user: {

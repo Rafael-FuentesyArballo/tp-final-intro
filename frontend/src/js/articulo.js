@@ -1,37 +1,73 @@
 
-async function agregar_comentario(element, div_principal){
 
+async function agregar_comentario(element, div_principal){
+    console.log(element)
     const fecha = new Date(element.fecha)
     const dia = fecha.toLocaleDateString('es-AR')
     const hora = fecha.toLocaleTimeString('es-AR')
 
     const comentario = `
-                            <article class="media">
-                                <div class="media-content">
-                                    <div class="content">
-                                        <p>
+                        <article id="article_${element.id}" class="media">
+                            <div class="media-content">
+                                <div class="content">
+                                    <div id="comentario_${element.id}">
+                                        <div class="comentario_info" id="comentario_info_editar_${element.id}" >
                                             <strong>${element.autor}</strong>
-                                            <br>
-                                            ${element.texto}
-                                            <br>
-                                            <small>
-                                                <a href="#" class="like_button" data-comment-id="${element.id}"></a>
-                                                ${hora} · ${dia}
-                                            </small>
-                                        </p>
+                                        </div>
+                                        <p id="texto_contenido_${element.id}" style="margin-bottom: 0px">${element.texto}</p>
+                                        <small>
+                                            <a href="#" class="like_button" data-comment-id="${element.id}"></a>
+                                            ${hora} · ${dia}
+                                        </small>
                                     </div>
                                 </div>
-                            </article>
+                            </div>
+                        </article>
                         `;
     div_principal.insertAdjacentHTML('beforeend', comentario)
+    if(element.id_autor === parseInt(id_user)){
+        console.log(element.id)
+        const comentario_info_editar = document.getElementById(`comentario_info_editar_${element.id}`)
+        console.log(comentario_info_editar)
+        comentario_info_editar.insertAdjacentHTML('beforeend', `<button id="boton_editar_${element.id}" class="boton_editar button is-small is-info" value="${element.id}"
+            >Editar</button>`)
+    }
+    
 }
-async function boton_borra_articulo(div_principal){
-    const comentario = `<button style="margin-left: 1%" id="buttton_delete" class="button is-danger">Borrar publicacion</button>
+
+async function actulizar_comentario(element){
+    const fecha = new Date(element.fecha)
+    const dia = fecha.toLocaleDateString('es-AR')
+    const hora = fecha.toLocaleTimeString('es-AR')
+    const miDiv = document.getElementById(`comentario_${element.id}`);
+
+    miDiv.innerHTML = `<div class="comentario_info" id="comentario_info_editar_${element.id}" >
+                            <strong>${element.autor}</strong>
+                        </div>
+                        <p id="texto_contenido_${element.id}" style="margin-bottom: 0px">${element.texto}</p>
+                        <small>
+                            <a href="#" class="like_button" data-comment-id="${element.id}"></a>
+                            ${hora} · ${dia}
+                        </small>
                         `;
+    if(element.id_autor === parseInt(id_user)){
+        const comentario_info_editar = document.getElementById(`comentario_info_editar_${element.id}`)
+        comentario_info_editar.insertAdjacentHTML('beforeend', `<button id="boton_editar_${element.id}" class="boton_editar button is-small is-info" value="${element.id}"
+            >Editar</button>`)
+    }
+}
+async function borrar_comentario(element, div_principal){
+    const article_a_borrar = document.getElementById(`article_${element.id}`);
+    article_a_borrar.remove()
+}
+
+
+async function boton_borra_articulo(div_principal){
+    const comentario = `<button style="margin-left: 1%" id="buttton_delete" class="button is-danger is-loading">Borrar publicacion</button>`;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 async function boton_editar_articulo(div_principal){
-    const comentario = `<button id="buttton_edit" class="button is-info">Editar</button>`;
+    const comentario = `<button id="buttton_edit" class="button is-info is-loading" >Editar</button>`;
     div_principal.insertAdjacentHTML('beforeend', comentario)
 }
 
@@ -78,7 +114,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             punto_de_encuentro.innerHTML= data.articulo.ubicacion
             id_descripcion.innerHTML=data.articulo.descripcion
-            numero_precio.append("$"+data.articulo.precio)
+            
+            const formatterEsAR = new Intl.NumberFormat('es-AR');
+
+            numero_precio.append(`$`+`${formatterEsAR.format(parseInt(data.articulo.precio))}`)
             precio.append(numero_precio)
             
             id_vendedor.append(punto_vendedor)
@@ -122,7 +161,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         estaLogeadoServidor().then(logeado => {
             if(logeado){
-        
                 const formData = new FormData(form_comentario_1);
                 const comentando = formData.get("contenido_comentario")
 
@@ -136,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     id_articulo: parseInt(id),
                     id_autor: parseInt(id_user),
                 };
+                console.log(dataToSend)
                 
                 fetch(`${url_keystrokes}/api/comentarios/`, {
                     method: "POST",
@@ -170,9 +209,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     }); 
     setTimeout(() => {
         const btnEditar = document.getElementById('buttton_edit');
-        const parametro_url = new URLSearchParams(window.location.search)
-        const id = parametro_url.get('id')
-        btnEditar.addEventListener("click", () => window.location.href = `editar_articulo.html?id=${id}`);
+        if(btnEditar){
+            btnEditar.classList.remove('is-loading')
+            const parametro_url = new URLSearchParams(window.location.search)
+            const id = parametro_url.get('id')
+            btnEditar.addEventListener("click", () => window.location.href = `editar_articulo.html?id=${id}`);
+        }
+        
+    }, "3000")    
+
+    setTimeout( () => {
+        const comentario = document.querySelectorAll(".boton_editar")
+        let boton_editar_seleccionado = new Number()
+        let textarea =  document.querySelector("#textarea_editar_comentario")
+        const lista = document.getElementById('comentarios_articulo_principal');
+        let texto = null
+        lista.addEventListener('click', function(event) {
+            if (event.target.id.startsWith('boton_editar_')) {
+                console.log('Hiciste clic en: ' + event.target.value);
+                boton_editar_seleccionado = parseInt(event.target.value)
+                texto =  document.querySelector(`#texto_contenido_${event.target.value}`)
+                textarea.innerHTML=texto.textContent
+                document.getElementById('windows_edit_user').showModal()
+            }
+        });
+
+        const boton_editar_comentario = document.querySelector("#boton_enviar_editar_comentario")
+        boton_editar_comentario.addEventListener('click', async () => {
+            estaLogeadoServidor()
+                .then((logeado) => {
+                if (!logeado) throw new Error("No logeado");
+
+                const formData = new FormData(form_comentario_a_actualizar);
+                const texto = formData.get("contenido_comentario_a_actualizar")
+                
+                if(boton_editar_seleccionado === null && texto.length === 0 && id_user === undefined ){
+                    throw new Error("Error al verificar el contenido a actulizar");
+                }
+
+                const dataToSend = {
+                    id_autor: parseInt(id_user),
+                    texto: texto,
+                };
+                fetch(`${url_keystrokes}/api/comentario/${boton_editar_seleccionado}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(dataToSend),
+                }).then(response => {
+                    if (!response.ok) throw new Error("Error al actualizar");
+
+                    return response.json()
+                }).then( result => {
+                    actulizar_comentario(result)
+                    document.getElementById('windows_edit_user').close()
+                    texto.textContent = null
+                }).catch(error => {
+                    console.error(error);
+                } )
+            })
+            .catch((error) => {
+                console.error(error);
+                logoutUser();
+            });
+        })
+
+        const boton_borrar_comentario = document.querySelector("#boton_borrar_comentario")
+        boton_borrar_comentario.addEventListener('click', async () => {
+            estaLogeadoServidor()
+                .then((logeado) => {
+                if (!logeado) throw new Error("No logeado");
+
+                if(id_user === undefined ){
+                    throw new Error("Error al usuario del contenido a actulizar");
+                }
+
+                fetch(`${url_keystrokes}/api/comentario/${boton_editar_seleccionado}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                }).then(response => {
+                    if (!response.ok) throw new Error("Error al actualizar");
+
+                    return response.json()
+                }).then( result => {
+                    console.log("el comentario borrado es", result)
+                    borrar_comentario(result, div_principal)
+                    document.getElementById('windows_edit_user').close()
+                }).catch(error => {
+                    console.error(error);
+                } )
+            })
+            .catch((error) => {
+                console.error(error);
+                logoutUser();
+            });
+        })
     }, "3000")
 })
-
